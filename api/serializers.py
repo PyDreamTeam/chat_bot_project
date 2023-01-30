@@ -10,7 +10,7 @@ from .models import User
 class UserSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=55)
     email = serializers.EmailField(max_length=254)
-    password = serializers.CharField(max_length=55)
+    password = serializers.CharField(min_length=8, max_length=55)
 
     def create(self, validated_data):
         return User.objects.create(**validated_data)
