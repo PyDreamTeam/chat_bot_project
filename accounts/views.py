@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
-from api.serializers import UserSerializer
+from .serializers import UserSerializer
 
 
 class UserRegistration(APIView):
@@ -13,7 +13,10 @@ class UserRegistration(APIView):
         
         if serializer.is_valid():
 
-            User.objects.create_user(serializer.data.get('email'), serializer.data.get('password'))
+            User.objects.create_user(
+                serializer.data.get('email'),
+                serializer.data.get('password')
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
             # new_user = User.objects.create(
             #     email=request.data['email'],
