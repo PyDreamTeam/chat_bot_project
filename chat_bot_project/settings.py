@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'api',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -146,4 +147,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'api.User' #new model user
+AUTH_USER_MODEL = 'accounts.User' #new model user

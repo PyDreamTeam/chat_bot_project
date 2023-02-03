@@ -3,12 +3,11 @@ from accounts.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password2 = ...
-    
+
     class Meta:
         model = User
-        fields = ["email", "first_name", "last_name", "user_role", "password", "password2"]
-
+        fields = ["email", "first_name", "last_name", "user_role", "password"]
+        # read_only_fields = ['password']
 
 # class UserSerializer(serializers.Serializer):
 #     name = serializers.CharField(max_length=55)

@@ -13,7 +13,8 @@ class UserRegistration(APIView):
         
         if serializer.is_valid():
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)  
+            User.objects.create_user(serializer.data.get('email'), serializer.data.get('password'))
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
             # new_user = User.objects.create(
             #     email=request.data['email'],
             #     first_name=request.data['first_name'],

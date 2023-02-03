@@ -4,7 +4,7 @@ from .views import UserRegistration
 
 
 urlpatterns = [
-    path('/registration/', UserRegistration.as_view(), name='registration'), #User Registration
-    path('/login/', views.LoginView.as_view(), name='login'), #User login
-    path('/logout/', views.LogoutView.as_view(), name='logout'), #User logout
+    path('registration/', UserRegistration.as_view(), name='registration'), #User Registration
+    path('login/', views.LoginView.as_view(), name='login'), #User login
+    path('logout/', views.LogoutView.as_view(), name='logout'), #User logout
 ]
