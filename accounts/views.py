@@ -3,29 +3,28 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserCreateSerializer
 
 
 class UserRegistration(APIView):
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserCreateSerializer(data=request.data)
         
-        if serializer.is_valid():
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            User.objects.create_user(
-                serializer.data.get('email'),
-                serializer.data.get('password')
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-            # new_user = User.objects.create(
-            #     email=request.data['email'],
-            #     first_name=request.data['first_name'],
-            #     last_name =request.data['last_name'],
-            #     user_role=request.data['user_role'],            
-            #     password=request.data['password']
-            # )  
-            # return Response(new_user, status=status.HTTP_201_CREATED)
-            
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        User.objects.create_user(
+            serializer.data.get('email'),
+            serializer.data.get('password')
+        )
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class UserApiView(APIView):
+
+    def get(self, request):
+        user_data = User.objects.all()
+        return Response({'users': UserCreateSerializer(user_data, many=True).data})
+
         
