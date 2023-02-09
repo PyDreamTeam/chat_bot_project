@@ -128,13 +128,16 @@ REST_FRAMEWORK = {
 #
 # AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
+# smtp
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # DJOSER CONFIG
 DJOSER = {
     "LOGIN_FIELD": "email",
     "USER_CREATE_PASSWORD_RETYPE": False,
     "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-    "SEND_CONFIRMATION_EMAIL": False,
+    "SEND_CONFIRMATION_EMAIL": True,
     "SET_USERNAME_RETYPE": False,
     "SET_PASSWORD_RETYPE": False,
     "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
