@@ -13,6 +13,7 @@ class UserViewSet(views.UserViewSet):
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, get_email_notifications=True)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         user = User.objects.get(email=request.data.get('email'))
