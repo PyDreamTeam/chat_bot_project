@@ -8,9 +8,9 @@ router = DefaultRouter()
 router.register("user", views_accounts.UserViewSet)
 
 urlpatterns = [
-                  path('userlist/', views_accounts.UserApiView.as_view()),
-                  path('userlist/<int:pk>/', views_accounts.UserApiView.as_view()),
-                  path('auth/', include('djoser.urls')),
-                  path('auth/', include('djoser.urls.authtoken')),  # djoser
-                  path('change-password/', ChangePasswordView.as_view(), name='change-password')
-              ] + router.urls
+    path('userlist/', views_accounts.UserApiView.as_view()),
+    path('userlist/<int:pk>/', views_accounts.UserApiView.as_view()),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.authtoken')),  # djoser
+    path('change-password/', ChangePasswordView.as_view(), name='change-password')
+    ] + router.urls

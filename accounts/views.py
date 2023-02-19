@@ -10,6 +10,7 @@ from djoser import views
 from rest_framework import generics
 from django.contrib.auth.models import User as UserModel
 from rest_framework.permissions import IsAuthenticated
+from django.utils.translation import gettext as _
 
 
 class UserViewSet(views.UserViewSet):
@@ -54,17 +55,14 @@ class ChangePasswordView(generics.UpdateAPIView):
         if serializer.is_valid():
             # Check old password
             if not self.object.check_password(serializer.data.get("old_password")):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"old_password": [_("Wrong password.")]}, status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
             response = {
-                'status': 'success',
-                'code': status.HTTP_200_OK,
-                'message': 'Password updated successfully',
-                'data': []
+                'message': _('Password updated successfully'),
             }
 
-            return Response(response)
+            return Response(response, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
