@@ -61,7 +61,7 @@ ROOT_URLCONF = 'chat_bot_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -158,7 +158,7 @@ DJOSER = {
         "user": "djoser.serializers.UserSerializer",
         "current_user": "djoser.serializers.UserSerializer",
         "user_delete": "djoser.serializers.UserSerializer",
-        'password_reset': 'djoser.serializers.SendEmailResetSerializer',
+        'password_reset': 'accounts.serializers.PasswordResetSerializer',
         'password_reset_confirm': 'djoser.serializers.PasswordResetConfirmSerializer',
     },
     "EMAIL": {
