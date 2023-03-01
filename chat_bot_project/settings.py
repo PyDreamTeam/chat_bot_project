@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'djoser',
     'api',
     'accounts',
+    'bot_platform',
 ]
 
 MIDDLEWARE = [
