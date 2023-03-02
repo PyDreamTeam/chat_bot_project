@@ -25,5 +25,11 @@ class Bots(models.Model):
 
 
 
-
+    def display_business_area(self):
+        return ', '.join([business_area.name for business_area in self.business_area.all()])
     
+    def display_business_target(self):
+        return ', '.join([business_target.name for business_target in self.business_target.all()])
+    
+    def display_fuctional(self):
+        return ', '.join([fuctional.name for fuctional in self.fuctional.all()])
