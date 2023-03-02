@@ -14,6 +14,6 @@ urlpatterns = [
     path('userlist/<int:pk>/', views_accounts.UserApiView.as_view()),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),  # djoser
-    re_path(r'^user/reset_password_confirm/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserViewSet.as_view({'post': 'reset_password_confirm'}, template_name='registration/password_reset_confirm.html', name='password_reset_confirm'))
+    re_path(r'^user/reset_password_confirm/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserViewSet.as_view({'post': 'reset_password_confirm'}, name='password_reset_confirm'))
 ] + router.urls
 
