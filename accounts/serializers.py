@@ -4,8 +4,8 @@ from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSeria
     UserSerializer as BaseUserSerializer
 from django.contrib.auth import get_user_model
 
-from django.contrib.auth.models import User as UserModel
 from rest_framework import serializers
+
 
 User = get_user_model()
 
@@ -26,7 +26,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    model = UserModel
+    model = User
 
     """
     Serializer for password change endpoint.

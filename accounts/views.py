@@ -1,16 +1,14 @@
 from django.db import transaction
 from djoser.conf import settings
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import User
 from .serializers import UserCreateSerializer, ChangePasswordSerializer
 from djoser import views
 
-from rest_framework import generics
-from django.contrib.auth.models import User as UserModel
 from rest_framework.permissions import IsAuthenticated
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 class UserViewSet(views.UserViewSet):
@@ -41,7 +39,7 @@ class ChangePasswordView(generics.UpdateAPIView):
     An endpoint for changing password.
     """
     serializer_class = ChangePasswordSerializer
-    model = UserModel
+    model = User
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, queryset=None):
@@ -63,6 +61,6 @@ class ChangePasswordView(generics.UpdateAPIView):
                 'message': _('Password updated successfully'),
             }
 
-            return Response(response, status=status.HTTP_200_OK)
+            return Response(response, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

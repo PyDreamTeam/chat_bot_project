@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from . import views as views_accounts
-from .views import ChangePasswordView
+
 
 router = DefaultRouter()
 router.register("user", views_accounts.UserViewSet)
@@ -10,7 +10,7 @@ router.register("user", views_accounts.UserViewSet)
 urlpatterns = [
     path('userlist/', views_accounts.UserApiView.as_view()),
     path('userlist/<int:pk>/', views_accounts.UserApiView.as_view()),
+    path('change-password/', views_accounts.ChangePasswordView.as_view(), name='change-password'),
     path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),  # djoser
-    path('change-password/', ChangePasswordView.as_view(), name='change-password')
-    ] + router.urls
+    path('auth/', include('djoser.urls.authtoken')),  # djoser    
+] + router.urls
