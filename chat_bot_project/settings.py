@@ -158,7 +158,7 @@ DJOSER = {
         "user": "djoser.serializers.UserSerializer",
         "current_user": "djoser.serializers.UserSerializer",
         "user_delete": "djoser.serializers.UserSerializer",
-        'password_reset': 'accounts.serializers.PasswordResetSerializer',
+        'password_reset': 'accounts.serializers.PasswordResetSerializer', # custom serializer
         'password_reset_confirm': 'djoser.serializers.PasswordResetConfirmSerializer',
     },
     "EMAIL": {

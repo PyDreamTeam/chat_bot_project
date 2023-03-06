@@ -24,9 +24,10 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
         return user
 
 class PasswordResetSerializer(SendEmailResetSerializer):
+    
     def validate_email(self, value):
         try:
             User.objects.get(email=value)
         except User.DoesNotExist:
-            raise ValidationError('Данный почтовый ящик не найден')
+            raise ValidationError('Email not found')
         return value
