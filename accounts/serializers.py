@@ -3,6 +3,8 @@ from djoser.conf import settings
 from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer, \
     UserSerializer as BaseUserSerializer
 from django.contrib.auth import get_user_model
+from djoser.serializers import SendEmailResetSerializer
+from django.core.exceptions import ValidationError
 
 from rest_framework import serializers
 
@@ -23,6 +25,16 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
                 user.is_active = False
                 user.save(update_fields=["is_active"])
         return user
+
+
+class PasswordResetSerializer(SendEmailResetSerializer):
+    
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value)
+        except User.DoesNotExist:
+            raise ValidationError('Email not found')
+        return value
 
 
 class ChangePasswordSerializer(serializers.Serializer):
