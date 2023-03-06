@@ -16,7 +16,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 
     class Meta(BaseUserRegistrationSerializer.Meta):
         model = User
-        fields = ["email", "first_name", "last_name", "user_role", "password"]
+        fields = ["email", "first_name", "last_name", "user_role", "password", "get_email_notifications"]
 
     def perform_create(self, validated_data):
         with transaction.atomic():

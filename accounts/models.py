@@ -19,6 +19,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email'), unique=True)
     user_role = models.CharField(max_length=10, choices=USER_ROLE, default='User')
+    get_email_notifications = models.BooleanField(blank=False, default=False)
 
     objects = CustomUserManager()
 
