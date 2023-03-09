@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BotPlatformConfig(AppConfig):
+class ChatbotCardsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'bot_platform'
+    name = 'chatbot_cards'

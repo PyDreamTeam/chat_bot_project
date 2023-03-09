@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'djoser',
     'api',
     'accounts',
-    'bot_platform',
+    'chatbot_cards',
 ]
 
 MIDDLEWARE = [
