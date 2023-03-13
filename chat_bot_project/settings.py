@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'api',
     'accounts',
     'chatbot_cards',
+    'chatbot_favourites',
 ]
 
 MIDDLEWARE = [
