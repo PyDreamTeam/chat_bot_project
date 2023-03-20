@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .serializers import *
 
-# Create your views here.
+
+class Bot_favouritesViewSet(viewsets.ModelViewSet):
+    queryset = Bot_favourites.objects.all()
+    serializer_class = Bot_favourites_serializer
