@@ -7,42 +7,91 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='BusinessArea',
+            name="BusinessArea",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='BusinessTarget',
+            name="BusinessTarget",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='Functional',
+            name="Functional",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='Bots',
+            name="Bots",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=50)),
-                ('description', models.TextField(blank=True, help_text='Enter information about bot', max_length=500)),
-                ('image', models.ImageField(null=True, upload_to='')),
-                ('type_platform', models.CharField(blank=True, max_length=50)),
-                ('business_area', models.ManyToManyField(blank=True, to='chatbot_cards.businessarea')),
-                ('business_target', models.ManyToManyField(blank=True, to='chatbot_cards.businesstarget')),
-                ('fuctional', models.ManyToManyField(blank=True, to='chatbot_cards.functional')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=50)),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True,
+                        help_text="Enter information about bot",
+                        max_length=500,
+                    ),
+                ),
+                ("image", models.ImageField(null=True, upload_to="")),
+                ("type_platform", models.CharField(blank=True, max_length=50)),
+                (
+                    "business_area",
+                    models.ManyToManyField(blank=True, to="chatbot_cards.businessarea"),
+                ),
+                (
+                    "business_target",
+                    models.ManyToManyField(
+                        blank=True, to="chatbot_cards.businesstarget"
+                    ),
+                ),
+                (
+                    "fuctional",
+                    models.ManyToManyField(blank=True, to="chatbot_cards.functional"),
+                ),
             ],
         ),
     ]

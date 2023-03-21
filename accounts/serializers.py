@@ -1,7 +1,9 @@
 from django.db import transaction
 from djoser.conf import settings
-from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer, \
-    UserSerializer as BaseUserSerializer
+from djoser.serializers import (
+    UserCreateSerializer as BaseUserRegistrationSerializer,
+    UserSerializer as BaseUserSerializer,
+)
 from django.contrib.auth import get_user_model
 from djoser.serializers import SendEmailResetSerializer
 from django.core.exceptions import ValidationError
@@ -13,10 +15,16 @@ User = get_user_model()
 
 
 class UserCreateSerializer(BaseUserRegistrationSerializer):
-
     class Meta(BaseUserRegistrationSerializer.Meta):
         model = User
-        fields = ["email", "first_name", "last_name", "user_role", "password", "get_email_notifications"]
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "user_role",
+            "password",
+            "get_email_notifications",
+        ]
 
     def perform_create(self, validated_data):
         with transaction.atomic():
@@ -28,12 +36,11 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 
 
 class PasswordResetSerializer(SendEmailResetSerializer):
-    
     def validate_email(self, value):
         try:
             User.objects.get(email=value)
         except User.DoesNotExist:
-            raise ValidationError('Email not found')
+            raise ValidationError("Email not found")
         return value
 
 
