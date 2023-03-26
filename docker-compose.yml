@@ -1,7 +1,7 @@
 version: '3'
 services:
   django:
-    build: ./app
+    build: ./
     container_name: djangoapp
     restart: always
     expose:
@@ -11,7 +11,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./app:/app/
+      - ./:/app/
     env_file:
       - ./chat_bot_project/.env.example
   postgres:
