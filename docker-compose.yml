@@ -11,7 +11,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./:/app/
+      - ./:/usr/src/app/
     env_file:
       - ./chat_bot_project/.env.example
   postgres:
