@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  django:
+    build: ./chat_bot_project
+    container_name: djangoapp
+    restart: always
+    expose:
+      - 8000
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./chat_bot_project:/app/
+    env_file:
+      - ./chat_bot_project/.env.example
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgresdb
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_DB=dbname
+volumes:
+  postgres_volume:
