@@ -19,11 +19,11 @@ pipeline {
         sh 'docker-compose up -d --build'
       }
     }
-    // stage('Deploy') {
-    //   steps {
-    //     // Deploy Docker container to a server
-    //     sh 'docker-compose up -d'
-    //   }
-    // }
+    stage('Deploy') {
+      steps {
+        // Deploy Docker container to a server
+        sh 'docker-compose up -d'
+      }
+    }
   }
 }
