@@ -22,7 +22,7 @@ pipeline {
     stage('Deploy') {
       steps {
         // Deploy Docker container to a server
-        sh 'sudo docker-compose up -d'
+        sh 'docker-compose up -d'
       }
     }
   }

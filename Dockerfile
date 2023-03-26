@@ -15,6 +15,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN chmod +x /app/entrypoint.sh
+RUN chmod a+x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
