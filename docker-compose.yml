@@ -4,8 +4,6 @@ services:
     build: ./
     container_name: djangoapp
     restart: always
-    expose:
-      - 8000
     ports:
       - 8000:8000
     command: >
@@ -19,11 +17,13 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: postgresdb
+    expose:
+      - 5432
     volumes:
       - postgres_volume:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=dbpass
-      - POSTGRES_DB=dbname
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_NAME=postgres
 volumes:
   postgres_volume:
