@@ -9,6 +9,7 @@ pipeline {
     }
     stage('Stop and delete old containers') {
       steps {
+        sh 'docker-compose down'
         sh 'docker system prune -f'
         // sh 'docker stop $(docker ps -aq) && docker rm $(docker ps -aq)'
       }
