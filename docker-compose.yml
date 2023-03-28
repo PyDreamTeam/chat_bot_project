@@ -24,15 +24,15 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_NAME=postgres
   
-  node:
-    build: ./frontend
-    container_name: nexttapp
-    restart: always
-    ports:
-      - 3005:3000
-    volumes:
-      - ./frontend:/app 
-    depends_on:
-      - django    
+  # node:
+  #   build: ./frontend
+  #   container_name: nexttapp
+  #   restart: always
+  #   ports:
+  #     - 3005:3000
+  #   volumes:
+  #     - ./frontend:/app 
+  #   depends_on:
+  #     - django    
 volumes:
   postgres_volume:
