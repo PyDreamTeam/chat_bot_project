@@ -1,7 +1,7 @@
 version: '3'
 services:
   django:
-    build: ./
+    build: ./backend/chat_bot_project
     container_name: djangoapp
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
       - POSTGRES_NAME=postgres
   
   node:
-    build: ./
+    build: ./frontend/chat_bot_project_frontend
     container_name: nexttapp
     restart: always
     ports:
