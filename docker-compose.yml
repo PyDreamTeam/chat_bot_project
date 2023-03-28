@@ -1,7 +1,7 @@
 version: '3'
 services:
   django:
-    build: ./backend/chat_bot_project
+    build: ./backend
     container_name: djangoapp
     restart: always
     ports:
@@ -11,9 +11,9 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./backend/chat_bot_project:/usr/src/app/
+      - ./backend:/usr/src/app/
     env_file:
-      - ./backend/chat_bot_project/chat_bot_project/.env.example
+      - ./backend/chat_bot_project/.env.example
   postgres:
     image: postgres:15-alpine
     container_name: postgresdb
@@ -25,12 +25,12 @@ services:
       - POSTGRES_NAME=postgres
   
   node:
-    build: ./frontend/chat_bot_project_frontend
+    build: ./frontend
     container_name: nexttapp
     restart: always
     ports:
       - 3005:3000
     volumes:
-      - ./frontend/chat_bot_project_frontend:/app   
+      - ./frontend:/app   
 volumes:
   postgres_volume:
