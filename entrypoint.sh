@@ -8,7 +8,7 @@ then
       sleep 0.1
     done
 
-    echo "run db"
+    echo "run "
 fi
 
 python manage.py migrate
