@@ -2,7 +2,7 @@ version: '3'
 services:
   django:
     build: ./backend
-    container_name: djangoapp
+    container_name: djangoapp_pydream
     restart: always
     ports:
       - 8000:8000
@@ -16,7 +16,7 @@ services:
       - ./backend/chat_bot_project/.env.example
   postgres:
     image: postgres:15-alpine
-    container_name: postgresdb
+    container_name: postgresdb_pydream
     volumes:
       - postgres_volume:/var/lib/postgresql/data/
     environment:
@@ -26,7 +26,7 @@ services:
   
   # node:
   #   build: ./frontend
-  #   container_name: nexttapp
+  #   container_name: nexttapp_pydream
   #   restart: always
   #   ports:
   #     - 3005:3000
