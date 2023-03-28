@@ -13,7 +13,7 @@ services:
     volumes:
       - ./:/usr/src/app/
     env_file:
-      - ./chat_bot_project/.env.example
+      - ./backend/chat_bot_project/.env.example
   postgres:
     image: postgres:15-alpine
     container_name: postgresdb
@@ -25,12 +25,12 @@ services:
       - POSTGRES_NAME=postgres
   
   node:
-    build: ./
+    build: ./frontend
     container_name: nexttapp
     restart: always
     ports:
       - 3005:3000
     volumes:
-      - ./:/app   
+      - ./frontend:/app   
 volumes:
   postgres_volume:
