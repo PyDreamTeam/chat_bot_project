@@ -11,9 +11,9 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./:/usr/src/app/
+      - ./backend/chat_bot_project:/usr/src/app/
     env_file:
-      - ./backend/chat_bot_project/.env.example
+      - ./backend/chat_bot_project/chat_bot_project/.env.example
   postgres:
     image: postgres:15-alpine
     container_name: postgresdb
@@ -25,12 +25,12 @@ services:
       - POSTGRES_NAME=postgres
   
   node:
-    build: ./frontend
+    build: ./
     container_name: nexttapp
     restart: always
     ports:
       - 3005:3000
     volumes:
-      - ./frontend:/app   
+      - ./frontend/chat_bot_project_frontend:/app   
 volumes:
   postgres_volume:
