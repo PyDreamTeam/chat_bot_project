@@ -36,5 +36,17 @@ services:
       - ./frontend:/app 
     depends_on:
       - django    
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_pydream
+    restart: always
+    ports:
+      - "8085:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pydream@mail.com
+      PGADMIN_DEFAULT_PASSWORD: password           
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
 volumes:
   postgres_volume:
