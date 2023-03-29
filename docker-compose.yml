@@ -44,7 +44,7 @@ services:
     ports:
       - "8085:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: pydream@mail.com
+      PGADMIN_DEFAULT_EMAIL: pydream@pydream.com
       PGADMIN_DEFAULT_PASSWORD: password           
     volumes:
       - ./pgadmin:/var/lib/pgadmin
