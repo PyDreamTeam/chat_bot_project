@@ -50,3 +50,4 @@ services:
       - pgadmin:/var/lib/pgadmin
 volumes:
   postgres_volume:
+  pgadmin:
