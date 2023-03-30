@@ -47,6 +47,6 @@ services:
       PGADMIN_DEFAULT_EMAIL: pydream@pydream.com
       PGADMIN_DEFAULT_PASSWORD: password           
     volumes:
-      - ./pgadmin:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
 volumes:
   postgres_volume:
