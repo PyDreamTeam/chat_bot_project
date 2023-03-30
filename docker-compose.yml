@@ -42,7 +42,7 @@ services:
     container_name: pgadmin_pydream
     restart: always
     ports:
-      - "8085:80"
+      - "5055:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: pydream@pydream.com
       PGADMIN_DEFAULT_PASSWORD: password           
