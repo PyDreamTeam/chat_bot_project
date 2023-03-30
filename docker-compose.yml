@@ -13,7 +13,7 @@ services:
     volumes:
       - ./backend:/usr/src/app/
     env_file:
-      - ./backend/chat_bot_project/.env.example
+      - ./backend/.env.example
   postgres:
     image: postgres:15-alpine
     container_name: postgresdb_pydream
