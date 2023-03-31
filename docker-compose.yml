@@ -33,7 +33,7 @@ services:
     ports:
       - 3005:3000
     volumes:
-      - ./frontend:/app 
+      - ./frontend:/frontend/app 
     depends_on:
       - django    
 
