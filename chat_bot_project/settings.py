@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    "corsheaders",  #cors
     'api',
     'accounts',
     'chatbot_cards',
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #cors
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'chat_bot_project.urls'
@@ -176,7 +179,23 @@ DJOSER = {
 # CORS HEADERS
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'origin',
+    'dnt',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with'
+]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://sub.example.com",
+#     "http://localhost:8080",
+#     "http://127.0.0.1:9000",
+# ]
 
 
 # Internationalization
