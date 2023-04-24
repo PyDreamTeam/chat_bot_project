@@ -179,17 +179,17 @@ DJOSER = {
 # CORS HEADERS
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'origin',
-    'dnt',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with'
-]
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'origin',
+#     'dnt',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with'
+# ]
 # CORS_ALLOWED_ORIGINS = [
 #     "https://example.com",
 #     "https://sub.example.com",
