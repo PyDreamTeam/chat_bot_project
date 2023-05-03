@@ -22,9 +22,21 @@ class UserViewSet(views.UserViewSet):
         headers = self.get_success_headers(serializer.data)
         token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
         token_serializer_class = settings.SERIALIZERS.token
-        return Response(
-            data=token_serializer_class(token).data,
-            status=status.HTTP_201_CREATED, headers=headers)
+        
+        response = {
+            'id': user.id,    
+            'token': token_serializer_class(token).data,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,   
+            'user_role': user.user_role,
+            'emailNotification': user.get_email_notifications,            
+        }
+        
+        if serializer.data.get('avatar'):
+            response['avatar'] = serializer.data.get('avatar')
+            
+        return Response(response, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class UserApiView(APIView):
