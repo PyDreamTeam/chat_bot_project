@@ -1,14 +1,18 @@
 from django.db import transaction
-from djoser.conf import settings
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
+
 from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+from djoser.conf import settings
+from djoser import views, utils
+from djoser.views import TokenCreateView, TokenDestroyView
+
 from .models import User
 from .serializers import UserCreateSerializer, ChangePasswordSerializer
-from djoser import views
-
-from rest_framework.permissions import IsAuthenticated
-from django.utils.translation import gettext_lazy as _
 
 
 class UserViewSet(views.UserViewSet):
@@ -22,21 +26,46 @@ class UserViewSet(views.UserViewSet):
         headers = self.get_success_headers(serializer.data)
         token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
         token_serializer_class = settings.SERIALIZERS.token
-        
+
         response = {
-            'id': user.id,    
-            'token': token_serializer_class(token).data,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,   
-            'user_role': user.user_role,
-            'emailNotification': user.get_email_notifications,            
+            "id": str(user.id),
+            "email": serializer.data.get('email'),
+            "first_name": serializer.data.get('first_name'),
+            "last_name": serializer.data.get('last_name'),
+            "user_role": serializer.data.get('user_role'),
+            "emailNotification": serializer.data.get('emailNotification'),
+            "auth_token": token_serializer_class(token).data.get('auth_token'),
         }
-        
         if serializer.data.get('avatar'):
             response['avatar'] = serializer.data.get('avatar')
-            
-        return Response(response, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(data=response, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class CustomTokenCreateView(TokenCreateView):
+
+    def _action(self, serializer):
+        user = User.objects.get(email=serializer.data.get('email'))
+        token = utils.login_user(self.request, serializer.user)
+        token_serializer_class = settings.SERIALIZERS.token
+                       
+        data = {
+            'id': str(user.id),
+            'email': str(user.email),
+            'first_name': str(user.first_name),
+            'last_name': str(user.last_name),
+            'user_role': str(user.user_role),
+            'emailNotification': str(user.get_email_notifications),
+            'auth_token': token_serializer_class(token).data.get('auth_token'),
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+class CustomTokenDestroyView(TokenDestroyView):
+    def post(self, request, *args, **kwargs):
+        utils.logout_user(request)
+        #serializer = self.get_serializer(data=request.data)
+       
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserApiView(APIView):
