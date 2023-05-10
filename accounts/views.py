@@ -26,6 +26,7 @@ class UserViewSet(views.UserViewSet):
         headers = self.get_success_headers(serializer.data)
         token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
         token_serializer_class = settings.SERIALIZERS.token
+
         response = {
             "id": str(user.id),
             "email": serializer.data.get('email'),
