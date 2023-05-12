@@ -58,7 +58,7 @@ class CustomTokenCreateView(TokenCreateView):
             'auth_token': token_serializer_class(token).data.get('auth_token'),
         }
         if serializer.data.get('avatar'):
-            response['avatar'] = serializer.data.get('avatar')
+            data['avatar'] = serializer.data.get('avatar')
         return Response(data=data, status=status.HTTP_200_OK)
 
 
