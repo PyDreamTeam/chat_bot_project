@@ -56,9 +56,9 @@ class CustomTokenCreateView(TokenCreateView):
             'user_role': str(user.user_role),
             'emailNotification': str(user.get_email_notifications),
             'auth_token': token_serializer_class(token).data.get('auth_token'),
+            'avatar': user.avatar
         }
-        if serializer.data.get('avatar'):
-            data['avatar'] = serializer.data.get('avatar')
+        
         return Response(data=data, status=status.HTTP_200_OK)
 
 
