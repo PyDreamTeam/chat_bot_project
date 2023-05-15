@@ -36,8 +36,7 @@ class UserViewSet(views.UserViewSet):
             "emailNotification": serializer.data.get('get_email_notifications'),
             "auth_token": token_serializer_class(token).data.get('auth_token'),
         }
-        if serializer.data.get('avatar'):
-            response['avatar'] = serializer.data.get('avatar')
+        
         return Response(data=response, status=status.HTTP_201_CREATED, headers=headers)
 
 
@@ -57,9 +56,7 @@ class CustomTokenCreateView(TokenCreateView):
             'emailNotification': str(user.get_email_notifications),
             'auth_token': token_serializer_class(token).data.get('auth_token'),
         }
-        if user.avatar:
-            data['avatar'] = user.avatar
-            
+                    
         return Response(data=data, status=status.HTTP_200_OK)
 
 
