@@ -1,15 +1,18 @@
 from django.db import transaction
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
 
 from rest_framework import status, generics
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from djoser.conf import settings
 from djoser import views, utils
 from djoser.views import TokenCreateView, TokenDestroyView
+from djoser.conf import settings
+from djoser.compat import get_user_email
 
 from .models import User
 from .serializers import UserCreateSerializer, ChangePasswordSerializer
@@ -39,6 +42,38 @@ class UserViewSet(views.UserViewSet):
         
         return Response(data=response, status=status.HTTP_201_CREATED, headers=headers)
 
+    @action(["post"], detail=False)
+    def reset_password_confirm(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        serializer.user.set_password(serializer.data["new_password"])
+        print(type(serializer))
+        if hasattr(serializer.user, "last_login"):
+            serializer.user.last_login = now()
+        serializer.user.save()
+        user = serializer.user
+        token = settings.TOKEN_MODEL.objects.get(user=user)
+        token_serializer_class = settings.SERIALIZERS.token
+        
+        response = {
+            'message': _('Password reset successfully'),
+            'id': str(serializer.user.id),
+            'email': str(serializer.user.email),
+            'first_name': str(serializer.user.first_name),
+            'last_name': str(serializer.user.last_name),
+            'user_role': str(serializer.user.user_role),
+            'emailNotification': str(serializer.user.get_email_notifications),
+            'auth_token': token_serializer_class(token).data.get('auth_token'),
+        }
+
+        if settings.PASSWORD_CHANGED_EMAIL_CONFIRMATION:
+            context = {"user": serializer.user}
+            to = [get_user_email(serializer.user)]
+            settings.EMAIL.password_changed_confirmation(self.request, context).send(to)
+
+        return Response(data=response, status=status.HTTP_200_OK)   
+
 
 class CustomTokenCreateView(TokenCreateView):
 
@@ -47,7 +82,7 @@ class CustomTokenCreateView(TokenCreateView):
         token = utils.login_user(self.request, serializer.user)
         token_serializer_class = settings.SERIALIZERS.token
                        
-        data = {
+        response = {
             'id': str(user.id),
             'email': str(user.email),
             'first_name': str(user.first_name),
@@ -57,7 +92,7 @@ class CustomTokenCreateView(TokenCreateView):
             'auth_token': token_serializer_class(token).data.get('auth_token'),
         }
                     
-        return Response(data=data, status=status.HTTP_200_OK)
+        return Response(data=response, status=status.HTTP_200_OK)   
 
 
 class CustomTokenDestroyView(TokenDestroyView):
@@ -98,10 +133,21 @@ class ChangePasswordView(generics.UpdateAPIView):
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
+            user = self.object
+            token = settings.TOKEN_MODEL.objects.get(user=user)
+            token_serializer_class = settings.SERIALIZERS.token
+            
             response = {
                 'message': _('Password updated successfully'),
+                'id': str(user.id),
+                'email': str(user.email),
+                'first_name': str(user.first_name),
+                'last_name': str(user.last_name),
+                'user_role': str(user.user_role),
+                'emailNotification': str(user.get_email_notifications),
+                'auth_token': token_serializer_class(token).data.get('auth_token'),
             }
 
-            return Response(response, status=status.HTTP_204_NO_CONTENT)
+            return Response(data=response, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
