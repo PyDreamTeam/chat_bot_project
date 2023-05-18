@@ -45,3 +45,31 @@ class ChangePasswordSerializer(serializers.Serializer):
     """
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+
+class ChangeFirstNameSerializer(serializers.Serializer):
+    model = User
+
+    """
+    Serializer for password change first name.
+    """
+    first_name = serializers.CharField(required=False)
+
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data.get("first_name",  instance.first_name)
+        instance.save()
+        return instance
+
+
+class ChangeLastNameSerializer(serializers.Serializer):
+    model = User
+
+    """
+    Serializer for password change last name.
+    """
+    last_name = serializers.CharField(required=False)
+
+    def update(self, instance, validated_data):
+        instance.last_name = validated_data.get("last_name",  instance.last_name)
+        instance.save()
+        return instance

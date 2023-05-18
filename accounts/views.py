@@ -15,7 +15,8 @@ from djoser.conf import settings
 from djoser.compat import get_user_email
 
 from .models import User
-from .serializers import UserCreateSerializer, ChangePasswordSerializer
+from .serializers import UserCreateSerializer, ChangePasswordSerializer, ChangeFirstNameSerializer,\
+    ChangeLastNameSerializer
 
 
 class UserViewSet(views.UserViewSet):
@@ -157,7 +158,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         if serializer.is_valid():
             # Check old password
-            if not self.object.check_password(serializer.data.get("old_password")):
+            if not self.object:
                 return Response({"old_password": [_("Wrong password.")]}, status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
@@ -180,3 +181,68 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(data=response, status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangeFirstNameView(generics.UpdateAPIView):
+    """
+    An endpoint for changing first_name.
+    """
+    serializer_class = ChangeFirstNameSerializer
+    model = User
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            id = kwargs.get("id", None)
+            if not id:
+                return Response({"Method PUT not allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                instance = User.objects.get(id=id)
+            except:
+                return Response({"error": "Object does not exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer = ChangeFirstNameSerializer(data=request.data, instance=instance)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response({"first_name": serializer.data}, status=status.HTTP_200_OK)
+
+
+class ChangeLastNameView(generics.UpdateAPIView):
+    """
+    An endpoint for changing last_name.
+    """
+    serializer_class = ChangeFirstNameSerializer
+    model = User
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            id = kwargs.get("id", None)
+            if not id:
+                return Response({"Method PUT not allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                instance = User.objects.get(id=id)
+            except:
+                return Response({"error": "Object does not exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer = ChangeLastNameSerializer(data=request.data, instance=instance)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response({"last_name": serializer.data}, status=status.HTTP_200_OK)

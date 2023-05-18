@@ -10,6 +10,8 @@ urlpatterns = [
     path('userlist/', views_accounts.UserApiView.as_view()),
     path('userlist/<int:pk>/', views_accounts.UserApiView.as_view()),
     path('change-password/', views_accounts.ChangePasswordView.as_view(), name='change-password'),
+    path('change-firstname/<int:id>/', views_accounts.ChangeFirstNameView.as_view(), name='change-first-name'),
+    path('change-lastname/<int:id>/', views_accounts.ChangeLastNameView.as_view(), name='change-last-name'),
     #path('auth/', include('djoser.urls')),
     #path('auth/', include('djoser.urls.authtoken')),  # djoser
     path('auth/token/create/', views_accounts.CustomTokenCreateView.as_view(), name='token_create'),
