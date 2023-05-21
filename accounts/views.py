@@ -102,35 +102,6 @@ class CustomTokenDestroyView(TokenDestroyView):
        
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def reset_password_confirm(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        serializer.user.set_password(serializer.data["new_password"])
-        if hasattr(serializer.user, "last_login"):
-            serializer.user.last_login = now()
-        serializer.user.save()
-
-        token = Token.objects.get(user=serializer.user)
-        token_serializer_class = settings.SERIALIZERS.token
-        response = {
-            'message': _('Password reset successfully'),
-            'id': str(serializer.user.id),
-            'email': str(serializer.user.email),
-            'first_name': str(serializer.user.first_name),
-            'last_name': str(serializer.user.last_name),
-            'user_role': str(serializer.user.user_role),
-            'emailNotification': str(serializer.user.get_email_notifications),
-            'auth_token': token_serializer_class(token).data.get('auth_token'),
-        }
-
-        if settings.PASSWORD_CHANGED_EMAIL_CONFIRMATION:
-            context = {"user": serializer.user}
-            to = [get_user_email(serializer.user)]
-            settings.EMAIL.password_changed_confirmation(self.request, context).send(to)
-
-        return Response(response, status=status.HTTP_200_OK)
-
 
 class UserApiView(APIView):
 
