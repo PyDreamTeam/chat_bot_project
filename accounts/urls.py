@@ -9,6 +9,7 @@ from . import views as views_accounts
 urlpatterns = [
     #path('userlist/', views_accounts.UserApiView.as_view()),
    # path('userlist/<int:pk>/', views_accounts.UserApiView.as_view()),
+    path('user/', views_accounts.UserViewSet.as_view({'post': 'create'}, name='user-registration')),
     path('change-password/', views_accounts.ChangePasswordView.as_view(), name='change-password'),
     #path('auth/', include('djoser.urls')),
     #path('auth/', include('djoser.urls.authtoken')),  # djoser
