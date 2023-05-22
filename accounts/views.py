@@ -48,7 +48,6 @@ class UserViewSet(views.UserViewSet):
         serializer.is_valid(raise_exception=True)
         
         serializer.user.set_password(serializer.data["new_password"])
-        print(type(serializer))
         if hasattr(serializer.user, "last_login"):
             serializer.user.last_login = now()
         serializer.user.save()

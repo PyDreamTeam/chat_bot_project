@@ -16,11 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
-    path('botcards/', include('chatbot_cards.urls')),
+    #path('botcards/', include('chatbot_cards.urls')),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'), # API Schema
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'), # Optional UI
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'), # Optional UI
 ]
 

@@ -43,10 +43,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     "corsheaders",  #cors
-    'api',
+    #'api',
     'accounts',
-    'chatbot_cards',
+    #'chatbot_cards',
     # 'chatbot_favourites',
+    'drf_spectacular', # Documentation automation 
 ]
 
 MIDDLEWARE = [
@@ -124,10 +125,21 @@ REST_FRAMEWORK = {
 
 
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema', # drf-spectacular
     # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
-#
+#drf-spectacular SPECTACULAR_SETTINGS
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TODO List API',
+    'DESCRIPTION': 'API documentation for our app',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True
+    # OTHER SETTINGS
+}
+
+
 # AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
 # smtp
