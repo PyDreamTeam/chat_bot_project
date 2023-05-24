@@ -103,26 +103,8 @@ class CustomTokenDestroyView(TokenDestroyView):
        
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class CustomTokenAuthentication(TokenAuthentication):
-    keyword = 'Bearer'
-
-    def authenticate_credentials(self, key):
-        model = self.get_model()
-        try:
-            token = model.objects.get(key=key)
-        except model.DoesNotExist:
-            raise AuthenticationFailed('Invalid token', code=status.HTTP_403_FORBIDDEN)
-
-        if not token.user.is_active:
-            raise AuthenticationFailed('User inactive or deleted', code=status.HTTP_403_FORBIDDEN)
-
-        return (token.user, token)
-
 
 class UserApiView(APIView):
-
-    authentication_classes = [CustomTokenAuthentication]
-    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user_data = User.objects.all()

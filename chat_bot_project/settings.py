@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'accounts',
     #'chatbot_cards',
     # 'chatbot_favourites',
-    'drf_spectacular', # Documentation automation 
+    'drf_spectacular', # Documentation automation
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +122,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',  # djoser
+        # 'rest_framework.authentication.TokenAuthentication',  # djoser
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # SimpleJWT
 
 
     ],
@@ -165,6 +167,8 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
+    'TOKEN_MODEL': 'rest_framework_simplejwt.tokens.AccessToken',
+    'TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
         "your redirect url",
@@ -186,6 +190,11 @@ DJOSER = {
     "CONSTANTS": {
         'messages': 'djoser.constants.Messages',
     },
+}
+
+# Simple JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
 }
 
 # CORS HEADERS
