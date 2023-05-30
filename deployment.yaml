@@ -1,0 +1,154 @@
+#data-db-persistentvolumeclaim.yam
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+  service: pydream-db
+  name: pydream-db
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+  requests:
+    storage: 2Gi
+    
+---
+#db-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+  service: db
+  name: db-config
+data:
+  db-name: "pydream"
+---
+#db-secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pydream-credentials
+type: Opaque
+data:
+  user: YWRtaW4=
+  password: YWRtaW5AMTIz
+---
+#db-deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+service: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+matchLabels:
+    service: db
+  template:
+metadata:
+    labels:
+      service: db
+      tier: backend
+spec:
+    containers:
+      - image: postgres
+        name: database
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: pydream-credentials
+                key: user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pydream-credentials
+                key: password
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: db-config
+                key: db-name
+        ports:
+          - containerPort: 5432
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        volumeMounts:
+          - mountPath: /var/lib/mysql/data
+            name: pydream-db
+    restartPolicy: Always
+    volumes:
+      - name: pydream-db
+        persistentVolumeClaim:
+          claimName: pydream-db
+---
+#db-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+service: db
+  name: db
+spec:
+  ports:
+- name: "5432"
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+  selector:
+service: db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+service: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+matchLabels:
+    service: web
+  template:
+metadata:
+    labels:
+      service: web
+spec:
+    containers:
+      - args:
+          - bash
+          - -c
+          - python manage.py syncdb --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+        image: mamicheck/djangopy:latest
+        name: pydream
+        ports:
+          - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 250Mi
+    restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+service: web
+  name: web
+spec:
+  type: LoadBalancer
+  ports:
+- name: "8000"
+    port: 8000
+    targetPort: 8000
+  selector:
+service: web
