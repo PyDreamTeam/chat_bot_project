@@ -10,6 +10,8 @@ RUN apk update \
 
 RUN pip install --upgrade pip
 
+RUN pip install drf-spectacular
+
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
