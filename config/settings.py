@@ -44,22 +44,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    "rest_framework_simplejwt", #JWT
-    "corsheaders",  #cors
+    'djoser', #djoser 
+    'corsheaders',  #cors   
+    'rest_framework_simplejwt', #JWT authentication backend library
+    'rest_framework_simplejwt.token_blacklist',
     'accounts',
-    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # middleware for cors-headers
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', #cors
-    'django.middleware.common.CommonMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -82,9 +82,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASE CONFIG
 DATABASES = {
     'default': {
         'ENGINE': env.str('DATABASE_ENGINE'),
@@ -115,25 +114,88 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-REST_FRAMEWORK = {
-
+REST_FRAMEWORK = {    
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [        
+        "rest_framework_simplejwt.authentication.JWTAuthentication" #JWT
         #'rest_framework.authentication.TokenAuthentication',  # djoser
-        #"rest_framework_simplejwt.authentication.JWTAuthentication" #JWT
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication', 
+        #'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication', 
 
     ],
-    # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated"
+    ],
 }
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=25),  # can be changed
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
-    'AUTH_HEADER_TYPES': ('JWT',),
+
+# SMTP CONFIG
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+DEFAULT_FROM_EMAIL = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+
+
+# DJOSER CONFIG
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    "USER_CREATE_PASSWORD_RETYPE": False, # True is only required re_password
+    "USERNAME_CHANGED_EMAIL_CONFIRMATION": False,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "SET_USERNAME_RETYPE": False,
+    "SET_PASSWORD_RETYPE": True,
+    "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "user/reset_password_confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
+        "your redirect url",
+        "your redirect url",
+    ],
+    "SERIALIZERS": {
+        "user_create": "accounts.serializers.UserCreateSerializer",  # custom serializer
+        "user": "djoser.serializers.UserSerializer",
+        "current_user": "djoser.serializers.UserSerializer",
+        "user_delete": "djoser.serializers.UserSerializer",
+        'password_reset': 'accounts.serializers.PasswordResetSerializer', # custom serializer
+        'password_reset_confirm': 'djoser.serializers.PasswordResetConfirmSerializer',
+    },
+    "EMAIL": {
+        'confirmation': 'djoser.email.ConfirmationEmail',
+        'password_reset': 'djoser.email.PasswordResetEmail',
+        'password_changed_confirmation': 'djoser.email.PasswordChangedConfirmationEmail',
+    },
+    "CONSTANTS": {
+        'messages': 'djoser.constants.Messages',
+    },
 }
+
+
+# JWT CONFIG
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),  # can be changed
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    
+    'AUTH_HEADER_TYPES': ('JWT',),   
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION", 
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+}
+
+
+# CORS HEADERS
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Internationalization
@@ -158,4 +220,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#AUTH_USER_MODEL = 'accounts.User' #new model user
+AUTH_USER_MODEL = 'accounts.User' #new model user
