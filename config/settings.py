@@ -154,7 +154,7 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "user/reset_password_confirm/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "ACTIVATION_URL": "activate/{uid}/{token}",
-    "SEND_ACTIVATION_EMAIL": False,
+    "SEND_ACTIVATION_EMAIL": True,
     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
         "your redirect url",
@@ -181,8 +181,10 @@ DJOSER = {
 
 # JWT CONFIG
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),  # can be changed
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # can be changed
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     
     'AUTH_HEADER_TYPES': ('JWT',),   
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION", 
