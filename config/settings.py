@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+from typing import Dict, Any
+
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -95,7 +98,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -127,6 +129,31 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated"
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+#drf-spectacular SPECTACULAR_SETTINGS
+SPECTACULAR_SETTINGS: Dict[str, Any] = {
+    # path prefix
+    'SCHEMA_PATH_PREFIX': r'/api/v[0-9]',
+    # swagger settings
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'filter': True,
+    },
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'ENABLE_LIST_MECHANICS_ON_NON_2XX': True,
+    # schema metadata
+    'TITLE': 'Chat-Bot API',
+    'DESCRIPTION': 'This is a API for a Chat-Bot store',
+    'VERSION': '1.0.1',
+    'CONTACT': {
+        "name": "API Support",
+        "url": "http://www.example.com/support",
+        "email": "support@example.com"
+    },
 }
 
 
