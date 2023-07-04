@@ -1,9 +1,10 @@
 from django.db import transaction
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+
 from djoser.conf import settings
 from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
-from django.contrib.auth import get_user_model
 from djoser.serializers import SendEmailResetSerializer
-from django.core.exceptions import ValidationError
 
 from rest_framework import serializers
 
