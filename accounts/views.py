@@ -9,6 +9,7 @@ from rest_framework import status, generics, viewsets
 
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
 from djoser import views, utils
 from djoser.conf import settings
@@ -19,9 +20,10 @@ from .serializers import UserCreateSerializer
 
 
 #Logout
-class APILogoutView(APIView):
+class APILogoutView(generics.GenericAPIView):
+    serializer_class = TokenRefreshSerializer
     permission_classes = (IsAuthenticated,)    
-    
+
     def post(self, request, *args, **kwargs):
         """request = refresh_token: token or 'all': id_user """
         if self.request.data.get('all'):
@@ -29,7 +31,7 @@ class APILogoutView(APIView):
             for token in OutstandingToken.objects.filter(user=request.user):
                 _, _ = BlacklistedToken.objects.get_or_create(token=token)
             return Response(status=status.HTTP_200_OK)
-        refresh_token = self.request.data.get('refresh_token')
+        refresh_token = self.request.data.get('refresh')
         token = RefreshToken(token=refresh_token)
         token.blacklist()
         return Response(status=status.HTTP_200_OK)
