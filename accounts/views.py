@@ -1,18 +1,12 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.views import APIView
+from rest_framework.views import APIView 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework import status, generics
+from rest_framework import status, generics, viewsets
 
-
-# from rest_framework_simplejwt.tokens import (
-#     OutstandingToken,
-#     BlacklistedToken,
-#     RefreshToken
-# )
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -26,9 +20,10 @@ from .serializers import UserCreateSerializer
 
 #Logout
 class APILogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)    
     
     def post(self, request, *args, **kwargs):
+        """request = refresh_token: token or 'all': id_user """
         if self.request.data.get('all'):
             token = OutstandingToken
             for token in OutstandingToken.objects.filter(user=request.user):
