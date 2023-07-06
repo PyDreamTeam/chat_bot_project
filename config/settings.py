@@ -171,7 +171,7 @@ EMAIL_PORT = 587
 # DJOSER CONFIG
 DJOSER = {
     "LOGIN_FIELD": "email",
-    "USER_CREATE_PASSWORD_RETYPE": False, # True is only required re_password
+    "USER_CREATE_PASSWORD_RETYPE": True, # True is only required re_password
     "USERNAME_CHANGED_EMAIL_CONFIRMATION": False,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
     "SEND_CONFIRMATION_EMAIL": True,
