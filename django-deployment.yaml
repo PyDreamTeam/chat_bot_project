@@ -23,11 +23,15 @@ spec:
           volumeMounts:
             - name: django-storage
               mountPath: /app/static
+          lifecycle:
+            postStart:
+              exec:
+                command: ["python", "manage.py", "migrate"]
       volumes:
         - name: django-storage
           persistentVolumeClaim:
             claimName: django-pvc-python
-
+          
 ---
 apiVersion: v1
 kind: Service
@@ -42,31 +46,31 @@ spec:
       targetPort: 8000
       nodePort: 31080 # port-range: 30000-32767
   type: NodePort
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: django-migrate-job
-spec:
-  ttlSecondsAfterFinished: 3600 # Job will be deleted 1 hour after it finishes
-  template:
-    spec:
-      containers:
-        - name: migrate
-          image: mamicheck/backend:{{IMAGE_TAG}}
-          command: ["python", "manage.py", "migrate"]
-          envFrom:
-            - secretRef:
-                name: pydream-secret
-          volumeMounts:
-            - name: django-storage
-              mountPath: /app/static
-      volumes:
-        - name: django-storage
-          persistentVolumeClaim:
-            claimName: django-pvc-python
-      restartPolicy: Never
-  backoffLimit: 4
+# ---
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: django-migrate-job
+# spec:
+#   ttlSecondsAfterFinished: 3600 # Job will be deleted 1 hour after it finishes
+#   template:
+#     spec:
+#       containers:
+#         - name: migrate
+#           image: mamicheck/backend:20
+#           command: ["python", "manage.py", "migrate"]
+#           envFrom:
+#             - secretRef:
+#                 name: pydream-secret
+#           volumeMounts:
+#             - name: django-storage
+#               mountPath: /app/static
+#       volumes:
+#         - name: django-storage
+#           persistentVolumeClaim:
+#             claimName: django-pvc-python
+#       restartPolicy: Never
+#   backoffLimit: 4
 
 ---
 
