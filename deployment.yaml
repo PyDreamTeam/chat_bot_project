@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: python
   name: postgres-deployment
 spec:
   replicas: 2
@@ -33,7 +32,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: python
   name: postgres-service
 spec:
   selector:
@@ -47,7 +45,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: python
   name: django-deployment
 spec:
   replicas: 2
@@ -79,7 +76,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: python
   name: django-service
 spec:
   selector:
@@ -94,7 +90,6 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: python
   name: django-migrate-job
 spec:
   ttlSecondsAfterFinished: 3600 # Job will be deleted 1 hour after it finishes
@@ -121,7 +116,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  namespace: python
   name: postgres-pv-python
 spec:
   capacity:
@@ -137,7 +131,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: python
   name: postgres-pvc-python
 spec:
   accessModes:
@@ -151,7 +144,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  namespace: python
   name: django-pvc-python
 spec:
   accessModes:
@@ -165,7 +157,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  namespace: python
   name: django-pv-python
 spec:
   capacity:
