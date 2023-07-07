@@ -17,7 +17,6 @@ from djoser.conf import settings
 from djoser.compat import get_user_email
 
 from .models import User
-from .serializers import UserCreateSerializer
 
 
 #Logout

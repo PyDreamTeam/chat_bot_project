@@ -3,7 +3,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from djoser.conf import settings
-from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
+
+from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCreatePasswordRetypeSerializer
 from djoser.serializers import SendEmailResetSerializer
 
 from rest_framework import serializers
@@ -11,10 +12,10 @@ from rest_framework import serializers
 
 User = get_user_model()
 
+    
+class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer):
 
-class UserCreateSerializer(BaseUserRegistrationSerializer):
-
-    class Meta(BaseUserRegistrationSerializer.Meta):
+    class Meta(BaseUserCreatePasswordRetypeSerializer.Meta):
         model = User
         fields = (
                     "email",
@@ -29,9 +30,10 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
         with transaction.atomic():
             user = User.objects.create_user(**validated_data)
             if settings.SEND_ACTIVATION_EMAIL:
-                user.is_active = False
+                user.is_active = True
                 user.save(update_fields=["is_active"])
         return user
+    
 
 
 class PasswordResetSerializer(SendEmailResetSerializer):
