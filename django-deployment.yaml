@@ -84,8 +84,6 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: manual
-
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -95,8 +93,6 @@ spec:
   capacity:
     storage: 2Gi
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
-  storageClassName: manual
-  hostPath:
+    - ReadWriteOnce  
+hostPath:
     path: /data/django-pv
