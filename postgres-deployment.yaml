@@ -53,6 +53,7 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
+  storageClassName: local-storage
   hostPath:
     path: /data/postgres-pv
 
@@ -67,3 +68,4 @@ spec:
   resources:
     requests:
       storage: 2Gi
+  storageClassName: local-storage
