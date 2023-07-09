@@ -53,7 +53,7 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
   storageClassName: manual
   hostPath:
     path: /data/postgres-pv
