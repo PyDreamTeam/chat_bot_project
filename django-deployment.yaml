@@ -96,6 +96,7 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
   storageClassName: local-storage
   hostPath:
     path: /data/django-pv
