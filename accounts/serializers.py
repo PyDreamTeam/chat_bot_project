@@ -34,8 +34,7 @@ class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer)
                 user.save(update_fields=["is_active"])
         return user
     
-
-
+    
 class PasswordResetSerializer(SendEmailResetSerializer):
     
     def validate_email(self, value):

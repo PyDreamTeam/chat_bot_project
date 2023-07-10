@@ -5,6 +5,6 @@ from django.views.generic.base import ContextMixin
 
 
 class ConfirmationEmail(BaseConfirmationEmail):
-    template_name = 'email/confirmation.html'
+    template_name = 'confirmation.html'
     
     
