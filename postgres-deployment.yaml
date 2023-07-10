@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: postgres-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
@@ -53,8 +53,8 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: local-storage
   hostPath:
     path: /data/postgres-pv
 
@@ -69,4 +69,4 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  storageClassName: manual
+  storageClassName: local-storage
