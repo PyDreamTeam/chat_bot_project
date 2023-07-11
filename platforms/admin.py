@@ -1,8 +1,5 @@
 from django.contrib import admin
-
 from platforms.models import Platform, PlatformFilter
-
-# Register your models here.
 
 @admin.register(Platform)
 class Platform1Admin(admin.ModelAdmin):
