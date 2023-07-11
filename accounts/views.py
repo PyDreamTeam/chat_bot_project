@@ -16,18 +16,21 @@ from djoser import views, utils
 from djoser.conf import settings
 from djoser.compat import get_user_email
 
+from drf_spectacular.utils import extend_schema
+
 from .models import User
-from .serializers import UserCreateSerializer
 
 
 #Logout
-class APILogoutView(generics.GenericAPIView):
+class LogoutAPIView(generics.GenericAPIView):
     serializer_class = TokenRefreshSerializer
     permission_classes = (IsAuthenticated,)    
-
+    
+    @extend_schema(responses={200: None})
     def post(self, request, *args, **kwargs):
         #all devices
         # if self.request.data.get('all'):
+            
         #     token = OutstandingToken
         #     for token in OutstandingToken.objects.filter(user=request.user):
         #         _, _ = BlacklistedToken.objects.get_or_create(token=token)
@@ -41,6 +44,6 @@ class APILogoutView(generics.GenericAPIView):
             token = RefreshToken(token=refresh_token)
             token.blacklist() 
         except TokenError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)            
-        
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+                  
         return Response(status=status.HTTP_200_OK)

@@ -13,11 +13,12 @@ This is a Backend TWNSND website built using **Django 4**, **Django REST Framewo
 
 - [x] Registering and logging/loguot to user account
 - [ ] Setting SMTP
-- [ ] Add Platforms cards
+- [ ] Add app Platforms
 - [ ] Filtering Platforms cards
-- [ ] Add Solutions cards
+- [ ] Add app Solutions
 - [ ] Filtering Solutions cards
 - [ ] Add Favorite
+- [ ] Add app Requests
 
 
 ## Technology Stack Backend:
