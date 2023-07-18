@@ -8,7 +8,7 @@ urlpatterns = [
 
     path('ordercreate/', OrderAPICreate.as_view()),
     path('orderlist/', OrderAPIList.as_view()),
-    path('orderdetail/', OrderAPIDetailView.as_view())
+    path('orderdetail/<int:pk>/', OrderAPIDetailView.as_view())
 
 
 ]
