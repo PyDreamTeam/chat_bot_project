@@ -5,7 +5,7 @@ class PlatformFilter(models.Model):
     title = models.CharField(max_length=100)
     functionality = models.CharField(max_length=200)
     integration = models.CharField(max_length=500, null=True, blank=True)
-    properties = models.JSONField()
+    properties = models.CharField(max_length=1000)
     image = models.ImageField(null=True, upload_to='./platforms/platformfilter_images/')
     is_active = models.BooleanField(default=True)
 
