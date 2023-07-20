@@ -3,8 +3,11 @@ start: #start on linux mint
 	python3 -m venv .venv
 	sudo docker-compose up --build -d
 	.venv/bin/python3 -m pip install --upgrade pip
+	sleep 5
 	.venv/bin/pip install -r requirements.txt
+	sleep 5
 	.venv/bin/python3 manage.py makemigrations
+	sleep 5
 	.venv/bin/python3 manage.py migrate
 	
 	sleep 3
