@@ -1,14 +1,27 @@
 from django.contrib import admin
-from platforms.models import Platform, PlatformFilter
+
+from platforms.models import (Platform, PlatformFilter, PlatformGroup,
+                              PlatformTag)
+
+
 @admin.register(Platform)
 class Platform1Admin(admin.ModelAdmin):
-    list_display = ("title", )
+    list_display = ("title",)
+
+
+@admin.register(PlatformTag)
+class PlatformTag1Admin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "properties",
+    )
 
 
 @admin.register(PlatformFilter)
-class PlatformFilter1Admin(admin.ModelAdmin):
-    list_display = ("title", "properties", )
+class PlatformTag1Admin(admin.ModelAdmin):
+    list_display = ("title",)
 
 
-
-
+@admin.register(PlatformGroup)
+class PlatformTag1Admin(admin.ModelAdmin):
+    list_display = ("title",)
