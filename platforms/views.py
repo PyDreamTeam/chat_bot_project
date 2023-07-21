@@ -20,6 +20,40 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     queryset = PlatformFilter.objects.all()
     serializer_class = PlatformFilterSerializer
 
+    def list(self, request):
+        groups = PlatformGroup.objects.all()
+        filters = PlatformFilter.objects.all()
+        tags = PlatformTag.objects.all()
+
+        results = []
+
+        for group in groups:
+            group_data = {
+                "group": group.title,
+                "id": group.id,
+                "count": 0,
+                "is_active": group.is_active,
+                "filters": [],
+            }
+
+            for platform_filter in filters.filter(group=group):
+                filter_data = {
+                    "filter": platform_filter.title,
+                    "id": platform_filter.id,
+                    # "image": platform_filter.image,
+                    "is_active": platform_filter.is_active,
+                }
+
+                group_data["filters"].append(filter_data)
+                group_data["count"] += 1
+
+            results.append(group_data)
+
+        return Response(
+            {"count": len(results), "next": None,
+             "previous": None, "results": results}
+        )
+
 
 class PlatformTagViewSet(viewsets.ModelViewSet):
     queryset = PlatformTag.objects.all()

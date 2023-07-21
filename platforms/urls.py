@@ -7,8 +7,8 @@ from .views import (PlatformFilterViewSet, PlatformGroupViewSet,
 router = DefaultRouter()
 router.register("platforms", PlatformViewSet)
 router.register("groups", PlatformGroupViewSet)
-router.register("filters", PlatformTagViewSet)
-router.register("tags", PlatformFilterViewSet)
+router.register("filters", PlatformFilterViewSet)
+router.register("tags", PlatformTagViewSet)
 
 urlpatterns = [
     path("platform/", include(router.urls)),
