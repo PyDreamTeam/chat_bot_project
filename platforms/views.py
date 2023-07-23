@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status, renderers
+from rest_framework.renderers import CoreJSONRenderer
 from rest_framework.response import Response
 
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
@@ -19,7 +20,25 @@ class PlatformGroupViewSet(viewsets.ModelViewSet):
 class PlatformFilterViewSet(viewsets.ModelViewSet):
     queryset = PlatformFilter.objects.all()
     serializer_class = PlatformFilterSerializer
+    renderer_classes = [renderers.JSONRenderer, renderers.CoreJSONRenderer]
 
+    # вывод одного значения
+    def retrieve(self, request, pk=None):
+        platform_filter = self.queryset.filter(pk=pk).first()
+        if platform_filter:
+            serializer = self.serializer_class(platform_filter)
+            filter_data = dict(serializer.data)
+            return Response({
+                    "filter": filter_data['title'],
+                    "id": filter_data['id'],
+                    "image": f"{filter_data['image']}" if filter_data['image'] else 'None',
+                    "is_active": filter_data['is_active'],
+                    "group": filter_data['group'],
+                })
+        else:
+            return Response({"message": "Platform filter not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # вывод всех значений
     def list(self, request):
         groups = PlatformGroup.objects.all()
         filters = PlatformFilter.objects.all()
@@ -27,6 +46,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
 
         results = []
 
+        # формирование списка групп
         for group in groups:
             group_data = {
                 "group": group.title,
@@ -36,11 +56,12 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                 "filters": [],
             }
 
+            # формирование списка фильтров по группам
             for platform_filter in filters.filter(group=group):
                 filter_data = {
                     "filter": platform_filter.title,
                     "id": platform_filter.id,
-                    # "image": platform_filter.image,
+                    "image": f"{platform_filter.image}" if platform_filter.image else 'None',
                     "is_active": platform_filter.is_active,
                 }
 
@@ -59,6 +80,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
     queryset = PlatformTag.objects.all()
     serializer_class = PlatformTagSerializer
 
+    # вывод всех значений
     def list(self, request):
         groups = PlatformGroup.objects.all()
         filters = PlatformFilter.objects.all()
@@ -66,6 +88,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
 
         results = []
 
+        # формирование списка групп
         for group in groups:
             group_data = {
                 "group": group.title,
@@ -75,16 +98,18 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                 "filters": [],
             }
 
+            # формирование списка фильтров по группам
             for platform_filter in filters.filter(group=group):
                 filter_data = {
                     "filter": platform_filter.title,
                     "id": platform_filter.id,
-                    # "image": platform_filter.image,
+                    "image": f"{platform_filter.image}" if platform_filter.image else 'None',
                     "count": 0,
                     "is_active": platform_filter.is_active,
                     "tags": [],
                 }
 
+                # формирование списка тэгов по фильтрам
                 for tag in tags.filter(title=platform_filter):
                     tag_data = {
                         "tag": tag.properties,
@@ -103,115 +128,3 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
             {"count": len(results), "next": None,
              "previous": None, "results": results}
         )
-
-
-# class PlatformViewSet(viewsets.ModelViewSet):
-#     queryset = Platform.objects.all()
-#     serializer_class = PlatformSerializer
-
-# class PlatformGroupViewSet(viewsets.ModelViewSet):
-#     queryset = PlatformGroup.objects.all()
-#     serializer_class = PlatformGroupSerializer
-
-# class PlatformFilterViewSet(viewsets.ModelViewSet):
-#     queryset = PlatformFilter.objects.all()
-#     serializer_class = PlatformFilterSerializer
-
-# class PlatformTagViewSet(viewsets.ModelViewSet):
-#     queryset = PlatformTag.objects.all()
-#     serializer_class = PlatformTagSerializer
-
-#     def list(self, request):
-#         queryset = PlatformTag.objects.all()
-#         serializer = PlatformTagSerializer(queryset, many=True)
-#         filters_list = serializer.data
-#         results = []
-#         filters = []
-#         # Выборка и формирование всех групп
-#         for group_item in filters_list:
-
-#             for filter_item in filters_list:
-#                 tags = []
-#                 # выборка и формирование всех тэгов для фильтров
-#                 for item in filters_list:
-#                     tag_filter = {}
-#                     tag_filter = {"id": item["id"], "properties": item["properties"], "is_active": item["is_active"]}
-#                     if item['title'] == filter_item["title"]:
-#                         tags.append(tag_filter)
-#                 # создаие фильтра
-#                 platform_filter = {
-#                             "title": filter_item["title"],
-#                             "image": filter_item["image"],
-#                             "count": len(tags),
-#                             "tags": tags,
-#                         }
-#                 # проверка наличия фильтра в фильтрах группы (если уже добавлен, то не добавлять)
-#                 has_filter = False
-#                 for item in filters:
-#                     if item['title'] == filter_item["title"]:
-#                         has_filter = True
-#                         break
-#                 if not has_filter:
-#                     filters.append(platform_filter)
-
-#             # создаие фильтра
-#             groups_of_filter = {
-#                             "group": group_item["group"],
-#                             "count": len(filters),
-#                             "filters": filters,
-#             }
-#             # проверка наличия группы в результатах (если уже добавлен, то не добавлять)
-#             has_group = False
-#             for item in results:
-#                 if item['group'] == group_item["group"]:
-#                     has_group = True
-#                     break
-#             if not has_group:
-#                 results.append(groups_of_filter)
-
-
-#         return Response({
-#             "count": len(results),
-#             "next": None,
-#             "previous": None,
-#             "results": results
-#         })
-
-
-# def list(self, request):
-#     queryset = PlatformFilter.objects.all()
-#     serializer = PlatformFilterSerializer(queryset, many=True)
-#     filters_list = serializer.data
-#     results = []
-#     # Выборка и формирование всех фильтров
-#     for filter_item in filters_list:
-#         tags = []
-#         # выборка и формирование всех тэгов для фильтров
-#         for item in filters_list:
-#             tag_filter = {}
-#             tag_filter = {"id": item["id"], "properties": item["properties"], "is_active": item["is_active"]}
-#             if item['title'] == filter_item["title"]:
-#                 tags.append(tag_filter)
-#         # создаие фильтра
-#         platform_filter = {
-#                     "title": filter_item["title"],
-#                     "group": filter_item["group"],
-#                     "image": filter_item["image"],
-#                     "tags": tags,
-#                 }
-#         # проверка наличия фильтра в результатах (если уже добавлен, тоне добпять)
-#         has_filter = False
-#         for item in results:
-#             if item['title'] == filter_item["title"]:
-#                 has_filter = True
-#                 break
-#         if not has_filter:
-#             results.append(platform_filter)
-
-
-#     return Response({
-#         "count": len(results),
-#         "next": None,
-#         "previous": None,
-#         "results": results
-#     })
