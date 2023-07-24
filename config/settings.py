@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
+    'platforms',
     'drf_spectacular', #specification
+    
 ]
 
 MIDDLEWARE = [
@@ -223,7 +225,7 @@ DJOSER = {
 
 # JWT CONFIG
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # can be changed
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1440),  # can be changed
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
