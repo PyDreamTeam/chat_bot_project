@@ -51,8 +51,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
-    'drf_spectacular', #specification
     'orders',
+    'drf_spectacular', #specification
+    
 ]
 
 MIDDLEWARE = [
