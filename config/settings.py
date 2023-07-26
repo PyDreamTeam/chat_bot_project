@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
+    'platforms',
     'orders',
     'drf_spectacular', #specification
     
@@ -180,7 +181,7 @@ DJOSER = {
     "SET_USERNAME_RETYPE": False,
     "SET_PASSWORD_RETYPE": True,
     "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-    "PASSWORD_RESET_CONFIRM_URL": "user/reset_password_confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "change-password?uid={uid}&token={token}",
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
@@ -210,10 +211,12 @@ DJOSER = {
         'token_create': 'djoser.serializers.TokenCreateSerializer',  
     },
     "EMAIL": {
-        'activation': 'djoser.email.ActivationEmail',
+        'activation': 'accounts.email.ActivationEmail', # custom
         'confirmation': 'accounts.email.ConfirmationEmail', # custom ConfirmationEmail
-        'password_reset': 'djoser.email.PasswordResetEmail',
-        'password_changed_confirmation': 'djoser.email.PasswordChangedConfirmationEmail',
+        'password_reset': 'accounts.email.PasswordResetEmail', # custom
+        'password_changed_confirmation': 'accounts.email.PasswordChangedConfirmationEmail', # custom
+        'username_changed_confirmation': 'accounts.email.UsernameChangedConfirmationEmail', # custom
+        'username_reset': 'accounts.email.UsernameResetEmail', # custom
     },
     "CONSTANTS": {
         'messages': 'djoser.constants.Messages',
@@ -223,7 +226,7 @@ DJOSER = {
 
 # JWT CONFIG
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # can be changed
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1440),  # can be changed
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
