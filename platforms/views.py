@@ -54,6 +54,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     "group": filter_data['group'],
                     "functionality": filter_data['functionality'],
                     "integration": filter_data['integration'],
+                    "multiple": filter_data['multiple'],
                 })
         else:
             return Response({"message": "Platform filter not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -85,6 +86,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     "is_active": platform_filter.is_active,
                     "functionality": platform_filter.functionality,
                     "integration": platform_filter.integration,
+                    "multiple": platform_filter.multiple,
                 }
 
                 group_data["filters"].append(filter_data)
@@ -136,6 +138,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                     "is_active": platform_filter.is_active,
                     "functionality": platform_filter.functionality,
                     "integration": platform_filter.integration,
+                    "multiple": platform_filter.multiple,
                     "tags": [],
                 }
 
