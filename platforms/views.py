@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
+from .utils import get_permissions
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
@@ -13,9 +14,13 @@ class PlatformViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Разрешить авторизованным пользователям редактировать, остальные могут только читать
 
     def get_permissions(self):
-        if self.request.method == 'GET':
-            self.permission_classes = [permissions.AllowAny]  # Разрешить GET-запросы без авторизации
-        return super().get_permissions()
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
+
+    # def get_permissions(self):
+    #     if self.request.method == 'GET':
+    #         self.permission_classes = [permissions.AllowAny]  # Разрешить GET-запросы без авторизации
+    #     return super().get_permissions()
 
 
 class PlatformGroupViewSet(viewsets.ModelViewSet):
@@ -24,9 +29,8 @@ class PlatformGroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Разрешить авторизованным пользователям редактировать, остальные могут только читать
 
     def get_permissions(self):
-        if self.request.method == 'GET':
-            self.permission_classes = [permissions.AllowAny]  # Разрешить GET-запросы без авторизации
-        return super().get_permissions()
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
 
 
 class PlatformFilterViewSet(viewsets.ModelViewSet):
@@ -36,9 +40,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Разрешить авторизованным пользователям редактировать, остальные могут только читать
 
     def get_permissions(self):
-        if self.request.method == 'GET':
-            self.permission_classes = [permissions.AllowAny]  # Разрешить GET-запросы без авторизации
-        return super().get_permissions()
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
 
     # вывод одного значения
     def retrieve(self, request, pk=None):
@@ -106,9 +109,8 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # Разрешить авторизованным пользователям редактировать, остальные могут только читать
 
     def get_permissions(self):
-        if self.request.method == 'GET':
-            self.permission_classes = [permissions.AllowAny]  # Разрешить GET-запросы без авторизации
-        return super().get_permissions()
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
 
     # вывод всех значений
     def list(self, request):
