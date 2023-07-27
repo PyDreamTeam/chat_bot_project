@@ -12,9 +12,11 @@ class PlatformGroup(models.Model):
 
 class PlatformFilter(models.Model):
     title = models.CharField(max_length=100)
+    functionality = models.CharField(max_length=200, null=True)
+    integration = models.CharField(max_length=800, null=True)
+    multiple = models.BooleanField(default=True)
     group = models.ForeignKey(PlatformGroup, on_delete=models.CASCADE)
-    image = models.ImageField(
-        null=True, upload_to="./platforms/filter_images/")
+    image = models.CharField(max_length=800, null=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -32,8 +34,7 @@ class PlatformTag(models.Model):
 
 class Platform(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(
-        null=True, upload_to="./platforms/platform_images/")
+    image = models.CharField(max_length=800, null=True)
     short_description = models.CharField(max_length=200)
     full_description = models.CharField(max_length=800)
     turnkey_solutions = models.IntegerField()
