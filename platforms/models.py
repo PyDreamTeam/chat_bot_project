@@ -12,6 +12,8 @@ class PlatformGroup(models.Model):
 
 class PlatformFilter(models.Model):
     title = models.CharField(max_length=100)
+    functionality = models.CharField(max_length=200, null=True)
+    integration = models.CharField(max_length=800, null=True)
     group = models.ForeignKey(PlatformGroup, on_delete=models.CASCADE)
     image = models.ImageField(
         null=True, upload_to="./platforms/filter_images/")
