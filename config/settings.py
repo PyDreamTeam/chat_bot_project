@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
     'platforms',
+    'orders',
     'drf_spectacular', #specification
     
 ]
