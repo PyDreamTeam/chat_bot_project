@@ -48,6 +48,20 @@ spec:
 #       storage: 1Gi
 #   storageClassName: manual
 # ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: pgadmin-py
+# spec:
+#   selector:
+#     app: pgadmin-py
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#       nodePort: 31505 # port-range: 30000-32767
+#   type: NodePort
+# ---
 apiVersion: v1
 kind: Service
 metadata:
@@ -57,7 +71,24 @@ spec:
     app: pgadmin-py
   ports:
     - protocol: TCP
-      port: 80
+      port: 81
       targetPort: 80
-      nodePort: 31505 # port-range: 30000-32767
-  type: NodePort
+  #     nodePort: 31505 # port-range: 30000-32767
+  # type: NodePort
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: pgadmin-app-ingress
+# spec:
+#   rules:
+#     - host: python.twnsnd.online
+#       http:
+#         paths:
+#           - path: /pgadmin
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: pgadmin-app-service
+#                 port:
+#                   number: 80
