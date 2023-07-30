@@ -56,7 +56,7 @@ spec:
     app: django
   ports:
     - protocol: TCP
-      port: 82
+      port: 8000
       targetPort: 8000
 # ---
 # apiVersion: batch/v1
