@@ -73,5 +73,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      nodePort: 31505 # port-range: 30000-32767
-  type: NodePort
+  #     nodePort: 31505 # port-range: 30000-32767
+  # type: NodePort
