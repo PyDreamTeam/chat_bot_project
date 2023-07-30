@@ -73,22 +73,5 @@ spec:
     - protocol: TCP
       port: 81
       targetPort: 80
-  #     nodePort: 31505 # port-range: 30000-32767
-  # type: NodePort
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: pgadmin-app-ingress
-# spec:
-#   rules:
-#     - host: python.twnsnd.online
-#       http:
-#         paths:
-#           - path: /pgadmin
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: pgadmin-app-service
-#                 port:
-#                   number: 80
+      nodePort: 31505 # port-range: 30000-32767
+  type: NodePort
