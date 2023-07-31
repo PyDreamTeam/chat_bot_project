@@ -25,4 +25,11 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['first_name', 'last_name', 'user_role', 'get_email_notifications']
     
     def __str__(self):
-        return self.email  
+        return self.email
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
