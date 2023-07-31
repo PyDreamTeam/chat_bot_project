@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.views import APIView
+from rest_framework.views import APIView 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -12,43 +12,38 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import TokenError
 
+from djoser import views, utils
+from djoser.conf import settings
+from djoser.compat import get_user_email
 
 from drf_spectacular.utils import extend_schema
 
-from .models import User, Profile
-from .serializers import ProfileSerializer, UserCreatePasswordRetypeSerializer
+from .models import User
 
 
-# Logout
+#Logout
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = TokenRefreshSerializer
-    permission_classes = (IsAuthenticated,)
-
+    permission_classes = (IsAuthenticated,)    
+    
     @extend_schema(responses={200: None})
     def post(self, request, *args, **kwargs):
-        # all devices
+        #all devices
         # if self.request.data.get('all'):
-
+            
         #     token = OutstandingToken
         #     for token in OutstandingToken.objects.filter(user=request.user):
         #         _, _ = BlacklistedToken.objects.get_or_create(token=token)
         #     return Response(status=status.HTTP_200_OK)
-
-        # token blacklist
+        
+        #token blacklist        
         try:
             refresh_token = self.request.data.get('refresh')
             if not refresh_token:
                 raise TokenError
             token = RefreshToken(token=refresh_token)
-            token.blacklist()
+            token.blacklist() 
         except TokenError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+                  
         return Response(status=status.HTTP_200_OK)
-
-
-class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
-
