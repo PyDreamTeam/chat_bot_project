@@ -346,3 +346,20 @@ class PlatformFiltration(generics.ListAPIView):
             "previous": None,
             "results": modified_data,
         }
+
+
+
+
+class PlatformSearch(generics.ListAPIView):
+    queryset = Platform.objects.all()
+    serializer_class = PlatformSerializer
+    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
+
+    def get_queryset(self):
+        title = self.request.data.get('title')
+        return self.queryset.filter(title__icontains=title)

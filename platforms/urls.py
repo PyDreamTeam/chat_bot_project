@@ -4,6 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     PlatformFilterViewSet,
     PlatformGroupViewSet,
+    PlatformSearch,
     PlatformTagViewSet,
     PlatformViewSet,
     PlatformImageViewSet,
@@ -20,6 +21,8 @@ router.register("images", PlatformImageViewSet)
 
 urlpatterns = [
 path("platform/filtration/", PlatformFiltration.as_view(), name="platform-filtration"),
+path("platform/search/", PlatformSearch.as_view(), name="platform-search"),
+
 
 path("platform/", include(router.urls)),
 ]
