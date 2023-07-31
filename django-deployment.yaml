@@ -32,11 +32,25 @@ spec:
           persistentVolumeClaim:
             claimName: django-pvc-python
           
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: django-service
+# spec:
+#   selector:
+#     app: django
+#   ports:
+#     - protocol: TCP
+#       port: 8000
+#       targetPort: 8000
+#       nodePort: 31080 # port-range: 30000-32767
+#   type: NodePort
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-service
+  name: django-app-service
 spec:
   selector:
     app: django
@@ -44,8 +58,6 @@ spec:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-      nodePort: 31080 # port-range: 30000-32767
-  type: NodePort
 # ---
 # apiVersion: batch/v1
 # kind: Job
