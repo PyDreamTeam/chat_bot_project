@@ -55,22 +55,3 @@ class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    # def get_object(self):
-    #     return self.request.user.profile
-    #
-    # def update(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance, data=request.data, partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_update(serializer)
-    #
-    #     return Response(serializer.data)
-    #
-    # def destroy(self, request, *args, **kwargs):
-    #     user = self.request.user
-    #     profile = self.get_object()
-    #
-    #     profile.delete()
-    #     user.delete()
-    #
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
