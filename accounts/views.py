@@ -12,9 +12,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import TokenError
 
-from djoser import views, utils
-from djoser.conf import settings
-from djoser.compat import get_user_email
 
 from drf_spectacular.utils import extend_schema
 
