@@ -26,15 +26,7 @@ class LogoutAPIView(generics.GenericAPIView):
 
     @extend_schema(responses={200: None})
     def post(self, request, *args, **kwargs):
-        # all devices
-        # if self.request.data.get('all'):
 
-        #     token = OutstandingToken
-        #     for token in OutstandingToken.objects.filter(user=request.user):
-        #         _, _ = BlacklistedToken.objects.get_or_create(token=token)
-        #     return Response(status=status.HTTP_200_OK)
-
-        # token blacklist
         try:
             refresh_token = self.request.data.get('refresh')
             if not refresh_token:
