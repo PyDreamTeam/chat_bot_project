@@ -7,7 +7,7 @@ from .models import (Platform, PlatformFilter, PlatformGroup, PlatformImage,
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformImageSerializer, PlatformSerializer,
                           PlatformTagSerializer)
-from .utils import get_permissions
+from .utils import get_permissions, modify_data
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
@@ -94,7 +94,8 @@ class PlatformViewSet(viewsets.ModelViewSet):
             results.append(data_platform)
 
         return Response(
-            {"count": len(results), "next": None, "previous": None, "results": results}
+            {"count": len(results), "next": None,
+             "previous": None, "results": results}
         )
 
 
@@ -184,7 +185,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
             results.append(group_data)
 
         return Response(
-            {"count": len(results), "next": None, "previous": None, "results": results}
+            {"count": len(results), "next": None,
+             "previous": None, "results": results}
         )
 
 
@@ -249,7 +251,8 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
             results.append(group_data)
 
         return Response(
-            {"count": len(results), "next": None, "previous": None, "results": results}
+            {"count": len(results), "next": None,
+             "previous": None, "results": results}
         )
 
 
@@ -303,51 +306,8 @@ class PlatformFiltration(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serialized_data = self.serializer_class(queryset, many=True)
-        modified_data = self.modify_data(serialized_data.data)  # редактировать данные
+        modified_data = modify_data(serialized_data.data)
         return Response(modified_data)
-
-    def modify_data(self, data):
-        # редактировать данные
-        modified_data = []
-
-        for item in data:
-            modified_item = dict(item)
-            data_my = {
-                "id": modified_item["id"],
-                "title": modified_item["title"],
-                "short_description": modified_item["short_description"],
-                "full_description": modified_item["full_description"],
-                "turnkey_solutions": modified_item["turnkey_solutions"],
-                "price": modified_item["price"],
-                "is_active": modified_item["is_active"],
-                "created_at": modified_item["created_at"],
-                "image": modified_item["image"] if modified_item["image"] else "None",
-                "tags": [],
-            }
-
-            for platform_tag in Platform.objects.get(
-                id=modified_item["id"]
-            ).filter.all():
-                tag_data = {
-                    "id": platform_tag.id,
-                    "tag": platform_tag.properties,
-                    "image_tag": platform_tag.image if platform_tag.image else "None",
-                    "is_active": platform_tag.is_active,
-                    "is_message": platform_tag.is_message,
-                }
-
-                data_my["tags"].append(tag_data)
-            if data_my not in modified_data:
-                modified_data.append(data_my)
-
-        return {
-            "count": len(modified_data),
-            "next": None,
-            "previous": None,
-            "results": modified_data,
-        }
-
-
 
 
 class PlatformSearch(generics.ListAPIView):
@@ -363,3 +323,9 @@ class PlatformSearch(generics.ListAPIView):
     def get_queryset(self):
         title = self.request.data.get('title')
         return self.queryset.filter(title__icontains=title)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serialized_data = self.serializer_class(queryset, many=True)
+        modified_data = modify_data(serialized_data.data)
+        return Response(modified_data)
