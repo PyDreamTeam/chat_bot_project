@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from platforms.models import (Platform, PlatformFilter, PlatformGroup, PlatformImage,
+from platforms.models import (Platform, PlatformFilter, PlatformGroup,
                               PlatformTag)
 
 
@@ -24,9 +24,4 @@ class PlatformTag1Admin(admin.ModelAdmin):
 
 @admin.register(PlatformGroup)
 class PlatformTag1Admin(admin.ModelAdmin):
-    list_display = ("title",)
-
-
-@admin.register(PlatformImage)
-class PlatformImage1Admin(admin.ModelAdmin):
     list_display = ("title",)

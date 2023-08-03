@@ -1,20 +1,11 @@
 from django.db import models
 
 
-class PlatformImage(models.Model):
-    title = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.title},"
-
-
 class PlatformGroup(models.Model):
     title = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ForeignKey(PlatformImage, on_delete=models.CASCADE, null=True)
+    image = models.CharField(max_length=800, null=True)
 
     def __str__(self):
         return f"{self.title},"
@@ -27,7 +18,7 @@ class PlatformFilter(models.Model):
     multiple = models.BooleanField(default=True)
     group = models.ForeignKey(PlatformGroup, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
-    image = models.ForeignKey(PlatformImage, on_delete=models.CASCADE, null=True)
+    image = models.CharField(max_length=800, null=True)
 
     def __str__(self):
         return f"{self.title}, {self.group}"
@@ -37,7 +28,7 @@ class PlatformTag(models.Model):
     title = models.ForeignKey(PlatformFilter, on_delete=models.CASCADE)
     properties = models.CharField(max_length=1000)
     is_active = models.BooleanField(default=True)
-    image = models.ForeignKey(PlatformImage, on_delete=models.CASCADE, null=True)
+    image = models.CharField(max_length=800, null=True)
     is_message = models.BooleanField(default=False)
 
     def __str__(self):
@@ -53,9 +44,7 @@ class Platform(models.Model):
     price = models.IntegerField()
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ForeignKey(PlatformImage, on_delete=models.CASCADE, null=True)
+    image = models.CharField(max_length=800, null=True)
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"
-
-

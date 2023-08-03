@@ -1,13 +1,14 @@
-from platforms.models import Platform
 from rest_framework import permissions
 
+from platforms.models import Platform
+
+
 def get_permissions(request_method):
-    if request_method == 'GET':
+    if request_method == "GET":
         return [permissions.AllowAny]  # Разрешить GET-запросы без авторизации
-    return [permissions.IsAuthenticatedOrReadOnly]  # Разрешить авторизованным пользователям редактировать, остальные могут только читать
-
-
-
+    return [
+        permissions.IsAuthenticatedOrReadOnly
+    ]  # Разрешить авторизованным пользователям редактировать, остальные могут только читать
 
 
 def modify_data(data):
@@ -28,7 +29,8 @@ def modify_data(data):
             "tags": [],
         }
 
-        for platform_tag in Platform.objects.get(id=modified_item["id"]).filter.all():
+        for platform_tag in Platform.objects.get(
+                id=modified_item["id"]).filter.all():
             tag_data = {
                 "id": platform_tag.id,
                 "tag": platform_tag.properties,

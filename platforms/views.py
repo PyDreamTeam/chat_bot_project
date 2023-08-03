@@ -2,18 +2,17 @@ from django.db.models import Q
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
-from .models import (Platform, PlatformFilter, PlatformGroup, PlatformImage,
-                     PlatformTag)
+from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
-                          PlatformImageSerializer, PlatformSerializer,
-                          PlatformTagSerializer)
+                          PlatformSerializer, PlatformTagSerializer)
 from .utils import get_permissions, modify_data
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -102,7 +101,8 @@ class PlatformViewSet(viewsets.ModelViewSet):
 class PlatformGroupViewSet(viewsets.ModelViewSet):
     queryset = PlatformGroup.objects.all()
     serializer_class = PlatformGroupSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -114,7 +114,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     queryset = PlatformFilter.objects.all()
     serializer_class = PlatformFilterSerializer
     renderer_classes = [renderers.JSONRenderer, renderers.CoreJSONRenderer]
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -193,7 +194,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
 class PlatformTagViewSet(viewsets.ModelViewSet):
     queryset = PlatformTag.objects.all()
     serializer_class = PlatformTagSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -239,6 +241,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                     tag_data = {
                         "tag": tag.properties,
                         "id": tag.id,
+                        "image_tag": tag.image if tag.image else "None",
                         "is_active": tag.is_active,
                         "is_message": tag.is_message,
                     }
@@ -256,21 +259,11 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         )
 
 
-class PlatformImageViewSet(viewsets.ModelViewSet):
-    queryset = PlatformImage.objects.all()
-    serializer_class = PlatformImageSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get_permissions(self):
-        permissions = get_permissions(self.request.method)
-        return [permission() for permission in permissions]
-
-
 class PlatformFiltration(generics.ListAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -313,7 +306,8 @@ class PlatformFiltration(generics.ListAPIView):
 class PlatformSearch(generics.ListAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут только читать
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -321,7 +315,7 @@ class PlatformSearch(generics.ListAPIView):
         return [permission() for permission in permissions]
 
     def get_queryset(self):
-        title = self.request.data.get('title')
+        title = self.request.data.get("title")
         return self.queryset.filter(title__icontains=title)
 
     def list(self, request, *args, **kwargs):

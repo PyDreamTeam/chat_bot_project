@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Platform, PlatformFilter, PlatformGroup, PlatformImage, PlatformTag
+from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 
 
 class PlatformSerializer(serializers.ModelSerializer):
@@ -24,10 +24,4 @@ class PlatformGroupSerializer(serializers.ModelSerializer):
 class PlatformFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlatformFilter
-        fields = "__all__"
-
-
-class PlatformImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PlatformImage
         fields = "__all__"
