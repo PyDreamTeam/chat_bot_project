@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin-py
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin-py
+  template:
+    metadata:
+      labels:
+        app: pgadmin-py
+    spec:
+      containers:
+        - name: pgadmin-py
+          image: dpage/pgadmin4
+          ports:
+            - containerPort: 80
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: "pydream@pydream.com"
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: "pydream"
+---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pgadmin-pv-py
+# spec:
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: /data/pgadmin
+#   storageClassName: manual
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pgadmin-pvc
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   storageClassName: manual
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: pgadmin-py
+# spec:
+#   selector:
+#     app: pgadmin-py
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#       nodePort: 31505 # port-range: 30000-32767
+#   type: NodePort
+# ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin-py
+spec:
+  selector:
+    app: pgadmin-py
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  #     nodePort: 31505 # port-range: 30000-32767
+  # type: NodePort

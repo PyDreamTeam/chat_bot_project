@@ -1,0 +1,53 @@
+version: '3'
+services:
+  django:
+    build: ./backend
+    container_name: djangoapp_pydream
+    restart: always
+    ports:
+      - 8000:8000
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/usr/src/app/
+    env_file:
+      - ./backend/.env
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgresdb_pydream
+    ports:
+      - 5433:5432
+    # volumes:
+    #   - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_NAME=postgres
+  
+  node:
+    build: ./frontend
+    container_name: nexttapp_pydream
+    restart: always
+    ports:
+      - 3005:3000
+    volumes:
+      - ./frontend:/frontend/app 
+    depends_on:
+      - django    
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_pydream
+    restart: always
+    ports:
+      - "5055:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pydream@pydream.com
+      PGADMIN_DEFAULT_PASSWORD: password           
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+volumes:
+  postgres_volume:
+  pgadmin:
