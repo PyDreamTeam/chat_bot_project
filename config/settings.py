@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'djoser', #djoser 
-    'corsheaders',  #cors   
+    'corsheaders',  #cors 
+    'social_django', #social AUTHENTICATION
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'social_django.middleware.SocialAuthExceptionMiddleware', #middleware social
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', # middleware for cors-headers
@@ -81,6 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends', #OPTIONS social
+                'social_django.context_processors.login_redirect', #OPTIONS social
             ],
         },
     },
@@ -171,6 +175,15 @@ EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 
 
+# AUTHENTICATION CONFIG
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2', #Google
+    'social_core.backends.facebook.FacebookOAuth2', #Facebook
+    'social_core.backends.vk.VKOAuth2', #VK
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+
 # DJOSER CONFIG
 DJOSER = {
     "LOGIN_FIELD": "email",
@@ -187,8 +200,9 @@ DJOSER = {
     "SEND_ACTIVATION_EMAIL": False,
     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        "your redirect url",
-        "your redirect url",
+        'http://localhost:8000/google',
+        'http://localhost:8000/facebook',
+        'http://localhost:8000/VK.com',
     ],
     "SERIALIZERS": {
         "user_create": "djoser.serializers.UserCreateSerializer", 
@@ -221,6 +235,31 @@ DJOSER = {
     "CONSTANTS": {
         'messages': 'djoser.constants.Messages',
     },
+}
+
+
+# SOCIAL AUTH GOOGLE CONFIG
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '[YOUR GOOGLE OAUTH2 API KEY]'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '[YOUR GOOGLE OAUTH2 API SECRET]'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+
+
+# SOCIAL AUTH FACEBOOK CONFIG
+SOCIAL_AUTH_FACEBOOK_KEY = '[YOUR FACEBOOK API KEY]'
+SOCIAL_AUTH_FACEBOOK_SECRET = '[YOUR FACEBOOK API SECRET]'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'email, first_name, last_name'
+}
+
+
+# SOCIAL AUTH Vkontakte CONFIG
+SOCIAL_AUTH_VK_OAUTH2_KEY = '[YOUR FACEBOOK API KEY]'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = '[YOUR FACEBOOK API SECRET]'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'email, first_name, last_name'
 }
 
 
