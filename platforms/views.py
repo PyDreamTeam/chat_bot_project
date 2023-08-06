@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
-from .utils import get_permissions, modify_data
+from .permissions import get_permissions
+from .utils import modify_data
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
@@ -271,6 +272,7 @@ class PlatformFiltration(generics.CreateAPIView):
         id_tags = self.request.data.get("id_tags", [])
         price_min = self.request.data.get("price_min")
         price_max = self.request.data.get("price_max")
+        sort_abc = self.request.data.get("sort_abc")
 
         # Объект Q для хранения условий фильтрации
         q = Q()
@@ -292,7 +294,12 @@ class PlatformFiltration(generics.CreateAPIView):
             q &= Q(price__lte=price_max)
 
         # Фильтрация
-        platforms = self.queryset.filter(q)
+        if sort_abc == 'a':
+            platforms = self.queryset.filter(q).order_by('title')
+        elif sort_abc == 'z':
+            platforms = self.queryset.filter(q).order_by('-title')
+        else:
+            platforms = self.queryset.filter(q)
         return platforms
 
     def create(self, request, *args, **kwargs):
