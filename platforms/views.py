@@ -1,7 +1,7 @@
 from django.db.models import Q
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
-
+from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
@@ -304,9 +304,20 @@ class PlatformFiltration(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serialized_data = self.serializer_class(queryset, many=True)
-        modified_data = modify_data(serialized_data.data)
-        return Response(modified_data)
+        page_number = self.request.data.get("page_number") # номер страницы
+        try:
+            items_per_page = int(self.request.data.get("items_per_page", 10))
+            if items_per_page == 0:
+                items_per_page = 10
+        except Exception:
+            items_per_page = 10
+        paginator = Paginator(queryset, items_per_page)
+        page = paginator.get_page(page_number)
+
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            modified_data = modify_data(serializer.data, len(queryset))
+            return Response(modified_data)
 
 
 # class PlatformSearch(generics.ListAPIView):

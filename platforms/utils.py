@@ -1,7 +1,7 @@
 from platforms.models import Platform
 
 
-def modify_data(data):
+def modify_data(data, total_count):
     modified_data = []
 
     for item in data:
@@ -34,8 +34,9 @@ def modify_data(data):
             modified_data.append(data_my)
 
     return {
-        "count": len(modified_data),
-        "next": None,
-        "previous": None,
+        "total_count": total_count,
+        "curent_count": len(modified_data),
+        # "next": None,
+        # "previous": None,
         "results": modified_data,
     }
