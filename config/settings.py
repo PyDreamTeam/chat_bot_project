@@ -240,9 +240,26 @@ SIMPLE_JWT = {
 }
 
 
-# CORS HEADERS
+# CORS CONFIG
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'origin',
+    'dnt',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'access-control-allow-methods',
+    'content-disposition',
+]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://python.twnsnd.online',
+#     'https://python.twnsnd.online',    
+# ]
 
 
 # Internationalization
