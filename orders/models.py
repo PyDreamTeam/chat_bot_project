@@ -3,7 +3,7 @@ from accounts.models import User
 
 
 class Order(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     phone_number = models.CharField(max_length=13)
     comment = models.CharField(max_length=200)
 

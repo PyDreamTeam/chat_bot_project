@@ -21,7 +21,9 @@ class OrderAPICreate(APIView):
         else:
             data = request.data
 
-        serializer = OrderSerializer(data=data)
+        data = request.data.copy()
+
+        serializer = OrderSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             application = serializer.save()
             return Response({'message': "Successfully created", 'id': application.id}, status=201)
