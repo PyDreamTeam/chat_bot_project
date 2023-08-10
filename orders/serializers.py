@@ -6,8 +6,8 @@ User = get_user_model()
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-    email = serializers.EmailField(source='user.email', read_only=True)
+    first_name = serializers.CharField(source='user.first_name')
+    email = serializers.EmailField(source='user.email')
     phone_number = serializers.CharField(write_only=True)
     comment = serializers.CharField(write_only=True)
 
