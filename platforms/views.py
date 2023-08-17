@@ -1,11 +1,12 @@
 from django.db.models import Q
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
-
+from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
-from .utils import get_permissions, modify_data
+from .permissions import get_permissions
+from .utils import modify_data
 
 
 class PlatformViewSet(viewsets.ModelViewSet):
@@ -209,6 +210,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         tags = PlatformTag.objects.all()
 
         results = []
+        exceptions = ["Статистика", "Тарифы", "Техническая поддержка", "Уровень сложности", ]
 
         # формирование списка групп
         for group in groups:
@@ -223,11 +225,11 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
             # формирование списка фильтров по группам
             for platform_filter in filters.filter(group=group):
                 filter_data = {
-                    "filter": platform_filter.title,
+                    "filter": f"{platform_filter.title}"
+                    if platform_filter.title not in exceptions
+                    else "",
                     "id": platform_filter.id,
-                    "image": f"{platform_filter.image}"
-                    if platform_filter.image
-                    else "None",
+                    "image": "" if platform_filter.title in exceptions else platform_filter.image if platform_filter.image else "None",
                     "count": 0,
                     "is_active": platform_filter.is_active,
                     "functionality": platform_filter.functionality,
@@ -241,7 +243,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                     tag_data = {
                         "tag": tag.properties,
                         "id": tag.id,
-                        "image_tag": tag.image if tag.image else "None",
+                        "image_tag": "None",#tag.image if tag.image else "None",
                         "is_active": tag.is_active,
                         "is_message": tag.is_message,
                     }
@@ -259,67 +261,82 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         )
 
 
-class PlatformFiltration(generics.ListAPIView):
+class PlatformFiltration(generics.CreateAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут
-    # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get_permissions(self):
-        permissions = get_permissions(self.request.method)
-        return [permission() for permission in permissions]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         # Получаем параметры фильтра из запроса
+        title = self.request.data.get("title")
         id_tags = self.request.data.get("id_tags", [])
         price_min = self.request.data.get("price_min")
         price_max = self.request.data.get("price_max")
+        sort_abc = self.request.data.get("sort_abc")
 
-        # объект Q для хранения условий фильтрации
+        # Объект Q для хранения условий фильтрации
         q = Q()
 
-        # условие по тегам, если они есть
+        # Условие по title, если оно есть (поиск по имени)
+        if title:
+            q &= Q(title__icontains=title)
+
+        # Условие по тегам, если они есть
         if id_tags:
             q &= Q(filter__id__in=id_tags)
 
-        # условие по минимальной цене, если она есть
+        # Условие по минимальной цене, если она есть
         if price_min:
             q &= Q(price__gte=price_min)
 
-        # условие по максимальной цене, если она есть
+        # Условие по максимальной цене, если она есть
         if price_max:
             q &= Q(price__lte=price_max)
 
-        # фильтрация
-        platforms = self.queryset.filter(q)
-
+        # Фильтрация
+        if sort_abc == 'a':
+            platforms = self.queryset.filter(q).order_by('title')
+        elif sort_abc == 'z':
+            platforms = self.queryset.filter(q).order_by('-title')
+        else:
+            platforms = self.queryset.filter(q)
         return platforms
 
-    def list(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serialized_data = self.serializer_class(queryset, many=True)
-        modified_data = modify_data(serialized_data.data)
-        return Response(modified_data)
+        page_number = self.request.data.get("page_number") # номер страницы
+        try:
+            items_per_page = int(self.request.data.get("items_per_page", 10))
+            if items_per_page == 0:
+                items_per_page = 10
+        except Exception:
+            items_per_page = 10
+        paginator = Paginator(queryset, items_per_page)
+        page = paginator.get_page(page_number)
+
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            modified_data = modify_data(serializer.data, len(queryset))
+            return Response(modified_data)
 
 
-class PlatformSearch(generics.ListAPIView):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут
-    # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+# class PlatformSearch(generics.ListAPIView):
+#     queryset = Platform.objects.all()
+#     serializer_class = PlatformSerializer
+#     # Разрешить авторизованным пользователям редактировать, остальные могут
+#     # только читать
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_permissions(self):
-        permissions = get_permissions(self.request.method)
-        return [permission() for permission in permissions]
+#     def get_permissions(self):
+#         permissions = get_permissions(self.request.method)
+#         return [permission() for permission in permissions]
 
-    def get_queryset(self):
-        title = self.request.data.get("title")
-        return self.queryset.filter(title__icontains=title)
+#     def get_queryset(self):
+#         title = self.request.data.get("title")
+#         return self.queryset.filter(title__icontains=title)
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serialized_data = self.serializer_class(queryset, many=True)
-        modified_data = modify_data(serialized_data.data)
-        return Response(modified_data)
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.get_queryset()
+#         serialized_data = self.serializer_class(queryset, many=True)
+#         modified_data = modify_data(serialized_data.data)
+#         return Response(modified_data)
