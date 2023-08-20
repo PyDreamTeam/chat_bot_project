@@ -45,6 +45,7 @@ class Platform(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.CharField(max_length=800, null=True)
+    link = models.CharField(max_length=800, null=True)
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"

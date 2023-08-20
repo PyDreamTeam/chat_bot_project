@@ -16,6 +16,7 @@ def modify_data(data, total_count):
             "is_active": modified_item["is_active"],
             "created_at": modified_item["created_at"],
             "image": modified_item["image"] if modified_item["image"] else "None",
+            "link": modified_item["link"],
             "tags": [],
         }
 

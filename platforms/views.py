@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
-from .permissions import get_permissions
+from accounts.permissions import get_permissions
 from .utils import modify_data
 
 
@@ -36,6 +36,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
                 "is_active": platform_data["is_active"],
                 "created_at": platform_data["created_at"],
                 "image": platform_data["image"] if platform_data["image"] else "None",
+                "link": platform_data["link"],
                 "tags": [],
             }
 
@@ -77,6 +78,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
                 "is_active": platform_data["is_active"],
                 "created_at": platform_data["created_at"],
                 "image": platform_data["image"] if platform_data["image"] else "None",
+                "link": platform_data["link"],
                 "tags": [],
             }
 
