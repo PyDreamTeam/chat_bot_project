@@ -7,6 +7,7 @@ from .managers import CustomUserManager
 
 class Role(models.TextChoices):
     user = "US", _("User")
+    superadmin = "SA", _("SuperAdmin")
     admin = "AD", _("Admin")
     manager = "MN", _("Manager")
 
