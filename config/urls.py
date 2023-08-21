@@ -9,6 +9,7 @@ urlpatterns = [
     path('api/', include('accounts.urls')),
     path('api/', include('platforms.urls')),
     path('api/', include('orders.urls')),
+    path('api/', include('solutions.urls')),
 
     #drf-spectacular
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
