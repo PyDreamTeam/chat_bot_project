@@ -1,11 +1,14 @@
 from django.db.models import Q
+from django.shortcuts import render
+from django.core.paginator import Paginator
+
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
-from django.core.paginator import Paginator
+
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
-from .permissions import get_permissions
+from accounts.permissions import get_permissions
 from .utils import modify_data
 
 
@@ -332,8 +335,3 @@ class SolutionFiltration(generics.CreateAPIView):
             serializer = self.serializer_class(page, many=True)
             modified_data = modify_data(serializer.data, len(queryset))
             return Response(modified_data)
-
-
-from django.shortcuts import render
-
-# Create your views here.
