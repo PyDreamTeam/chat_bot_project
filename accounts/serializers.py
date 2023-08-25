@@ -8,6 +8,7 @@ from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCre
 from djoser.serializers import SendEmailResetSerializer
 
 from rest_framework import serializers
+from .models import Profile
 
 
 User = get_user_model()

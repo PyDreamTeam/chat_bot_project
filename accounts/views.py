@@ -18,7 +18,8 @@ from djoser.compat import get_user_email
 
 from drf_spectacular.utils import extend_schema
 
-from .models import User
+from .models import User, Profile
+from .serializers import ProfileSerializer, UserCreatePasswordRetypeSerializer
 
 
 #Logout
@@ -47,3 +48,9 @@ class LogoutAPIView(generics.GenericAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)  
                   
         return Response(status=status.HTTP_200_OK)
+    
+#Profile   
+class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
