@@ -7,4 +7,3 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=13)
     comment = models.CharField(max_length=200)
 
-

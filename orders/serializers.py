@@ -15,6 +15,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['first_name', 'email', 'phone_number', 'comment']
 
+
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user if request and request.user.is_authenticated else None
@@ -28,4 +29,3 @@ class OrderSerializer(serializers.ModelSerializer):
                                          comment=validated_data['comment'])
 
         return order
-
