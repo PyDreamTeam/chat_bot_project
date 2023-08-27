@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from config import settings
+from solutions.models import Solution
 from .managers import CustomUserManager
 
 
@@ -37,3 +40,25 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.email
 
+
+class SolutionHistory(models.Model):
+    action_time = models.DateTimeField(
+        verbose_name=_("action time"),
+        default=timezone.now,
+        editable=False,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("user"),
+    )
+    solution = models.ForeignKey(
+        Solution,
+        on_delete=models.CASCADE,
+        verbose_name=_("solution"),
+    )
+
+
+class SolutionHistoryConfig(models.Model):
+    max_view_records = models.IntegerField()
+    record_expiry_hours = models.DurationField()

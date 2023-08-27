@@ -10,6 +10,8 @@ from djoser.serializers import SendEmailResetSerializer
 from rest_framework import serializers
 from .models import Profile
 
+from solutions.serializers import SolutionSerializer
+from .models import Profile, SolutionHistory
 
 User = get_user_model()
 
@@ -71,3 +73,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         return instance
 
 
+class SolutionHistorySerializer(serializers.ModelSerializer):
+    solution = SolutionSerializer()
+
+    class Meta:
+        model = SolutionHistory
+        fields = ["solution"]
