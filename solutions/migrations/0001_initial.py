@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='PlatformFilter',
+            name='SolutionFilter',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='PlatformGroup',
+            name='SolutionGroup',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
@@ -35,35 +35,42 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='PlatformTag',
+            name='SolutionTag',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('properties', models.CharField(max_length=1000)),
                 ('is_active', models.BooleanField(default=True)),
                 ('image', models.CharField(max_length=800, null=True)),
                 ('is_message', models.BooleanField(default=False)),
-                ('title', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='platforms.platformfilter')),
+                ('title', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='solutions.solutionfilter')),
             ],
         ),
         migrations.AddField(
-            model_name='platformfilter',
+            model_name='solutionfilter',
             name='group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='platforms.platformgroup'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='solutions.solutiongroup'),
         ),
         migrations.CreateModel(
-            name='Platform',
+            name='Solution',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
-                ('short_description', models.CharField(max_length=200)),
-                ('full_description', models.CharField(max_length=800)),
-                ('turnkey_solutions', models.IntegerField()),
-                ('price', models.IntegerField()),
+                ('business_model', models.CharField(max_length=200)),
+                ('business_area', models.CharField(max_length=100)),
+                ('business_niche', models.CharField(max_length=100)),
+                ('objective', models.CharField(max_length=100)),
+                ('solution_type', models.CharField(max_length=100)),
+                ('short_description', models.CharField(max_length=300)),
+                ('platform', models.CharField(max_length=100)),
+                ('messengers', models.CharField(max_length=100)),
+                ('integration_with_CRM', models.CharField(max_length=100)),
+                ('integration_with_payment_systems', models.CharField(max_length=100)),
+                ('tasks', models.CharField(max_length=100)),
+                ('actions_to_complete_tasks', models.CharField(max_length=100)),
+                ('price', models.CharField(choices=[('Buy this turnkey solution', 'Buy this turnkey solution'), ('Buy this ready-made with the possibility of refinement', 'Buy this ready-made with the possibility of refinement')], max_length=200)),
                 ('is_active', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('image', models.CharField(max_length=800, null=True)),
-                ('link', models.CharField(max_length=800, null=True)),
-                ('filter', models.ManyToManyField(to='platforms.platformtag')),
+                ('filter', models.ManyToManyField(to='solutions.solutiontag')),
             ],
         ),
     ]

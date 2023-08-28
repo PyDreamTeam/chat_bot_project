@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Order
 from .serializers import OrderSerializer
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 
 class OrderAPICreate(APIView):
@@ -21,7 +23,9 @@ class OrderAPICreate(APIView):
         else:
             data = request.data
 
-        serializer = OrderSerializer(data=data)
+
+        serializer = OrderSerializer(data=data, context={'request': request})
+
         if serializer.is_valid():
             application = serializer.save()
             return Response({'message': "Successfully created", 'id': application.id}, status=201)

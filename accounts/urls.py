@@ -12,8 +12,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     # JWT Logout
     path('auth/logout/', LogoutAPIView.as_view(), name="api-logout"),
-
-    path('profile/<int:pk>/', ProfileDetailView.as_view(), name='user-profile-detail'),
-
-   
+    # profile
+    path('profile/<int:pk>/', ProfileDetailView.as_view(), name='user-profile-detail'),   
 ]

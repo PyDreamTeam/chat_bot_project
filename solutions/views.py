@@ -1,17 +1,20 @@
 from django.db.models import Q
+from django.shortcuts import render
+from django.core.paginator import Paginator
+
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
-from django.core.paginator import Paginator
-from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
-from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
-                          PlatformSerializer, PlatformTagSerializer)
+
+from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
+from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
+                          SolutionSerializer, SolutionTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
 
 
-class PlatformViewSet(viewsets.ModelViewSet):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
+class SolutionViewSet(viewsets.ModelViewSet):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -22,78 +25,90 @@ class PlatformViewSet(viewsets.ModelViewSet):
 
     # вывод одного значения
     def retrieve(self, request, pk=None):
-        platform = self.queryset.filter(pk=pk).first()
-        if platform:
-            serializer = self.serializer_class(platform)
-            platform_data = serializer.data
-            data_platform = {
-                "id": platform_data["id"],
-                "title": platform_data["title"],
-                "short_description": platform_data["short_description"],
-                "full_description": platform_data["full_description"],
-                "turnkey_solutions": platform_data["turnkey_solutions"],
-                "price": platform_data["price"],
-                "is_active": platform_data["is_active"],
-                "created_at": platform_data["created_at"],
-                "image": platform_data["image"] if platform_data["image"] else "None",
-                "link": platform_data["link"],
+        solution = self.queryset.filter(pk=pk).first()
+        if solution:
+            serializer = self.serializer_class(solution)
+            solution_data = serializer.data
+            data_solution = {
+                "id": solution_data["id"],
+                "title": solution_data["title"],
+                "business_model": solution_data["business_model"],
+                "business_area": solution_data["business_area"],
+                "objective": solution_data["objective"],
+                "solution_type": solution_data["business_area"],
+                "short_description": solution_data["short_description"],
+                "messengers": solution_data["messengers"],
+                "integration_with_CRM": solution_data["integration_with_CRM"],
+                "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
+                "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
+                "visual": solution_data["visual"],
+                "price": solution_data["price"],
+                "filter": solution_data["filter"],
+                "is_active": solution_data["is_active"],
+                "created_at": solution_data["created_at"],
                 "tags": [],
             }
 
-            for platform_tag in platform.filter.all():
+            for solution_tag in solution.filter.all():
                 tag_data = {
-                    "id": platform_tag.id,
-                    "tag": platform_tag.properties,
-                    "image_tag": platform_tag.image if platform_tag.image else "None",
-                    "is_active": platform_tag.is_active,
-                    "is_message": platform_tag.is_message,
+                    "id": solution_tag.id,
+                    "tag": solution_tag.properties,
+                    "image_tag": solution_tag.image if solution_tag.image else "None",
+                    "is_active": solution_tag.is_active,
+                    "is_message": solution_tag.is_message,
                 }
 
-                data_platform["tags"].append(tag_data)
+                data_solution["tags"].append(tag_data)
 
-            return Response(data_platform)
+            return Response(data_solution)
         else:
             return Response(
-                {"message": "Platform not found."}, status=status.HTTP_404_NOT_FOUND
+                {"message": "Solution not found."}, status=status.HTTP_404_NOT_FOUND
             )
 
     # вывод всех значений
 
     def list(self, request):
-        platforms = Platform.objects.all()
+        solutions = Solution.objects.all()
 
         results = []
 
         # формирование списка групп
-        for platform in platforms:
-            serializer = self.serializer_class(platform)
-            platform_data = serializer.data
-            data_platform = {
-                "id": platform_data["id"],
-                "title": platform_data["title"],
-                "short_description": platform_data["short_description"],
-                "full_description": platform_data["full_description"],
-                "turnkey_solutions": platform_data["turnkey_solutions"],
-                "price": platform_data["price"],
-                "is_active": platform_data["is_active"],
-                "created_at": platform_data["created_at"],
-                "image": platform_data["image"] if platform_data["image"] else "None",
-                "link": platform_data["link"],
+        for solution in solutions:
+            serializer = self.serializer_class(solution)
+            solution_data = serializer.data
+            data_solution = {
+                "id": solution_data["id"],
+                "title": solution_data["title"],
+                "business_model": solution_data["business_model"],
+                "business_area": solution_data["business_area"],
+                "objective": solution_data["objective"],
+                "solution_type": solution_data["business_area"],
+                "short_description": solution_data["short_description"],
+                "messengers": solution_data["messengers"],
+                "integration_with_CRM": solution_data["integration_with_CRM"],
+                "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
+                "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
+                "visual": solution_data["visual"],
+                "price": solution_data["price"],
+                "filter": solution_data["filter"],
+                "is_active": solution_data["is_active"],
+                "created_at": solution_data["created_at"],
                 "tags": [],
             }
 
-            for platform_tag in platform.filter.all():
+            for solution_tag in solution.filter.all():
                 tag_data = {
-                    "id": platform_tag.id,
-                    "tag": platform_tag.properties,
-                    "image_tag": platform_tag.image if platform_tag.image else "None",
-                    "is_active": platform_tag.is_active,
-                    "is_message": platform_tag.is_message,
+                    "id": solution_tag.id,
+                    "tag": solution_tag.properties,
+                    "image_tag": solution_tag.image if solution_tag.image else "None",
+                    "is_active": solution_tag.is_active,
+                    "is_message": solution_tag.is_message,
                 }
 
-                data_platform["tags"].append(tag_data)
+                data_solution["tags"].append(tag_data)
 
-            results.append(data_platform)
+            results.append(data_solution)
 
         return Response(
             {"count": len(results), "next": None,
@@ -101,9 +116,9 @@ class PlatformViewSet(viewsets.ModelViewSet):
         )
 
 
-class PlatformGroupViewSet(viewsets.ModelViewSet):
-    queryset = PlatformGroup.objects.all()
-    serializer_class = PlatformGroupSerializer
+class SolutionGroupViewSet(viewsets.ModelViewSet):
+    queryset = SolutionGroup.objects.all()
+    serializer_class = SolutionGroupSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -113,9 +128,9 @@ class PlatformGroupViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
 
 
-class PlatformFilterViewSet(viewsets.ModelViewSet):
-    queryset = PlatformFilter.objects.all()
-    serializer_class = PlatformFilterSerializer
+class SolutionFilterViewSet(viewsets.ModelViewSet):
+    queryset = SolutionFilter.objects.all()
+    serializer_class = SolutionFilterSerializer
     renderer_classes = [renderers.JSONRenderer, renderers.CoreJSONRenderer]
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
@@ -127,9 +142,9 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
 
     # вывод одного значения
     def retrieve(self, request, pk=None):
-        platform_filter = self.queryset.filter(pk=pk).first()
-        if platform_filter:
-            serializer = self.serializer_class(platform_filter)
+        solution_filter = self.queryset.filter(pk=pk).first()
+        if solution_filter:
+            serializer = self.serializer_class(solution_filter)
             filter_data = dict(serializer.data)
             return Response(
                 {
@@ -147,15 +162,15 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
             )
         else:
             return Response(
-                {"message": "Platform filter not found."},
+                {"message": "Solution filter not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
     # вывод всех значений
     def list(self, request):
-        groups = PlatformGroup.objects.all()
-        filters = PlatformFilter.objects.all()
-        PlatformTag.objects.all()
+        groups = SolutionGroup.objects.all()
+        filters = SolutionFilter.objects.all()
+        SolutionTag.objects.all()
 
         results = []
 
@@ -170,17 +185,17 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
             }
 
             # формирование списка фильтров по группам
-            for platform_filter in filters.filter(group=group):
+            for solution_filter in filters.filter(group=group):
                 filter_data = {
-                    "filter": platform_filter.title,
-                    "id": platform_filter.id,
-                    "image": f"{platform_filter.image}"
-                    if platform_filter.image
+                    "filter": solution_filter.title,
+                    "id": solution_filter.id,
+                    "image": f"{solution_filter.image}"
+                    if solution_filter.image
                     else "None",
-                    "is_active": platform_filter.is_active,
-                    "functionality": platform_filter.functionality,
-                    "integration": platform_filter.integration,
-                    "multiple": platform_filter.multiple,
+                    "is_active": solution_filter.is_active,
+                    "functionality": solution_filter.functionality,
+                    "integration": solution_filter.integration,
+                    "multiple": solution_filter.multiple,
                 }
 
                 group_data["filters"].append(filter_data)
@@ -194,9 +209,9 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         )
 
 
-class PlatformTagViewSet(viewsets.ModelViewSet):
-    queryset = PlatformTag.objects.all()
-    serializer_class = PlatformTagSerializer
+class SolutionTagViewSet(viewsets.ModelViewSet):
+    queryset = SolutionTag.objects.all()
+    serializer_class = SolutionTagSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -207,9 +222,9 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
 
     # вывод всех значений
     def list(self, request):
-        groups = PlatformGroup.objects.all()
-        filters = PlatformFilter.objects.all()
-        tags = PlatformTag.objects.all()
+        groups = SolutionGroup.objects.all()
+        filters = SolutionFilter.objects.all()
+        tags = SolutionTag.objects.all()
 
         results = []
         exceptions = ["Статистика", "Тарифы", "Техническая поддержка", "Уровень сложности", ]
@@ -225,27 +240,27 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
             }
 
             # формирование списка фильтров по группам
-            for platform_filter in filters.filter(group=group):
+            for solution_filter in filters.filter(group=group):
                 filter_data = {
-                    "filter": f"{platform_filter.title}"
-                    if platform_filter.title not in exceptions
+                    "filter": f"{solution_filter.title}"
+                    if solution_filter.title not in exceptions
                     else "",
-                    "id": platform_filter.id,
-                    "image": "" if platform_filter.title in exceptions else platform_filter.image if platform_filter.image else "None",
+                    "id": solution_filter.id,
+                    "image": "" if solution_filter.title in exceptions else solution_filter.image if solution_filter.image else "None",
                     "count": 0,
-                    "is_active": platform_filter.is_active,
-                    "functionality": platform_filter.functionality,
-                    "integration": platform_filter.integration,
-                    "multiple": platform_filter.multiple,
+                    "is_active": solution_filter.is_active,
+                    "functionality": solution_filter.functionality,
+                    "integration": solution_filter.integration,
+                    "multiple": solution_filter.multiple,
                     "tags": [],
                 }
 
                 # формирование списка тэгов по фильтрам
-                for tag in tags.filter(title=platform_filter):
+                for tag in tags.filter(title=solution_filter):
                     tag_data = {
                         "tag": tag.properties,
                         "id": tag.id,
-                        "image_tag": "None",#tag.image if tag.image else "None",
+                        "image_tag": "None",  # tag.image if tag.image else "None",
                         "is_active": tag.is_active,
                         "is_message": tag.is_message,
                     }
@@ -263,9 +278,9 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         )
 
 
-class PlatformFiltration(generics.CreateAPIView):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
+class SolutionFiltration(generics.CreateAPIView):
+    queryset = Solution.objects.all()
+    serializer_class = SolutionSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
@@ -297,16 +312,16 @@ class PlatformFiltration(generics.CreateAPIView):
 
         # Фильтрация
         if sort_abc == 'a':
-            platforms = self.queryset.filter(q).order_by('title')
+            solutions = self.queryset.filter(q).order_by('title')
         elif sort_abc == 'z':
-            platforms = self.queryset.filter(q).order_by('-title')
+            solutions = self.queryset.filter(q).order_by('-title')
         else:
-            platforms = self.queryset.filter(q)
-        return platforms
+            solutions = self.queryset.filter(q)
+        return solutions
 
     def create(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        page_number = self.request.data.get("page_number") # номер страницы
+        page_number = self.request.data.get("page_number")  # номер страницы
         try:
             items_per_page = int(self.request.data.get("items_per_page", 10))
             if items_per_page == 0:
@@ -318,27 +333,5 @@ class PlatformFiltration(generics.CreateAPIView):
 
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-            modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
+            modified_data = modify_data(serializer.data, len(queryset))
             return Response(modified_data)
-
-
-# class PlatformSearch(generics.ListAPIView):
-#     queryset = Platform.objects.all()
-#     serializer_class = PlatformSerializer
-#     # Разрешить авторизованным пользователям редактировать, остальные могут
-#     # только читать
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-#     def get_permissions(self):
-#         permissions = get_permissions(self.request.method)
-#         return [permission() for permission in permissions]
-
-#     def get_queryset(self):
-#         title = self.request.data.get("title")
-#         return self.queryset.filter(title__icontains=title)
-
-#     def list(self, request, *args, **kwargs):
-#         queryset = self.get_queryset()
-#         serialized_data = self.serializer_class(queryset, many=True)
-#         modified_data = modify_data(serialized_data.data)
-#         return Response(modified_data)

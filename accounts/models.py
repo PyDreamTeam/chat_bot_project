@@ -7,6 +7,7 @@ from .managers import CustomUserManager
 
 class Role(models.TextChoices):
     user = "US", _("User")
+    superadmin = "SA", _("SuperAdmin")
     admin = "AD", _("Admin")
     manager = "MN", _("Manager")
 
@@ -35,3 +36,4 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.email
+
