@@ -13,7 +13,6 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-
 from drf_spectacular.utils import extend_schema
 
 from .models import User, Profile
@@ -40,6 +39,7 @@ class LogoutAPIView(generics.GenericAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
+# Profile
 class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -51,4 +51,3 @@ class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
         profile = Profile.objects.get(user=user)
 
         return profile
-
