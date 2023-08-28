@@ -19,12 +19,12 @@ import requests
 
 
 # Адрес для добавления на локальный сервер
-url_main = 'http://127.0.0.1:8000/'
+url_main = 'http://python.twnsnd.online/'
 
 # Учетные данные пользователя локального сервера
 user = {
-    "email": "admin@admin.by",
-    "password": "admin"
+    "email": "email",
+    "password": "pass"
 }
 
 
