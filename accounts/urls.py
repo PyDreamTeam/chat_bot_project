@@ -13,7 +13,7 @@ urlpatterns = [
     # JWT Logout
     path('auth/logout/', LogoutAPIView.as_view(), name="api-logout"),
 
-    path('profile/', ProfileDetailView.as_view(), name='user-profile-detail'),
+    path('profile/<int:pk>/', ProfileDetailView.as_view(), name='user-profile-detail'),
 
    
 ]
