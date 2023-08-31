@@ -1,9 +1,8 @@
+from rest_framework.permissions import AllowAny
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from .models import Order
-from accounts.models import User, Profile
 from .serializers import OrderSerializer
-from rest_framework.permissions import AllowAny
 from django.utils import timezone
 
 """
@@ -27,9 +26,6 @@ class OrdersViewSet(mixins.CreateModelMixin,
         registered users are processed here and their data is stored in the database.
         """
         if self.request.user.is_authenticated:
-            data = Profile.objects.all()
-
-            print(data)
 
             serializer.save(user=self.request.user, created_time=timezone.now())
             """
