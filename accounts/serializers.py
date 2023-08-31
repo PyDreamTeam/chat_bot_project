@@ -8,9 +8,9 @@ from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCre
 from djoser.serializers import SendEmailResetSerializer
 
 from rest_framework import serializers
-from .models import Profile
+from .models import Profile, SolutionHistoryConfig
 
-from solutions.serializers import SolutionSerializer
+from solutions.serializers import SolutionSerializer, SolutionTagSerializer
 from .models import Profile, SolutionHistory
 
 User = get_user_model()
@@ -61,9 +61,25 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'email', 'phone_number', 'image']
 
 
+class SolutionSerializerInAccounts(SolutionSerializer):
+    filter = SolutionTagSerializer(many=True)
+
+
 class SolutionHistorySerializer(serializers.ModelSerializer):
-    solution = SolutionSerializer()
+    solution = SolutionSerializerInAccounts()
 
     class Meta:
         model = SolutionHistory
-        fields = ["solution"]
+        fields = ("solution", )
+
+
+class MaxViewRecordsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SolutionHistoryConfig
+        fields = ("max_view_records", )
+
+
+class ExpiryPeriodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SolutionHistoryConfig
+        fields = ("expiry_period", )

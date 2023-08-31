@@ -58,7 +58,15 @@ class SolutionHistory(models.Model):
         verbose_name=_("solution"),
     )
 
+    def __str__(self):
+        return f"user: {self.user}, solution: {self.solution}"
+
 
 class SolutionHistoryConfig(models.Model):
     max_view_records = models.IntegerField()
-    record_expiry_hours = models.DurationField()
+    expiry_period = models.DurationField()
+
+    def __str__(self):
+        return f"max_view_records: {self.max_view_records}, " \
+               f"expiry_period: {self.expiry_period}"
+
