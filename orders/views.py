@@ -1,7 +1,5 @@
 from rest_framework import mixins
-
 from rest_framework.viewsets import GenericViewSet
-
 from .models import Order
 from accounts.models import User, Profile
 from .serializers import OrderSerializer
@@ -39,5 +37,4 @@ class OrdersViewSet(mixins.CreateModelMixin,
             """
         else:
             serializer.save(created_time=timezone.now())
-
 
