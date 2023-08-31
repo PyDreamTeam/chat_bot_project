@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
+from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
@@ -59,7 +60,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 }
 
                 data_solution["tags"].append(tag_data)
-
+            add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
             return Response(data_solution)
         else:
             return Response(

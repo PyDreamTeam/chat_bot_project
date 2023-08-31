@@ -40,9 +40,8 @@ def remove_unnecessary_solution_history():
     ).delete()
 
 
-def add_solution_in_history(*, user, solution):
-    SolutionHistory.objects.create(user=user, solution=solution)
-    remove_unnecessary_solution_history()
+def add_solution_in_history(*, user_id, solution_id):
+    SolutionHistory.objects.create(user_id=user_id, solution_id=solution_id)
 
 
 def get_solution_history(*, user):
