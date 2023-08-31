@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'solutions',
     'orders',
     'drf_spectacular', #specification
-    
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -94,9 +94,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': env.str('DATABASE_ENGINE'),
-        'NAME': env.str('DATABASE_NAME'),
-        'USER': env.str('DATABASE_USER'),
-        'PASSWORD': env.str('DATABASE_PASSWORD'),
+        'NAME': env.str('POSTGRES_DB'),
+        'USER': env.str('POSTGRES_USER'),
+        'PASSWORD': env.str('POSTGRES_PASSWORD'),
         'HOST': env.str('DATABASE_HOST'),
         'PORT': env.str('DATABASE_PORT'),
     }
@@ -286,3 +286,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User' #new model user
+
+CELERY_BROKER_URL = f"redis://{env.str('CELERY_HOST')}:{env.str('CELERY_PORT')}"
+CELERY_RESULT_BACKEND = f"redis://{env.str('CELERY_HOST')}:{env.str('CELERY_PORT')}"
+CELERY_IMPORTS = ["accounts.tasks"]
