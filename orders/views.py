@@ -23,14 +23,13 @@ class OrdersViewSet(viewsets.GenericViewSet,
             return Order.objects.filter(user=self.request.user)
 
         else:
-            #return an empty dict to work around the error
+            #return an empty dict to work around the error count
             return []
 
     def perform_create(self, serializer):
 
         # registered users are processed here and their data is stored in the database.
         if self.request.user.is_authenticated:
-
             serializer.save(user=self.request.user, created_time=timezone.now())
 
         # unregistered users are processed here and their data is stored in the database.
