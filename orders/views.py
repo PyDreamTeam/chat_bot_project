@@ -18,8 +18,10 @@ class OrdersViewSet(viewsets.GenericViewSet,
 
     # this method gets inform from token
     def get_queryset(self):
+        if self.request.user.user_role == "SA" or self.request.user.user_role =="AD" or self.request.user.user_role =="MN":
+            return Order.objects.all()
 
-        if self.request.user.is_authenticated:
+        elif self.request.user.is_authenticated:
             return Order.objects.filter(user=self.request.user)
 
         else:
