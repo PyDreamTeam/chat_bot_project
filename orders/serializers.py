@@ -8,7 +8,7 @@ User = get_user_model()
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('user', 'first_name', 'phone_number', 'comment', 'created_time', 'email')
+        fields = ('user', 'first_name', 'phone_number', 'comment', 'created_time', 'email', 'id')
 
     # correct filling of all fields in the database
     def create(self, validated_data):

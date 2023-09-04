@@ -3,7 +3,6 @@ from .models import Order
 from .serializers import OrderSerializer
 from django.utils import timezone
 from rest_framework import viewsets
-from rest_framework.authentication import TokenAuthentication
 
 
 # OrdersViewSet processes applications from registered and unregistered users and save them in the database
@@ -16,17 +15,16 @@ class OrdersViewSet(viewsets.GenericViewSet,
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [AllowAny]
-    authentication_classes = [TokenAuthentication]
 
-    # этот метод для получения заявок по токену (пока не работает, как нужно)
+    # this method gets inform from token
     def get_queryset(self):
 
         if self.request.user.is_authenticated:
-
             return Order.objects.filter(user=self.request.user)
 
         else:
-            return Order.objects.all()
+            #return an empty dict to work around the error
+            return []
 
     def perform_create(self, serializer):
 
@@ -38,3 +36,4 @@ class OrdersViewSet(viewsets.GenericViewSet,
         # unregistered users are processed here and their data is stored in the database.
         else:
             serializer.save(created_time=timezone.now())
+
