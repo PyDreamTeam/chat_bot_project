@@ -1,11 +1,14 @@
 from django.db.models import Q
+from django.shortcuts import render
+from django.core.paginator import Paginator
+
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
-from django.core.paginator import Paginator
+
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
-from .permissions import get_permissions
+from accounts.permissions import get_permissions
 from .utils import modify_data
 
 
@@ -38,7 +41,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "integration_with_CRM": solution_data["integration_with_CRM"],
                 "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
                 "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
-                "visual": solution_data["visual"],
+                "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
@@ -86,7 +89,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "integration_with_CRM": solution_data["integration_with_CRM"],
                 "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
                 "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
-                "visual": solution_data["visual"],
+                "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
@@ -332,8 +335,3 @@ class SolutionFiltration(generics.CreateAPIView):
             serializer = self.serializer_class(page, many=True)
             modified_data = modify_data(serializer.data, len(queryset))
             return Response(modified_data)
-
-
-from django.shortcuts import render
-
-# Create your views here.
