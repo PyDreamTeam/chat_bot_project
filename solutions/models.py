@@ -55,7 +55,7 @@ class Solution(models.Model):
     integration_with_payment_systems = models.CharField(max_length=100)
     tasks = models.CharField(max_length=100)
     actions_to_complete_tasks = models.CharField(max_length=100)
-    visual = models.URLField()
+    image = models.URLField()
     price = models.CharField(max_length=200, choices=BUY_SOLUTION)
     filter = models.ManyToManyField(SolutionTag)
     is_active = models.BooleanField(default=True)
@@ -63,3 +63,5 @@ class Solution(models.Model):
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"
+
+
