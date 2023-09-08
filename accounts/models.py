@@ -15,6 +15,9 @@ class Role(models.TextChoices):
     manager = "MN", _("Manager")
 
 
+ALL_ROLES = (Role.superadmin, Role.user, Role.admin, Role.manager)
+
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email'), db_index=True, unique=True, blank=False)

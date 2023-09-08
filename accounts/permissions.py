@@ -13,6 +13,8 @@ def get_permissions(request_method):
 
 
 class IsAdminOrSuperAdmin(permissions.BasePermission):
+    VALID_ROLES = (Role.admin, Role.superadmin)
+
     def has_permission(self, request, view):
         user = request.user
-        return user.is_authenticated and user.user_role in (Role.admin, Role.superadmin)
+        return user.is_authenticated and user.user_role in self.VALID_ROLES
