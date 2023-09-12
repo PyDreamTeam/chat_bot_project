@@ -23,8 +23,8 @@ url_main = 'http://python.twnsnd.online/'
 
 # Учетные данные пользователя локального сервера
 user = {
-    "email": "email",
-    "password": "pass"
+    "email": "7777_7788@mail.ru",
+    "password": "123Qazwsx123@"
 }
 
 
