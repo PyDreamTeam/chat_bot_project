@@ -13,7 +13,7 @@ def modify_data(data, total_count, page_number, total_page_number):
             "full_description": modified_item["full_description"],
             "turnkey_solutions": modified_item["turnkey_solutions"],
             "price": modified_item["price"],
-            "is_active": modified_item["is_active"],
+            "status": modified_item["status"],
             "created_at": modified_item["created_at"],
             "image": modified_item["image"] if modified_item["image"] else "None",
             "link": modified_item["link"],
@@ -26,7 +26,7 @@ def modify_data(data, total_count, page_number, total_page_number):
                 "id": platform_tag.id,
                 "tag": platform_tag.properties,
                 "image_tag": platform_tag.image if platform_tag.image else "None",
-                "is_active": platform_tag.is_active,
+                "status": platform_tag.status,
                 "is_message": platform_tag.is_message,
             }
 

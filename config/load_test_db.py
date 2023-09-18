@@ -10,21 +10,21 @@ import requests
 # # Адрес для добавления на сервер
 # url_main = 'http://python.twnsnd.online/'
 
-# # Учетные данные пользователя сайта
+# Учетные данные пользователя локального сервера
 # user = {
-#     "email": "your_email_from_site",
-#     "password": "your_password_from_site"
+#     "email": "7777_7788@mail.ru",
+#     "password": "123Qazwsx123@"
 # }
 
 
 
 # Адрес для добавления на локальный сервер
-url_main = 'http://python.twnsnd.online/'
+url_main = 'http://127.0.0.1:8000/'
 
 # Учетные данные пользователя локального сервера
 user = {
-    "email": "7777_7788@mail.ru",
-    "password": "123Qazwsx123@"
+    "email": "admin@admin.by",
+    "password": "admin"
 }
 
 
@@ -140,13 +140,13 @@ tags_data = [
     {'title': 8, 'properties': 'Мультиканально', },
     {'title': 8, 'properties': 'Омниканально', },
     {'title': 8, 'properties': 'Нет', },
-    {'title': 9, 'properties': 'Whatsapp', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Whatsapp', 'image': 'wp', 'is_message': 'True', },
     {'title': 9, 'properties': 'Whatsapp Business API', },
     {'title': 9, 'properties': 'Telegram', 'image': 'telegram', 'is_message': 'True', },
     {'title': 9, 'properties': 'Viber', 'image': 'viber', 'is_message': 'True', },
     {'title': 9, 'properties': 'ВКонтакте', 'image': 'vk', 'is_message': 'True', },
-    {'title': 9, 'properties': 'Facebook', 'is_message': 'True', },
-    {'title': 9, 'properties': 'Instagram', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Facebook', 'image': 'fb', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Instagram', },
     {'title': 10, 'properties': 'Визуальный редактор', },
     {'title': 10, 'properties': 'Линейный редактор', },
     {'title': 10, 'properties': 'Готовые шаблоны', },
