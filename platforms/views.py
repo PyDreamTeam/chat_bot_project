@@ -33,10 +33,11 @@ class PlatformViewSet(viewsets.ModelViewSet):
                 "full_description": platform_data["full_description"],
                 "turnkey_solutions": platform_data["turnkey_solutions"],
                 "price": platform_data["price"],
-                "is_active": platform_data["is_active"],
+                "status": platform_data["status"],
                 "created_at": platform_data["created_at"],
                 "image": platform_data["image"] if platform_data["image"] else "None",
                 "link": platform_data["link"],
+                "links_to_solution": platform_data["links_to_solution"],
                 "tags": [],
             }
 
@@ -45,7 +46,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
                     "id": platform_tag.id,
                     "tag": platform_tag.properties,
                     "image_tag": platform_tag.image if platform_tag.image else "None",
-                    "is_active": platform_tag.is_active,
+                    "status": platform_tag.status,
                     "is_message": platform_tag.is_message,
                 }
 
@@ -75,10 +76,11 @@ class PlatformViewSet(viewsets.ModelViewSet):
                 "full_description": platform_data["full_description"],
                 "turnkey_solutions": platform_data["turnkey_solutions"],
                 "price": platform_data["price"],
-                "is_active": platform_data["is_active"],
+                "status": platform_data["status"],
                 "created_at": platform_data["created_at"],
                 "image": platform_data["image"] if platform_data["image"] else "None",
                 "link": platform_data["link"],
+                "links_to_solution": platform_data["links_to_solution"],
                 "tags": [],
             }
 
@@ -87,7 +89,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
                     "id": platform_tag.id,
                     "tag": platform_tag.properties,
                     "image_tag": platform_tag.image if platform_tag.image else "None",
-                    "is_active": platform_tag.is_active,
+                    "status": platform_tag.status,
                     "is_message": platform_tag.is_message,
                 }
 
@@ -138,7 +140,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     "image": f"{filter_data['image']}"
                     if filter_data["image"]
                     else "None",
-                    "is_active": filter_data["is_active"],
+                    "status": filter_data["status"],
                     "group": filter_data["group"],
                     "functionality": filter_data["functionality"],
                     "integration": filter_data["integration"],
@@ -165,7 +167,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                 "group": group.title,
                 "id": group.id,
                 "count": 0,
-                "is_active": group.is_active,
+                "status": group.status,
                 "filters": [],
             }
 
@@ -177,7 +179,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     "image": f"{platform_filter.image}"
                     if platform_filter.image
                     else "None",
-                    "is_active": platform_filter.is_active,
+                    "status": platform_filter.status,
                     "functionality": platform_filter.functionality,
                     "integration": platform_filter.integration,
                     "multiple": platform_filter.multiple,
@@ -220,7 +222,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                 "group": group.title,
                 "id": group.id,
                 "count": 0,
-                "is_active": group.is_active,
+                "status": group.status,
                 "filters": [],
             }
 
@@ -233,7 +235,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                     "id": platform_filter.id,
                     "image": "" if platform_filter.title in exceptions else platform_filter.image if platform_filter.image else "None",
                     "count": 0,
-                    "is_active": platform_filter.is_active,
+                    "status": platform_filter.status,
                     "functionality": platform_filter.functionality,
                     "integration": platform_filter.integration,
                     "multiple": platform_filter.multiple,
@@ -245,8 +247,8 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
                     tag_data = {
                         "tag": tag.properties,
                         "id": tag.id,
-                        "image_tag": "None",#tag.image if tag.image else "None",
-                        "is_active": tag.is_active,
+                        "image_tag": tag.image if tag.image else "None",
+                        "status": tag.status,
                         "is_message": tag.is_message,
                     }
                     filter_data["tags"].append(tag_data)

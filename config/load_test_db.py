@@ -10,21 +10,21 @@ import requests
 # # Адрес для добавления на сервер
 # url_main = 'http://python.twnsnd.online/'
 
-# # Учетные данные пользователя сайта
+# Учетные данные пользователя локального сервера
 # user = {
-#     "email": "your_email_from_site",
-#     "password": "your_password_from_site"
+#     "email": "7777_7788@mail.ru",
+#     "password": "123Qazwsx123@"
 # }
 
 
 
 # Адрес для добавления на локальный сервер
-url_main = 'http://python.twnsnd.online/'
+url_main = 'http://127.0.0.1:8000/'
 
 # Учетные данные пользователя локального сервера
 user = {
-    "email": "7777_7788@mail.ru",
-    "password": "123Qazwsx123@"
+    "email": "admin@admin.by",
+    "password": "admin"
 }
 
 
@@ -140,13 +140,13 @@ tags_data = [
     {'title': 8, 'properties': 'Мультиканально', },
     {'title': 8, 'properties': 'Омниканально', },
     {'title': 8, 'properties': 'Нет', },
-    {'title': 9, 'properties': 'Whatsapp', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Whatsapp', 'image': 'wp', 'is_message': 'True', },
     {'title': 9, 'properties': 'Whatsapp Business API', },
     {'title': 9, 'properties': 'Telegram', 'image': 'telegram', 'is_message': 'True', },
     {'title': 9, 'properties': 'Viber', 'image': 'viber', 'is_message': 'True', },
     {'title': 9, 'properties': 'ВКонтакте', 'image': 'vk', 'is_message': 'True', },
-    {'title': 9, 'properties': 'Facebook', 'is_message': 'True', },
-    {'title': 9, 'properties': 'Instagram', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Facebook', 'image': 'fb', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Instagram', },
     {'title': 10, 'properties': 'Визуальный редактор', },
     {'title': 10, 'properties': 'Линейный редактор', },
     {'title': 10, 'properties': 'Готовые шаблоны', },
@@ -232,7 +232,7 @@ tags_data = [
 # Данные для добавления платформ
 url_platforms = f"{url_main}api/platform/platforms/"
 platforms_data = [
-    {"title": "Платформа 1", "short_description": "Краткое описание платформы 1", "full_description": "Полное описание платформы 1", "turnkey_solutions": 1, "filter": [10, 22, 13, 38, 39, 40], "price": 100, 'image': 'https://static-cse.canva.com/blob/584142/Apple.png', 'link': 'https://translate.google.com/', },
+    {"title": "Платформа 1", "short_description": "Краткое описание платформы 1", "full_description": "Полное описание платформы 1", "turnkey_solutions": 1, "filter": [10, 22, 13, 38, 39, 40], "price": 100, 'image': 'https://static-cse.canva.com/blob/584142/Apple.png', 'link': 'https://translate.google.com/', 'links_to_solution': ['link_1', 'link_2', 'link_3', ], },
     {"title": "Платформа 2", "short_description": "Краткое описание платформы 2", "full_description": "Полное описание платформы 2", "turnkey_solutions": 2, "filter": [20, 22, 23, 38, 39, 40], "price": 200, 'image': 'https://static-cse.canva.com/blob/584210/Nasa.jpg', 'link': 'https://translate.google.com/', },
     {"title": "Платформа 3", "short_description": "Краткое описание платформы 3", "full_description": "Полное описание платформы 3", "turnkey_solutions": 3, "filter": [30, 23, 33, 38, 39, 40], "price": 300, 'image': 'https://static-cse.canva.com/blob/584144/.png', 'link': 'https://translate.google.com/', },
     {"title": "Платформа 4", "short_description": "Краткое описание платформы 4", "full_description": "Полное описание платформы 4", "turnkey_solutions": 4, "filter": [40, 24, 43, 38, 39, 40], "price": 400, 'image': 'https://static-cse.canva.com/blob/584138/.png', 'link': 'https://translate.google.com/', },
