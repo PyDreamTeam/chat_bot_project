@@ -17,6 +17,7 @@ def modify_data(data, total_count, page_number, total_page_number):
             "created_at": modified_item["created_at"],
             "image": modified_item["image"] if modified_item["image"] else "None",
             "link": modified_item["link"],
+            "links_to_solution": modified_item["links_to_solution"],
             "tags": [],
         }
 

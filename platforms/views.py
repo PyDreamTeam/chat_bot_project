@@ -37,6 +37,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
                 "created_at": platform_data["created_at"],
                 "image": platform_data["image"] if platform_data["image"] else "None",
                 "link": platform_data["link"],
+                "links_to_solution": platform_data["links_to_solution"],
                 "tags": [],
             }
 
@@ -79,6 +80,7 @@ class PlatformViewSet(viewsets.ModelViewSet):
                 "created_at": platform_data["created_at"],
                 "image": platform_data["image"] if platform_data["image"] else "None",
                 "link": platform_data["link"],
+                "links_to_solution": platform_data["links_to_solution"],
                 "tags": [],
             }
 

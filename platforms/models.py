@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class PlatformGroup(models.Model):
@@ -37,15 +38,16 @@ class PlatformTag(models.Model):
 
 class Platform(models.Model):
     title = models.CharField(max_length=100)
-    short_description = models.CharField(max_length=200)
-    full_description = models.CharField(max_length=800)
-    turnkey_solutions = models.IntegerField()
-    filter = models.ManyToManyField(PlatformTag)
-    price = models.IntegerField()
-    status = models.CharField(max_length=800, default='save')
+    short_description = models.CharField(max_length=200, null=True)
+    full_description = models.CharField(max_length=800, null=True)
+    turnkey_solutions = models.IntegerField(null=True)
+    filter = models.ManyToManyField(PlatformTag, null=True)
+    price = models.IntegerField(null=True)
+    status = models.CharField(max_length=800, default='save', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.TextField(null=True, blank=True)
     link = models.CharField(max_length=800, null=True)
+    links_to_solution = ArrayField(models.CharField(max_length=10000), null=True, blank=True)
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"
