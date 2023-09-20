@@ -11,7 +11,7 @@ def remove_unnecessary_solution_history():
         .values("max_view_records")[:1]
     )
 
-    # Получаем список пользователей у которых привешено максимальное количество сохраненных записей
+    # Получаем список пользователей у которых превышено максимальное количество сохраненных записей
     users_to_exclude = (
         SolutionHistory.objects.values("user_id")
         .annotate(entry_count=Count("id"), max_records=Subquery(max_records_subquery))
@@ -24,7 +24,7 @@ def remove_unnecessary_solution_history():
         .values("id")[:max_records_subquery[0]["max_view_records"]]
     )
 
-    # Получаем список истекших сохраненных записей
+    # Получаем срок хранения записи
     expired_records = SolutionHistoryConfig.objects.filter(pk=1)
 
     # Удаляем истекшие и лишние записи
