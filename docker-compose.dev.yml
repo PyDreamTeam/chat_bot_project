@@ -22,27 +22,10 @@ services:
       - "5433:5432"
     volumes:
        - ../data/postgresql:/var/lib/postgresql/data/
-    env_file:
-      - ./config/.env
-
-  pgadmin:
-    image: dpage/pgadmin4:7.5
-    container_name: pgadmin_pydream
-    restart: always
-    ports:
-      - "5055:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: pydream@pydream.com
-      PGADMIN_DEFAULT_PASSWORD: password
-      PGADMIN_LISTEN_PORT: 15432
-    volumes:
-      - ../data/pgadmin:/var/lib/pgadmin
-
-  redis:
-    image: redis
-    container_name: redis_pydream
-    ports:
-      - "6379:6379"
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=testdb
 
   celery_worker:
     build:
@@ -68,6 +51,11 @@ services:
     depends_on:
       - django
 
+  redis:
+    image: redis
+    container_name: redis_pydream
+    ports:
+      - "6379:6379"
 
   flower:
     image: mher/flower
