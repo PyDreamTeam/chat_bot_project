@@ -31,27 +31,34 @@ from .serializers import (
 from .services import get_solution_history
 
 
-# Logout
+#Logout
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = TokenRefreshSerializer
-    permission_classes = (IsAuthenticated,)
-
+    permission_classes = (IsAuthenticated,)    
+    
     @extend_schema(responses={200: None})
     def post(self, request, *args, **kwargs):
-
+        #all devices
+        # if self.request.data.get('all'):
+            
+        #     token = OutstandingToken
+        #     for token in OutstandingToken.objects.filter(user=request.user):
+        #         _, _ = BlacklistedToken.objects.get_or_create(token=token)
+        #     return Response(status=status.HTTP_200_OK)
+        
+        #token blacklist        
         try:
             refresh_token = self.request.data.get('refresh')
             if not refresh_token:
                 raise TokenError
             token = RefreshToken(token=refresh_token)
-            token.blacklist()
+            token.blacklist() 
         except TokenError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(status=status.HTTP_400_BAD_REQUEST)  
+                  
         return Response(status=status.HTTP_200_OK)
-
-
-# Profile
+    
+#Profile   
 class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
