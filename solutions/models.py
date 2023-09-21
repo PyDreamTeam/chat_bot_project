@@ -56,10 +56,16 @@ class Solution(models.Model):
     tasks = models.CharField(max_length=100)
     actions_to_complete_tasks = models.CharField(max_length=100)
     image = models.URLField()
-    price = models.CharField(max_length=200, choices=BUY_SOLUTION)
+    number = models.CharField(max_length=200, choices=BUY_SOLUTION)
     filter = models.ManyToManyField(SolutionTag)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    advantages = models.CharField(max_length=300)
+    subtitle = models.CharField(max_length=300)
+    full_description = models.CharField(max_length=300)
+    dignity = models.CharField(max_length=300)
+    steps_title = models.CharField(max_length=100)
+    steps_text = models.CharField(max_length=300)
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"
