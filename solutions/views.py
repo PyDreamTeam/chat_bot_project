@@ -18,7 +18,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
     serializer_class = SolutionSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
         permissions = get_permissions(self.request.method)
@@ -42,8 +42,14 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "integration_with_CRM": solution_data["integration_with_CRM"],
                 "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
                 "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
+                "advantages": solution_data["advantages"],
+                "subtitle": solution_data["subtitle"],
+                "full_description": solution_data["full_description"],
+                "dignity": solution_data["dignity"],
+                "steps_title": solution_data["steps_title"],
+                "steps_text": solution_data["steps_text"],
                 "image": solution_data["image"],
-                "price": solution_data["price"],
+                "number": solution_data["number"],
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
@@ -90,8 +96,14 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "integration_with_CRM": solution_data["integration_with_CRM"],
                 "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
                 "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
+                "advantages": solution_data["advantages"],
+                "subtitle": solution_data["subtitle"],
+                "full_description": solution_data["full_description"],
+                "dignity": solution_data["dignity"],
+                "steps_title": solution_data["steps_title"],
+                "steps_text": solution_data["steps_text"],
                 "image": solution_data["image"],
-                "price": solution_data["price"],
+                "number": solution_data["number"],
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],

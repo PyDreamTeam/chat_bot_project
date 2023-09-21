@@ -38,7 +38,7 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=13, null=True, blank=True)
-    image = models.CharField(max_length=255, null=True, blank=True)
+    image = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.user.email
