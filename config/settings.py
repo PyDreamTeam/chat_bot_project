@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
+    'favorite',
     'platforms',
     'solutions',
     'orders',
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    # 'django.contrib.contenttypes', # added to correct work favorite
 ]
 
 ROOT_URLCONF = 'config.urls'

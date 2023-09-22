@@ -7,9 +7,10 @@ from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
+from favorite.favorite import ManageFavorite
 
 
-class PlatformViewSet(viewsets.ModelViewSet):
+class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут

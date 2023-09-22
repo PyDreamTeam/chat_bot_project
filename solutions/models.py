@@ -1,4 +1,7 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from favorite.models import Favorite
+
 
 
 class SolutionGroup(models.Model):
@@ -60,6 +63,8 @@ class Solution(models.Model):
     filter = models.ManyToManyField(SolutionTag)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # create new field to correct work app favorite
+    favorites = GenericRelation(Favorite)
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"
