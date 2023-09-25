@@ -17,9 +17,10 @@ class Favorite(models.Model):
     # Согласно документации, создаём поля для хранения ContentType и object_id
     # https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#django.contrib.contenttypes.fields.GenericForeignKey
     # https: // habr.com / ru / articles / 723300 /
+    tag_relationship = models.SlugField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)
-    object_id = models.CharField(max_length=128)
+    object_id = models.BigIntegerField()
     # Создаём генерируемый внешний ключ, который может быть связан с продуктами разных типов: решения и платформы
     content_object = GenericForeignKey("content_type", "object_id")
     class Meta:
