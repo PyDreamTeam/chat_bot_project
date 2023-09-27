@@ -18,8 +18,7 @@ from .models import Platform
 from .serializers import PlatformSerializer
 
 
-class PlatformViewSetFavorite(viewsets.ModelViewSet, ManageFavorite):
-
+class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavorite):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -28,6 +27,7 @@ class PlatformViewSetFavorite(viewsets.ModelViewSet, ManageFavorite):
 
     def list(self, request):
         user = request.user
+        print(user)
 
         favorites = Favorite.objects.filter(user=user)
         favorites_platform = []
@@ -61,7 +61,14 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
     def retrieve(self, request, pk=None):
         platform = self.queryset.filter(pk=pk).first()
         if platform:
+            favorite = Favorite.objects.filter(user=request.user) & Favorite.objects.filter(object_id=platform.id)
+            is_favorite = False
+            print(favorite[0])
+            if favorite[0] == platform.id:
+                is_favorite = True
+
             serializer = self.serializer_class(platform)
+
             platform_data = serializer.data
             data_platform = {
                 "id": platform_data["id"],
@@ -76,6 +83,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
                 "tags": [],
+                "is_favorite": is_favorite,
             }
 
             for platform_tag in platform.filter.all():

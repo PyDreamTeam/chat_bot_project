@@ -55,4 +55,4 @@ class Platform(models.Model):
     favorites = GenericRelation(Favorite)
 
     def __str__(self):
-        return f"{self.title}, {self.short_description}"
+        return f"{self.title}, {self.short_description}, {self.id}"

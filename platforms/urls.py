@@ -3,11 +3,11 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (PlatformFilterViewSet, PlatformFiltration,
                     PlatformGroupViewSet, PlatformTagViewSet,
-                    PlatformViewSet, PlatformViewSetFavorite)
+                    PlatformViewSet, PlatformFavoriteViewSet)
 
 router = DefaultRouter()
 router.register("platforms", PlatformViewSet)
-router.register("platforms-favorite", PlatformViewSetFavorite)
+router.register("platforms-favorite", PlatformFavoriteViewSet)
 router.register("groups", PlatformGroupViewSet)
 router.register("filters", PlatformFilterViewSet)
 router.register("tags", PlatformTagViewSet)

@@ -3,9 +3,11 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (SolutionFilterViewSet, SolutionFiltration,
                     SolutionGroupViewSet, SolutionTagViewSet,
-                    SolutionViewSet)
+                    SolutionViewSet, SolutionFavoriteViewSet, SolutionFavoriteAllViewSet)
 
 router = DefaultRouter()
+router.register("solutions/favorite", SolutionFavoriteAllViewSet)
+router.register("solutions/favorite/'pk'/", SolutionFavoriteViewSet)
 router.register("solutions", SolutionViewSet)
 router.register("groups", SolutionGroupViewSet)
 router.register("filters", SolutionFilterViewSet)

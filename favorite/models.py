@@ -34,5 +34,7 @@ class Favorite(models.Model):
                 name='unique_user_content_type_object_id'
             )
         ]
+    def __str__(self):
+        return f'{self.object_id}'
 
 

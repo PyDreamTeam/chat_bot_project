@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
+from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, FavoriteSolutions
 
 
 class SolutionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Solution
+        model = Solution, FavoriteSolutions
         fields = "__all__"
 
 

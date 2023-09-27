@@ -64,9 +64,17 @@ class Solution(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     # create new field to correct work app favorite
-    favorites = GenericRelation(Favorite)
+    favorites = models.ManyToManyField('FavoriteSolutions', blank=True, related_name='favorite')
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"
+
+class FavoriteSolutions(models.Model):
+    user = models.BigIntegerField()
+    favorite_solution = models.BigIntegerField()
+    time_to_create = models.DateTimeField(blank=True)
+
+    def __str__(self):
+        return f"{self.user}, {self.favorite_solution}"
 
 
