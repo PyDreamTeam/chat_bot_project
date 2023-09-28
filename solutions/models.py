@@ -56,7 +56,7 @@ class Solution(models.Model):
     tasks = models.CharField(max_length=100)
     actions_to_complete_tasks = models.CharField(max_length=100)
     image = models.URLField()
-    number = models.CharField(max_length=200, choices=BUY_SOLUTION)
+    price = models.IntegerField(null=True)
     filter = models.ManyToManyField(SolutionTag)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
