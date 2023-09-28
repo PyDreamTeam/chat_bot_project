@@ -5,223 +5,16 @@ from django.core.paginator import Paginator
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
-from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, FavoriteSolutions
+from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
+from favorite.favorite import ManageFavoriteSolutions
+from favorite.models import FavoriteSolutions
 
 
-# get all favorite solutions to user
-class SolutionFavoriteAllViewSet(viewsets.ModelViewSet):
-    queryset = Solution.objects.all()
-    serializer_class = SolutionSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут
-    # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def list(self, request):
-        user = int(request._auth['user_id'])
-        print(user)
-        favorites = FavoriteSolutions.objects.filter(user=user)
-
-
-
-        for solution in solutions:
-            serializer = self.serializer_class(solution)
-            print(solution)
-
-        print('22222222222222')
-
-        print('33333333333333333333')
-        return Response(
-            {"count": len(solutions), "next": None,
-             "previous": None, "results": solutions})
-
-        favorites_solution = []
-        #
-        #
-        # # Перебираем избранные объекты и добавляем связанные solution в список
-        # for favorite in favorites:
-        #     print('start')
-        #
-        #     content_type = Solution.objects.get(favorite[0])
-        #
-        #     # Проверяем, является ли объект платформой
-        #     if content_type.model == 'solution':
-        #         favorites_solution(favorite.content_object)
-        #
-        # # Сериализуем список избранных платформ
-        # serializer = self.serializer_class(favorites_solution, many=True)
-        # return Response(serializer.data)
-
-
-# create or delete favorite solution
-class SolutionFavoriteViewSet(viewsets.ModelViewSet):
-    queryset = Solution.objects.all()
-
-    serializer_class = SolutionSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут
-    # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def list(self, request):
-        solutions = Solution.objects.all()
-
-        results = []
-
-        # формирование списка групп
-        for solution in solutions:
-            serializer = self.serializer_class(solution)
-            solution_data = serializer.data
-            data_solution = {
-                "id": solution_data["id"],
-                "title": solution_data["title"],
-                "business_model": solution_data["business_model"],
-                "business_area": solution_data["business_area"],
-                "objective": solution_data["objective"],
-                "solution_type": solution_data["business_area"],
-                "short_description": solution_data["short_description"],
-                "messengers": solution_data["messengers"],
-                "integration_with_CRM": solution_data["integration_with_CRM"],
-                "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
-                "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
-                "image": solution_data["image"],
-                "price": solution_data["price"],
-                "filter": solution_data["filter"],
-                "is_active": solution_data["is_active"],
-                "created_at": solution_data["created_at"],
-                "tags": [],
-            }
-
-            for solution_tag in solution.filter.all():
-                tag_data = {
-                    "id": solution_tag.id,
-                    "tag": solution_tag.properties,
-                    "image_tag": solution_tag.image if solution_tag.image else "None",
-                    "is_active": solution_tag.is_active,
-                    "is_message": solution_tag.is_message,
-                }
-
-                data_solution["tags"].append(tag_data)
-
-            results.append(data_solution)
-
-        return Response(
-            {"count": len(results), "next": None,
-             "previous": None, "results": results}
-        )
-
-    # queryset = Solution.objects.all()
-    # serializer_class = SolutionSerializer
-    # # Разрешить авторизованным пользователям редактировать, остальные могут
-    # # только читать
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    #
-    # def get_permissions(self):
-    #     permissions = get_permissions(self.request.method)
-    #     return [permission() for permission in permissions]
-    #
-    # Добавление либо удалени из избранного
-    def retrieve(self, request, pk=None):
-        serializer = self.serializer_class(solution)
-
-        # проверяем есть это решение в базе данных в таблице избранное
-        # favorite_solution = self.queryset.all()
-        # print('11111111')
-        # print(favorite_solution)
-
-    #     if solution:
-    #         serializer = self.serializer_class(solution)
-    #         solution_data = serializer.data
-    #         data_solution = {
-    #             "id": solution_data["id"],
-    #             "title": solution_data["title"],
-    #             "business_model": solution_data["business_model"],
-    #             "business_area": solution_data["business_area"],
-    #             "objective": solution_data["objective"],
-    #             "solution_type": solution_data["business_area"],
-    #             "short_description": solution_data["short_description"],
-    #             "messengers": solution_data["messengers"],
-    #             "integration_with_CRM": solution_data["integration_with_CRM"],
-    #             "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
-    #             "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
-    #             "image": solution_data["image"],
-    #             "price": solution_data["price"],
-    #             "filter": solution_data["filter"],
-    #             "is_active": solution_data["is_active"],
-    #             "created_at": solution_data["created_at"],
-    #             "tags": [],
-    #         }
-    #
-    #         for solution_tag in solution.filter.all():
-    #             tag_data = {
-    #                 "id": solution_tag.id,
-    #                 "tag": solution_tag.properties,
-    #                 "image_tag": solution_tag.image if solution_tag.image else "None",
-    #                 "is_active": solution_tag.is_active,
-    #                 "is_message": solution_tag.is_message,
-    #             }
-    #
-    #             data_solution["tags"].append(tag_data)
-    #
-    #         return Response(data_solution)
-    #     else:
-    #         return Response(
-    #             {"message": "Solution not found."}, status=status.HTTP_404_NOT_FOUND
-    #         )
-    #
-    # # вывод всех значений
-    #
-    # def list(self, request):
-    #     solutions = Solution.objects.all()
-    #
-    #     results = []
-    #
-    #     # формирование списка групп
-    #     for solution in solutions:
-    #         serializer = self.serializer_class(solution)
-    #         solution_data = serializer.data
-    #         data_solution = {
-    #             "id": solution_data["id"],
-    #             "title": solution_data["title"],
-    #             "business_model": solution_data["business_model"],
-    #             "business_area": solution_data["business_area"],
-    #             "objective": solution_data["objective"],
-    #             "solution_type": solution_data["business_area"],
-    #             "short_description": solution_data["short_description"],
-    #             "messengers": solution_data["messengers"],
-    #             "integration_with_CRM": solution_data["integration_with_CRM"],
-    #             "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
-    #             "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
-    #             "image": solution_data["image"],
-    #             "price": solution_data["price"],
-    #             "filter": solution_data["filter"],
-    #             "is_active": solution_data["is_active"],
-    #             "created_at": solution_data["created_at"],
-    #             "tags": [],
-    #         }
-    #
-    #         for solution_tag in solution.filter.all():
-    #             tag_data = {
-    #                 "id": solution_tag.id,
-    #                 "tag": solution_tag.properties,
-    #                 "image_tag": solution_tag.image if solution_tag.image else "None",
-    #                 "is_active": solution_tag.is_active,
-    #                 "is_message": solution_tag.is_message,
-    #             }
-    #
-    #             data_solution["tags"].append(tag_data)
-    #
-    #         results.append(data_solution)
-    #
-    #     return Response(
-    #         {"count": len(results), "next": None,
-    #          "previous": None, "results": results}
-    #     )
-
-
-class SolutionViewSet(viewsets.ModelViewSet):
+class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -235,7 +28,11 @@ class SolutionViewSet(viewsets.ModelViewSet):
     # вывод одного значения
     def retrieve(self, request, pk=None):
         solution = self.queryset.filter(pk=pk).first()
+        is_favorite = False
         if solution:
+            favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=pk)
+            if favorite_solutions:
+                is_favorite = True
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
             data_solution = {
@@ -255,6 +52,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
+                "is_favorite": is_favorite,
                 "tags": [],
             }
 
@@ -286,6 +84,12 @@ class SolutionViewSet(viewsets.ModelViewSet):
         for solution in solutions:
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
+
+            is_favorite = False
+            favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=solution.id)
+            if favorite_solutions:
+                is_favorite = True
+
             data_solution = {
                 "id": solution_data["id"],
                 "title": solution_data["title"],
@@ -303,6 +107,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
+                "is_favorite": is_favorite,
                 "tags": [],
             }
 

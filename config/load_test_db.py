@@ -23,8 +23,8 @@ url_main = 'http://127.0.0.1:8000/'
 
 # Учетные данные пользователя локального сервера
 user = {
-    "email": "admin@admin.by",
-    "password": "admin"
+    "email": "2819815@mail.ru",
+    "password": "000000"
 }
 
 

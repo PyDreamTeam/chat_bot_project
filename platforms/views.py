@@ -27,7 +27,6 @@ class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavorite):
 
     def list(self, request):
         user = request.user
-        print(user)
 
         favorites = Favorite.objects.filter(user=user)
         favorites_platform = []
@@ -59,14 +58,12 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
 
     # вывод одного значения
     def retrieve(self, request, pk=None):
+        is_favorite = False
         platform = self.queryset.filter(pk=pk).first()
         if platform:
-            favorite = Favorite.objects.filter(user=request.user) & Favorite.objects.filter(object_id=platform.id)
-            is_favorite = False
-            print(favorite[0])
-            if favorite[0] == platform.id:
+            favorite = Favorite.objects.filter(user=request.user) & Favorite.objects.filter(object_id=pk)
+            if favorite:
                 is_favorite = True
-
             serializer = self.serializer_class(platform)
 
             platform_data = serializer.data
@@ -82,8 +79,9 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
                 "image": platform_data["image"] if platform_data["image"] else "None",
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
-                "tags": [],
                 "is_favorite": is_favorite,
+                "tags": [],
+
             }
 
             for platform_tag in platform.filter.all():
@@ -114,6 +112,12 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
         for platform in platforms:
             serializer = self.serializer_class(platform)
             platform_data = serializer.data
+
+            is_favorite = False
+            favorite = Favorite.objects.filter(user=request.user) & Favorite.objects.filter(object_id=platform.id)
+            if favorite:
+                is_favorite = True
+
             data_platform = {
                 "id": platform_data["id"],
                 "title": platform_data["title"],
@@ -126,6 +130,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
                 "image": platform_data["image"] if platform_data["image"] else "None",
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
+                "is_favorite": is_favorite,
                 "tags": [],
             }
 
