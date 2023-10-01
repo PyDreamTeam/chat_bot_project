@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
                 ('tasks', models.CharField(max_length=100)),
                 ('actions_to_complete_tasks', models.CharField(max_length=100)),
                 ('image', models.URLField()),
-                ('number', models.CharField(choices=[('Buy this turnkey solution', 'Buy this turnkey solution'), ('Buy this ready-made with the possibility of refinement', 'Buy this ready-made with the possibility of refinement')], max_length=200)),
+                # ('number', models.CharField(choices=[('Buy this turnkey solution', 'Buy this turnkey solution'), ('Buy this ready-made with the possibility of refinement', 'Buy this ready-made with the possibility of refinement')], max_length=200)),
                 ('is_active', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('advantages', models.CharField(max_length=300)),
@@ -78,6 +78,7 @@ class Migration(migrations.Migration):
                 ('steps_title', models.CharField(max_length=100)),
                 ('steps_text', models.CharField(max_length=300)),
                 ('filter', models.ManyToManyField(to='solutions.solutiontag')),
+                ('price', models.IntegerField(null=True)),
             ],
         ),
     ]
