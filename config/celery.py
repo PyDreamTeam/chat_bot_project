@@ -13,6 +13,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "every": {
         "task": "accounts.tasks.remove_unnecessary_solution_history_task",
-        "schedule": crontab(minute='*/1'),  # crontab(minute=0, hour=0)
+        "schedule": crontab(minute=0, hour=0),
     },
 }
