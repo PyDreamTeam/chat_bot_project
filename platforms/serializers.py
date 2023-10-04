@@ -9,7 +9,6 @@ class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
         fields = "__all__"
-        print(fields)
 
 
 class PlatformTagSerializer(serializers.ModelSerializer):

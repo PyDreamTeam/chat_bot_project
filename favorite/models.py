@@ -5,8 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from accounts.models import User
 
 
-
-
 class FavoritePlatforms(models.Model):
     """
         Объект описывающий сущность избранного чего либо.

@@ -4,7 +4,6 @@ from django.contrib.postgres.fields import ArrayField
 from favorite.models import FavoritePlatforms
 
 
-
 class PlatformGroup(models.Model):
     title = models.CharField(max_length=100)
     status = models.CharField(max_length=800, default='save')
