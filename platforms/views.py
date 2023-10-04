@@ -7,8 +7,8 @@ from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
-from favorite.favorite import ManageFavorite
-from favorite.models import Favorite
+from mixin_favorite.mixin_favorite import ManageFavoritePlatforms
+from mixin_favorite.models import FavoritePlatforms
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
@@ -18,7 +18,7 @@ from .models import Platform
 from .serializers import PlatformSerializer
 
 
-class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavorite):
+class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -28,7 +28,7 @@ class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavorite):
     def list(self, request):
         user = request.user
 
-        favorites = Favorite.objects.filter(user=user)
+        favorites = FavoritePlatforms.objects.filter(user=user)
         favorites_platform = []
 
         # Перебираем избранные объекты и добавляем связанные платформы в список
@@ -45,7 +45,7 @@ class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavorite):
 
 
 
-class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
+class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -61,7 +61,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
         is_favorite = False
         platform = self.queryset.filter(pk=pk).first()
         if platform:
-            favorite = Favorite.objects.filter(user=request.user) & Favorite.objects.filter(object_id=pk)
+            favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=pk)
             if favorite:
                 is_favorite = True
             serializer = self.serializer_class(platform)
@@ -114,7 +114,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavorite):
             platform_data = serializer.data
 
             is_favorite = False
-            favorite = Favorite.objects.filter(user=request.user) & Favorite.objects.filter(object_id=platform.id)
+            favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=platform.id)
             if favorite:
                 is_favorite = True
 

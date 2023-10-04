@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from .models import Favorite, FavoriteSolutions
+from .models import FavoritePlatforms, FavoriteSolutions
 from requests import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -8,19 +8,19 @@ from rest_framework.response import Response
 
 
 
-class ManageFavorite:
+class ManageFavoritePlatforms:
     @action(
       detail=True,
       methods=['get'],
-      url_path='favorite',
+      url_path='mixin_favorite',
       permission_classes=[IsAuthenticated, ]
     )
     def favorite(self, request, pk):
         instance = self.get_object()
         content_type = ContentType.objects.get_for_model(instance)
-        if len(Favorite.objects.filter(user=request.user)) <= 19:
+        if len(FavoritePlatforms.objects.filter(user=request.user)) <= 19:
 
-            favorite_obj, created = Favorite.objects.get_or_create(
+            favorite_obj, created = FavoritePlatforms.objects.get_or_create(
                 user=request.user, content_type=content_type, object_id=instance.id
             )
 
@@ -46,7 +46,7 @@ class ManageFavoriteSolutions:
     @action(
       detail=True,
       methods=['get'],
-      url_path='favorite',
+      url_path='mixin_favorite',
       permission_classes=[IsAuthenticated, ]
     )
     def favorite(self, request, pk):

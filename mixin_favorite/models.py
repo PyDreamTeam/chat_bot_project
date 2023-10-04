@@ -4,11 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 
 from accounts.models import User
 
-# from platforms.models import Platform
 
 
 
-class Favorite(models.Model):
+class FavoritePlatforms(models.Model):
     """
         Объект описывающий сущность избранного чего либо.
     """
@@ -47,7 +46,7 @@ class FavoriteSolutions(models.Model):
     # Согласно документации, создаём поля для хранения ContentType и object_id
     # https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#django.contrib.contenttypes.fields.GenericForeignKey
     # https: // habr.com / ru / articles / 723300 /
-    tag_relationship = models.SlugField(null=True, blank=True)
+    tag_relationship = models.SlugField(null=True, blank=True)# можно удалить
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)
     object_id = models.BigIntegerField()

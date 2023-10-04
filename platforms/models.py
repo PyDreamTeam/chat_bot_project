@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from favorite.models import Favorite
+from mixin_favorite.models import FavoritePlatforms
 
 
 
@@ -51,8 +51,8 @@ class Platform(models.Model):
     image = models.TextField(null=True, blank=True)
     link = models.CharField(max_length=800, null=True)
     links_to_solution = ArrayField(models.CharField(max_length=10000), null=True, blank=True)
-    # create new field to correct work app favorite
-    favorites = GenericRelation(Favorite)
+    # create new field to correct work app mixin_favorite
+    favorites = GenericRelation(FavoritePlatforms)
 
     def __str__(self):
         return f"{self.title}, {self.short_description}, {self.id}"

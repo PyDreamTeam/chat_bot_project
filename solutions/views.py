@@ -10,8 +10,8 @@ from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
-from favorite.favorite import ManageFavoriteSolutions
-from favorite.models import FavoriteSolutions
+from mixin_favorite.mixin_favorite import ManageFavoriteSolutions
+from mixin_favorite.models import FavoriteSolutions
 
 
 class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
