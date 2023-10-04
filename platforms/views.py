@@ -76,7 +76,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
                 "price": platform_data["price"],
                 "status": platform_data["status"],
                 "created_at": platform_data["created_at"],
-                "image": platform_data["image"] if platform_data["image"] else "None",
+                "image": platform_data["image"],# if platform_data["image"] else "None",
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
                 "is_favorite": is_favorite,
@@ -88,7 +88,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
                 tag_data = {
                     "id": platform_tag.id,
                     "tag": platform_tag.properties,
-                    "image_tag": platform_tag.image if platform_tag.image else "None",
+                    "image_tag": platform_tag.image, # if platform_tag.image else "None",
                     "status": platform_tag.status,
                     "is_message": platform_tag.is_message,
                 }
@@ -127,7 +127,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
                 "price": platform_data["price"],
                 "status": platform_data["status"],
                 "created_at": platform_data["created_at"],
-                "image": platform_data["image"] if platform_data["image"] else "None",
+                "image": platform_data["image"], #if platform_data["image"] else "None",
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
                 "is_favorite": is_favorite,

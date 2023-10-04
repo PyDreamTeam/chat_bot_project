@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
+from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
@@ -19,7 +20,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
     serializer_class = SolutionSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
         permissions = get_permissions(self.request.method)
@@ -40,13 +41,21 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "title": solution_data["title"],
                 "business_model": solution_data["business_model"],
                 "business_area": solution_data["business_area"],
+                "business_niche": solution_data["business_niche"],
                 "objective": solution_data["objective"],
-                "solution_type": solution_data["business_area"],
+                "solution_type": solution_data["solution_type"],
                 "short_description": solution_data["short_description"],
+                "platform": solution_data["platform"],
                 "messengers": solution_data["messengers"],
                 "integration_with_CRM": solution_data["integration_with_CRM"],
                 "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
                 "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
+                "advantages": solution_data["advantages"],
+                "subtitle": solution_data["subtitle"],
+                "full_description": solution_data["full_description"],
+                "dignity": solution_data["dignity"],
+                "steps_title": solution_data["steps_title"],
+                "steps_text": solution_data["steps_text"],
                 "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],
@@ -66,7 +75,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 }
 
                 data_solution["tags"].append(tag_data)
-
+            add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
             return Response(data_solution)
         else:
             return Response(
@@ -95,13 +104,21 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "title": solution_data["title"],
                 "business_model": solution_data["business_model"],
                 "business_area": solution_data["business_area"],
+                "business_niche": solution_data["business_niche"],
                 "objective": solution_data["objective"],
-                "solution_type": solution_data["business_area"],
+                "solution_type": solution_data["solution_type"],
                 "short_description": solution_data["short_description"],
+                "platform": solution_data["platform"],
                 "messengers": solution_data["messengers"],
                 "integration_with_CRM": solution_data["integration_with_CRM"],
                 "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
                 "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
+                "advantages": solution_data["advantages"],
+                "subtitle": solution_data["subtitle"],
+                "full_description": solution_data["full_description"],
+                "dignity": solution_data["dignity"],
+                "steps_title": solution_data["steps_title"],
+                "steps_text": solution_data["steps_text"],
                 "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],

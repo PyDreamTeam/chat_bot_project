@@ -1,0 +1,8 @@
+[{
+    "model": "accounts.solutionhistoryconfig",
+    "pk": 1,
+    "fields": {
+        "max_view_records": 40,
+        "expiry_period": "24:00:00"
+    }
+}]

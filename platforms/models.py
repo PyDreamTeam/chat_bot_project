@@ -40,15 +40,15 @@ class PlatformTag(models.Model):
 
 class Platform(models.Model):
     title = models.CharField(max_length=100)
-    short_description = models.CharField(max_length=200, null=True)
-    full_description = models.CharField(max_length=800, null=True)
-    turnkey_solutions = models.IntegerField(null=True)
-    filter = models.ManyToManyField(PlatformTag, null=True)
-    price = models.IntegerField(null=True)
-    status = models.CharField(max_length=800, default='save', null=True)
+    short_description = models.CharField(max_length=200, null=True, blank=True)
+    full_description = models.CharField(max_length=800, null=True, blank=True)
+    turnkey_solutions = models.CharField(max_length=200,null=True, blank=True)
+    filter = models.ManyToManyField(PlatformTag, null=True, blank=True)
+    price = models.CharField(max_length=200,null=True, blank=True)
+    status = models.CharField(max_length=800, default='save', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.TextField(null=True, blank=True)
-    link = models.CharField(max_length=800, null=True)
+    link = models.CharField(max_length=800, null=True, blank=True)
     links_to_solution = ArrayField(models.CharField(max_length=10000), null=True, blank=True)
     # create new field to correct work app favorite
     favorites = GenericRelation(FavoritePlatforms)

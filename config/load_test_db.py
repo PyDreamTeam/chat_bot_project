@@ -3,29 +3,47 @@
 '''
 Внимание!!! 
 Скрипт работает правильно только на пустой бд!
+
+Инструкция:
+    1. Выбрать нужный адрес сервера (раскомментировать/закомментировать)
+    2. Ввести или проверить учетные данные пользователя
+    3. Запустить скрипт
 '''
 
 import requests
 
-# # Адрес для добавления на сервер
-# url_main = 'http://python.twnsnd.online/'
-
-# Учетные данные пользователя локального сервера
-# user = {
-#     "email": "7777_7788@mail.ru",
-#     "password": "123Qazwsx123@"
-# }
-
+# # Адрес для добавления на веб сервер
+# url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
 url_main = 'http://127.0.0.1:8000/'
 
-# Учетные данные пользователя локального сервера
+
+# Учетные данные пользователя
 user = {
-    "email": "2819815@mail.ru",
-    "password": "000000"
+
+    "email": "07777_7788@mail.ru",
+    "password": "123Qazwsx123@"
+
 }
+
+
+# Функция регистрации пользователя
+def register(url_main: str = url_main, user: dict = user):
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "email": user["email"],
+        "first_name": "string",
+        "last_name": "string",
+        "user_role": "AD",
+        "password": user["password"],
+        "get_email_notifications": "false",
+        "re_password": user["password"]
+    }
+    response = requests.post(
+        f'{url_main}api/auth/users/', json=data, headers=headers)
+    print(response)
 
 
 # Функция добавления
@@ -517,8 +535,14 @@ solutions_data = [
      "messengers": "Мессенджеры 1", "integration_with_CRM": "Интеграция с CRM 1",
      "integration_with_payment_systems": "Интеграция с платежными системами 1", "tasks": "Задачи 1",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 1",
+     "advantages": "Преимущества решения 1",
+     "subtitle": "Подзаголовок 1",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 1",
+     "dignity": "Достоинства решения 1",
+     "steps_title": "Шаги_заголовок 1",
+     "steps_text": "Шаги 1",
+     "price": 125,
      "image": "https://static-cse.canva.com/blob/584144/.png",
-     "price": "Buy this ready-made with the possibility of refinement",
      "filter": [10, 22, 13, 38, 39, 40],
     },
     {"title": "Решение 2", "business_model": "Бизнес модель 2",
@@ -528,8 +552,14 @@ solutions_data = [
      "messengers": "Мессенджеры 2", "integration_with_CRM": "Интеграция с CRM 2",
      "integration_with_payment_systems": "Интеграция с платежными системами 2", "tasks": "Задачи 2",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 2",
+     "advantages": "Преимущества решения 2",
+     "subtitle": "Подзаголовок 2",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 2",
+     "dignity": "Достоинства решения 2",
+     "steps_title": "Шаги_заголовок 2",
+     "steps_text": "Шаги 2",
      "image": "https://static-cse.canva.com/blob/584144/.png",
-     "price": "Buy this turnkey solution",
+     "price": 220,
      "filter": [20, 22, 23, 38, 39, 40],
     },
     {"title": "Решение 3", "business_model": "Бизнес модель 3",
@@ -539,8 +569,14 @@ solutions_data = [
      "messengers": "Мессенджеры 3", "integration_with_CRM": "Интеграция с CRM 3",
      "integration_with_payment_systems": "Интеграция с платежными системами 3", "tasks": "Задачи 3",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 3",
+     "advantages": "Преимущества решения 3",
+     "subtitle": "Подзаголовок 3",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 3",
+     "dignity": "Достоинства решения 3",
+     "steps_title": "Шаги_заголовок 3",
+     "steps_text": "Шаги 3",
      "image": "https://static-cse.canva.com/blob/584138/.png'",
-     "price": "Buy this ready-made with the possibility of refinement", "filter": [30, 23, 33, 38, 39, 40],
+     "price": 145, "filter": [30, 23, 33, 38, 39, 40],
     },
     {"title": "Решение 4", "business_model": "Бизнес модель 4",
      "business_area": "Сфера бизнеса 4", "business_niche": "Ниша бизнеса 4",
@@ -549,8 +585,14 @@ solutions_data = [
      "messengers": "Мессенджеры 4", "integration_with_CRM": "Интеграция с CRM 4",
      "integration_with_payment_systems": "Интеграция с платежными системами 4", "tasks": "Задачи 4",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 4",
+     "advantages": "Преимущества решения 4",
+     "subtitle": "Подзаголовок 4",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 4",
+     "dignity": "Достоинства решения 4",
+     "steps_title": "Шаги_заголовок 4",
+     "steps_text": "Шаги 4",
      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
-     "price": "Buy this ready-made with the possibility of refinement", "filter": [50, 25, 53, 38, 39, 40],
+     "price": 400, "filter": [50, 25, 53, 38, 39, 40],
     },
     {"title": "Решение 5", "business_model": "Бизнес модель 5",
      "business_area": "Сфера бизнеса 5", "business_niche": "Ниша бизнеса 5",
@@ -559,8 +601,14 @@ solutions_data = [
      "messengers": "Мессенджеры 5", "integration_with_CRM": "Интеграция с CRM 5",
      "integration_with_payment_systems": "Интеграция с платежными системами 5", "tasks": "Задачи 5",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 5",
+     "advantages": "Преимущества решения 5",
+     "subtitle": "Подзаголовок 5",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 5",
+     "dignity": "Достоинства решения 5",
+     "steps_title": "Шаги_заголовок 5",
+     "steps_text": "Шаги 5",
      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
-     "price": "Buy this turnkey solution", "filter": [60, 26, 63, 38, 39, 40],
+     "price": 600, "filter": [60, 26, 63, 38, 39, 40],
     },
     {"title": "Решение 6", "business_model": "Бизнес модель 6",
      "business_area": "Сфера бизнеса 6", "business_niche": "Ниша бизнеса 6",
@@ -569,9 +617,159 @@ solutions_data = [
      "messengers": "Мессенджеры 6", "integration_with_CRM": "Интеграция с CRM 6",
      "integration_with_payment_systems": "Интеграция с платежными системами 6", "tasks": "Задачи 6",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 6",
+     "advantages": "Преимущества решения 6",
+     "subtitle": "Подзаголовок 6",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 6",
+     "dignity": "Достоинства решения 6",
+     "steps_title": "Шаги_заголовок 6",
+     "steps_text": "Шаги 6",
      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
-     "price": "Buy this ready-made with the possibility of refinement", "filter": [63, 38, 39, 40, 41, 42, 37],
+     "price": 140, "filter": [63, 38, 39, 40, 41, 42, 37],
     },
+    {"title": "Решение 7", "business_model": "Бизнес модель 7",
+     "business_area": "Сфера бизнеса 7", "business_niche": "Ниша бизнеса 7",
+     "objective": "Цели 7", "solution_type": "Тип решения 7",
+     "short_description": "Краткое описание платформы 7", "platform": "Платформа 7",
+     "messengers": "Мессенджеры 7", "integration_with_CRM": "Интеграция с CRM 7",
+     "integration_with_payment_systems": "Интеграция с платежными системами 7", "tasks": "Задачи 7",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 7",
+     "advantages": "Преимущества решения 7",
+     "subtitle": "Подзаголовок 7",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 7",
+     "dignity": "Достоинства решения 7",
+     "steps_title": "Шаги_заголовок 7",
+     "steps_text": "Шаги 7",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 180, "filter": [63, 31, 39, 40, 41, 42, 37],
+     },
+    {"title": "Решение 8", "business_model": "Бизнес модель 8",
+     "business_area": "Сфера бизнеса 8", "business_niche": "Ниша бизнеса 8",
+     "objective": "Цели 8", "solution_type": "Тип решения 8",
+     "short_description": "Краткое описание платформы 8", "platform": "Платформа 8",
+     "messengers": "Мессенджеры 8", "integration_with_CRM": "Интеграция с CRM 8",
+     "integration_with_payment_systems": "Интеграция с платежными системами 8", "tasks": "Задачи 8",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 8",
+     "advantages": "Преимущества решения 8",
+     "subtitle": "Подзаголовок 8",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 8",
+     "dignity": "Достоинства решения 8",
+     "steps_title": "Шаги_заголовок 8",
+     "steps_text": "Шаги 8",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 190, "filter": [61, 38, 39, 40, 41, 42, 37],
+     },
+    {"title": "Решение 9", "business_model": "Бизнес модель 9",
+     "business_area": "Сфера бизнеса 9", "business_niche": "Ниша бизнеса 9",
+     "objective": "Цели 9", "solution_type": "Тип решения 9",
+     "short_description": "Краткое описание платформы 9", "platform": "Платформа 9",
+     "messengers": "Мессенджеры 9", "integration_with_CRM": "Интеграция с CRM 9",
+     "integration_with_payment_systems": "Интеграция с платежными системами 9", "tasks": "Задачи 9",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 9",
+     "advantages": "Преимущества решения 9",
+     "subtitle": "Подзаголовок 9",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 9",
+     "dignity": "Достоинства решения 9",
+     "steps_title": "Шаги_заголовок 9",
+     "steps_text": "Шаги 9",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 1465, "filter": [63, 38, 34, 40, 41, 42, 37],
+     },
+    {"title": "Решение 10", "business_model": "Бизнес модель 10",
+     "business_area": "Сфера бизнеса 10", "business_niche": "Ниша бизнеса 10",
+     "objective": "Цели 10", "solution_type": "Тип решения 10",
+     "short_description": "Краткое описание платформы 10", "platform": "Платформа 10",
+     "messengers": "Мессенджеры 10", "integration_with_CRM": "Интеграция с CRM 10",
+     "integration_with_payment_systems": "Интеграция с платежными системами 10", "tasks": "Задачи 10",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 10",
+     "advantages": "Преимущества решения 10",
+     "subtitle": "Подзаголовок 10",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 10",
+     "dignity": "Достоинства решения 10",
+     "steps_title": "Шаги_заголовок 10",
+     "steps_text": "Шаги 10",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 160, "filter": [63, 38, 39, 41, 41, 42, 37],
+     },
+    {"title": "Решение 11", "business_model": "Бизнес модель 11",
+     "business_area": "Сфера бизнеса 11", "business_niche": "Ниша бизнеса 11",
+     "objective": "Цели 11", "solution_type": "Тип решения 11",
+     "short_description": "Краткое описание платформы 11", "platform": "Платформа 11",
+     "messengers": "Мессенджеры 11", "integration_with_CRM": "Интеграция с CRM 11",
+     "integration_with_payment_systems": "Интеграция с платежными системами 11", "tasks": "Задачи 11",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 11",
+     "advantages": "Преимущества решения 11",
+     "subtitle": "Подзаголовок 11",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 11",
+     "dignity": "Достоинства решения 11",
+     "steps_title": "Шаги_заголовок 11",
+     "steps_text": "Шаги 11",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 144, "filter": [63, 38, 39, 41, 41, 42, 37],
+     },
+    {"title": "Решение 12", "business_model": "Бизнес модель 12",
+     "business_area": "Сфера бизнеса 12", "business_niche": "Ниша бизнеса 12",
+     "objective": "Цели 12", "solution_type": "Тип решения 12",
+     "short_description": "Краткое описание платформы 12", "platform": "Платформа 12",
+     "messengers": "Мессенджеры 12", "integration_with_CRM": "Интеграция с CRM 12",
+     "integration_with_payment_systems": "Интеграция с платежными системами 12", "tasks": "Задачи 12",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 12",
+     "advantages": "Преимущества решения 12",
+     "subtitle": "Подзаголовок 12",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 12",
+     "dignity": "Достоинства решения 12",
+     "steps_title": "Шаги_заголовок 12",
+     "steps_text": "Шаги 12",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 141, "filter": [63, 11, 39, 40, 41, 42, 37],
+     },
+    {"title": "Решение 13", "business_model": "Бизнес модель 13",
+     "business_area": "Сфера бизнеса 13", "business_niche": "Ниша бизнеса 13",
+     "objective": "Цели 13", "solution_type": "Тип решения 13",
+     "short_description": "Краткое описание платформы 13", "platform": "Платформа 13",
+     "messengers": "Мессенджеры 13", "integration_with_CRM": "Интеграция с CRM 13",
+     "integration_with_payment_systems": "Интеграция с платежными системами 13", "tasks": "Задачи 13",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 13",
+     "advantages": "Преимущества решения 13",
+     "subtitle": "Подзаголовок 13",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 13",
+     "dignity": "Достоинства решения 13",
+     "steps_title": "Шаги_заголовок 13",
+     "steps_text": "Шаги 13",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 147, "filter": [63, 38, 12, 40, 41, 42, 37],
+     },
+    {"title": "Решение 14", "business_model": "Бизнес модель 14",
+     "business_area": "Сфера бизнеса 14", "business_niche": "Ниша бизнеса 14",
+     "objective": "Цели 14", "solution_type": "Тип решения 14",
+     "short_description": "Краткое описание платформы 14", "platform": "Платформа 14",
+     "messengers": "Мессенджеры 14", "integration_with_CRM": "Интеграция с CRM 14",
+     "integration_with_payment_systems": "Интеграция с платежными системами 14", "tasks": "Задачи 14",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 14",
+     "advantages": "Преимущества решения 14",
+     "subtitle": "Подзаголовок 14",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 14",
+     "dignity": "Достоинства решения 14",
+     "steps_title": "Шаги_заголовок 14",
+     "steps_text": "Шаги 14",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 140, "filter": [63, 38, 59, 40, 41, 42, 37],
+     },
+    {"title": "Решение 15", "business_model": "Бизнес модель 15",
+     "business_area": "Сфера бизнеса 15", "business_niche": "Ниша бизнеса 15",
+     "objective": "Цели 15", "solution_type": "Тип решения 15",
+     "short_description": "Краткое описание платформы 15", "platform": "Платформа 15",
+     "messengers": "Мессенджеры 15", "integration_with_CRM": "Интеграция с CRM 15",
+     "integration_with_payment_systems": "Интеграция с платежными системами 15", "tasks": "Задачи 15",
+     "actions_to_complete_tasks": "Мероприятия по выполнению задачи 15",
+     "advantages": "Преимущества решения 15",
+     "subtitle": "Подзаголовок 15",
+     "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 15",
+     "dignity": "Достоинства решения 15",
+     "steps_title": "Шаги_заголовок 15",
+     "steps_text": "Шаги 15",
+     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
+     "price": 140, "filter": [63, 38, 39, 40, 41, 42, 37],
+     },
 ]
 
 
@@ -579,6 +777,9 @@ solutions_data = [
 
 
 if __name__ == '__main__':
+    # регистрация пользователя
+    register()
+    # platformsa
     add_to_db(groups_data, url_groups)
     add_to_db(filters_data, url_filters)
     add_to_db(tags_data, url_tags)
