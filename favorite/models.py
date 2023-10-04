@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
-from accounts.models import User
+from config import settings
 
 
 class FavoritePlatforms(models.Model):
@@ -15,7 +15,7 @@ class FavoritePlatforms(models.Model):
     # https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#django.contrib.contenttypes.fields.GenericForeignKey
     # https: // habr.com / ru / articles / 723300 /
     tag_relationship = models.SlugField(null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)
     object_id = models.BigIntegerField()
     # Создаём генерируемый внешний ключ, который может быть связан с продуктами разных типов: решения и платформы
@@ -45,7 +45,7 @@ class FavoriteSolutions(models.Model):
     # https://docs.djangoproject.com/en/3.2/ref/contrib/contenttypes/#django.contrib.contenttypes.fields.GenericForeignKey
     # https: // habr.com / ru / articles / 723300 /
     tag_relationship = models.SlugField(null=True, blank=True)# можно удалить
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)
     object_id = models.BigIntegerField()
     # Создаём генерируемый внешний ключ, который может быть связан с продуктами разных типов: решения и платформы
