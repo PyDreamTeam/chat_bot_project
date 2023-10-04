@@ -12,7 +12,7 @@ class ManageFavoritePlatforms:
     @action(
       detail=True,
       methods=['get'],
-      url_path='mixin_favorite',
+      url_path='favorite',
       permission_classes=[IsAuthenticated, ]
     )
     def favorite(self, request, pk):
@@ -26,18 +26,18 @@ class ManageFavoritePlatforms:
 
             if created:
                 return Response(
-                    {'message': 'Контент добавлен в избранное'},
+                    {'message': 'Content added in favorite'},
                     status=status.HTTP_201_CREATED
                 )
             else:
                 favorite_obj.delete()
                 return Response(
-                    {'message': 'Контент удален из избранного'},
+                    {'message': 'Content removed from favorites'},
                     status=status.HTTP_200_OK
                 )
         else:
             return Response(
-                {'message': 'Достигнут предел добавления в избранное'},
+                {'message': 'We have max count in favorite'},
                 status=status.HTTP_200_OK
             )
 
@@ -46,7 +46,7 @@ class ManageFavoriteSolutions:
     @action(
       detail=True,
       methods=['get'],
-      url_path='mixin_favorite',
+      url_path='favorite',
       permission_classes=[IsAuthenticated, ]
     )
     def favorite(self, request, pk):
@@ -60,17 +60,17 @@ class ManageFavoriteSolutions:
 
             if created:
                 return Response(
-                    {'message': 'Контент добавлен в избранное'},
+                    {'message': 'Content added in favorite'},
                     status=status.HTTP_201_CREATED
                 )
             else:
                 favorite_obj.delete()
                 return Response(
-                    {'message': 'Контент удален из избранного'},
+                    {'message': 'Content removed from favorites'},
                     status=status.HTTP_200_OK
                 )
         else:
             return Response(
-                {'message': 'Достигнут предел добавления в избранное'},
+                {'message': 'We have max count in favorite'},
                 status=status.HTTP_200_OK
             )

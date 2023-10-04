@@ -7,7 +7,7 @@ from .views import (PlatformFilterViewSet, PlatformFiltration,
 
 router = DefaultRouter()
 router.register("platforms", PlatformViewSet)
-router.register("platforms-mixin_favorite", PlatformFavoriteViewSet)
+router.register("platforms-favorite", PlatformFavoriteViewSet)
 router.register("groups", PlatformGroupViewSet)
 router.register("filters", PlatformFilterViewSet)
 router.register("tags", PlatformTagViewSet)

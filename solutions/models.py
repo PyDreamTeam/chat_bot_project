@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from mixin_favorite.models import FavoriteSolutions
+from favorite.models import FavoriteSolutions
 
 
 
@@ -63,7 +63,7 @@ class Solution(models.Model):
     filter = models.ManyToManyField(SolutionTag)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    # create new field to correct work app mixin_favorite
+    # create new field to correct work app favorite
     favorites = GenericRelation(FavoriteSolutions)
 
 

@@ -23,8 +23,8 @@ class FavoritePlatforms(models.Model):
     # Создаём генерируемый внешний ключ, который может быть связан с продуктами разных типов: решения и платформы
     content_object = GenericForeignKey("content_type", "object_id")
     class Meta:
-        verbose_name = 'Избранное'
-        verbose_name_plural = 'Избранные'
+        verbose_name = 'favorite'
+        verbose_name_plural = 'favorites'
 
         ordering = ['-id']
         constraints = [
@@ -53,8 +53,8 @@ class FavoriteSolutions(models.Model):
     # Создаём генерируемый внешний ключ, который может быть связан с продуктами разных типов: решения и платформы
     content_object = GenericForeignKey("content_type", "object_id")
     class Meta:
-        verbose_name = 'Избранное'
-        verbose_name_plural = 'Избранные'
+        verbose_name = 'favorite'
+        verbose_name_plural = 'favorites'
 
         ordering = ['-id']
         constraints = [

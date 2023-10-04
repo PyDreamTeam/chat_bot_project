@@ -7,8 +7,8 @@ from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
-from mixin_favorite.mixin_favorite import ManageFavoritePlatforms
-from mixin_favorite.models import FavoritePlatforms
+from favorite.mixin_favorite import ManageFavoritePlatforms
+from favorite.models import FavoritePlatforms
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
