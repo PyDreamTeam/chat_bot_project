@@ -276,7 +276,7 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
                     tag_data = {
                         "tag": tag.properties,
                         "id": tag.id,
-                        "image_tag": "None",  # tag.image if tag.image else "None",
+                        "image_tag": tag.image if tag.image else "None",
                         "is_active": tag.is_active,
                         "is_message": tag.is_message,
                     }
