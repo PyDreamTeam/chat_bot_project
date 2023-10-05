@@ -4,8 +4,6 @@ from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 
 
 class PlatformSerializer(serializers.ModelSerializer):
-    # is_favorite = serializers.BooleanField(read_only=True)
-
     class Meta:
         model = Platform
         fields = "__all__"

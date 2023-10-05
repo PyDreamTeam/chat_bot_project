@@ -11,11 +11,9 @@ from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
-from favorite.mixin_favorite import ManageFavoriteSolutions
-from favorite.models import FavoriteSolutions
 
 
-class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
+class SolutionViewSet(viewsets.ModelViewSet):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -29,11 +27,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
     # вывод одного значения
     def retrieve(self, request, pk=None):
         solution = self.queryset.filter(pk=pk).first()
-        is_favorite = False
         if solution:
-            favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=pk)
-            if favorite_solutions:
-                is_favorite = True
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
             data_solution = {
@@ -61,7 +55,6 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
-                "is_favorite": is_favorite,
                 "tags": [],
             }
 
@@ -93,12 +86,6 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
         for solution in solutions:
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
-
-            is_favorite = False
-            favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=solution.id)
-            if favorite_solutions:
-                is_favorite = True
-
             data_solution = {
                 "id": solution_data["id"],
                 "title": solution_data["title"],
@@ -124,7 +111,6 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
-                "is_favorite": is_favorite,
                 "tags": [],
             }
 

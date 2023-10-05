@@ -7,45 +7,9 @@ from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
-from favorite.mixin_favorite import ManageFavoritePlatforms
-from favorite.models import FavoritePlatforms
-
-from django.contrib.contenttypes.models import ContentType
-from django.http import Http404
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
-from .models import Platform
-from .serializers import PlatformSerializer
 
 
-class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
-    queryset = Platform.objects.all()
-    serializer_class = PlatformSerializer
-    # Разрешить авторизованным пользователям редактировать, остальные могут
-    # только читать
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def list(self, request):
-        user = request.user
-
-        favorites = FavoritePlatforms.objects.filter(user=user)
-        favorites_platform = []
-
-        # Перебираем избранные объекты и добавляем связанные платформы в список
-        for favorite in favorites:
-            content_type = ContentType.objects.get_for_model(favorite.content_object)
-
-            # Проверяем, является ли объект платформой
-            if content_type.model == 'platform':
-                favorites_platform.append(favorite.content_object)
-
-        # Сериализуем список избранных платформ
-        serializer = self.serializer_class(favorites_platform, many=True)
-        return Response(serializer.data)
-
-
-
-class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
+class PlatformViewSet(viewsets.ModelViewSet):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -58,14 +22,9 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
 
     # вывод одного значения
     def retrieve(self, request, pk=None):
-        is_favorite = False
         platform = self.queryset.filter(pk=pk).first()
         if platform:
-            favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=pk)
-            if favorite:
-                is_favorite = True
             serializer = self.serializer_class(platform)
-
             platform_data = serializer.data
             data_platform = {
                 "id": platform_data["id"],
@@ -79,9 +38,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
                 "image": platform_data["image"],# if platform_data["image"] else "None",
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
-                "is_favorite": is_favorite,
                 "tags": [],
-
             }
 
             for platform_tag in platform.filter.all():
@@ -112,12 +69,6 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         for platform in platforms:
             serializer = self.serializer_class(platform)
             platform_data = serializer.data
-
-            is_favorite = False
-            favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=platform.id)
-            if favorite:
-                is_favorite = True
-
             data_platform = {
                 "id": platform_data["id"],
                 "title": platform_data["title"],
@@ -130,7 +81,6 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
                 "image": platform_data["image"], #if platform_data["image"] else "None",
                 "link": platform_data["link"],
                 "links_to_solution": platform_data["links_to_solution"],
-                "is_favorite": is_favorite,
                 "tags": [],
             }
 
@@ -373,3 +323,24 @@ class PlatformFiltration(generics.CreateAPIView):
             modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
             return Response(modified_data)
 
+
+# class PlatformSearch(generics.ListAPIView):
+#     queryset = Platform.objects.all()
+#     serializer_class = PlatformSerializer
+#     # Разрешить авторизованным пользователям редактировать, остальные могут
+#     # только читать
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+#     def get_permissions(self):
+#         permissions = get_permissions(self.request.method)
+#         return [permission() for permission in permissions]
+
+#     def get_queryset(self):
+#         title = self.request.data.get("title")
+#         return self.queryset.filter(title__icontains=title)
+
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.get_queryset()
+#         serialized_data = self.serializer_class(queryset, many=True)
+#         modified_data = modify_data(serialized_data.data)
+#         return Response(modified_data)
