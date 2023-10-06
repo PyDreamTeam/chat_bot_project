@@ -25,6 +25,7 @@ user = {
 
     "email": "07777_7788@mail.ru",
     "password": "123Qazwsx123@"
+
 }
 
 
