@@ -31,9 +31,10 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
         solution = self.queryset.filter(pk=pk).first()
         is_favorite = False
         if solution:
-            favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=pk)
-            if favorite_solutions:
-                is_favorite = True
+            if request.user.is_authenticated:
+                favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=pk)
+                if favorite_solutions:
+                    is_favorite = True
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
             data_solution = {
@@ -75,7 +76,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 }
 
                 data_solution["tags"].append(tag_data)
-            add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
+            # add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
             return Response(data_solution)
         else:
             return Response(
@@ -95,9 +96,10 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
             solution_data = serializer.data
 
             is_favorite = False
-            favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=solution.id)
-            if favorite_solutions:
-                is_favorite = True
+            if request.user.is_authenticated:
+                favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=solution.id)
+                if favorite_solutions:
+                    is_favorite = True
 
             data_solution = {
                 "id": solution_data["id"],

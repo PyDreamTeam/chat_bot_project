@@ -61,9 +61,10 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         is_favorite = False
         platform = self.queryset.filter(pk=pk).first()
         if platform:
-            favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=pk)
-            if favorite:
-                is_favorite = True
+            if request.user.is_authenticated:
+                favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=pk)
+                if favorite:
+                    is_favorite = True
             serializer = self.serializer_class(platform)
 
             platform_data = serializer.data
@@ -114,9 +115,10 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
             platform_data = serializer.data
 
             is_favorite = False
-            favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=platform.id)
-            if favorite:
-                is_favorite = True
+            if request.user.is_authenticated:
+                favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=platform.id)
+                if favorite:
+                    is_favorite = True
 
             data_platform = {
                 "id": platform_data["id"],
