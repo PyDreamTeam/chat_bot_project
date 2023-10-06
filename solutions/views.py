@@ -76,7 +76,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 }
 
                 data_solution["tags"].append(tag_data)
-            # add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
+            add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
             return Response(data_solution)
         else:
             return Response(
