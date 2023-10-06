@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
+    'favorite',
     'platforms',
     'solutions',
     'orders',
@@ -66,7 +67,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
