@@ -22,6 +22,7 @@ url_main = 'http://127.0.0.1:8000/'
 
 # Учетные данные пользователя
 user = {
+
     "email": "07777_7788@mail.ru",
     "password": "123Qazwsx123@"
 }
@@ -440,8 +441,8 @@ tags_data_solutions = [
     {'title': 9, 'properties': 'Telegram', 'image': 'telegram', 'is_message': 'True', },
     {'title': 9, 'properties': 'Viber', 'image': 'viber', 'is_message': 'True', },
     {'title': 9, 'properties': 'ВКонтакте', 'image': 'vk', 'is_message': 'True', },
-    {'title': 9, 'properties': 'Facebook', 'is_message': 'True', },
-    {'title': 9, 'properties': 'Instagram', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Facebook', 'image': 'fb', 'is_message': 'True', },
+    {'title': 9, 'properties': 'Instagram', "image": 'inst', 'is_message': 'True', },
     {'title': 10, 'properties': 'Визуальный редактор', },
     {'title': 10, 'properties': 'Линейный редактор', },
     {'title': 10, 'properties': 'Готовые шаблоны', },
@@ -573,7 +574,7 @@ solutions_data = [
      "dignity": "Достоинства решения 3",
      "steps_title": "Шаги_заголовок 3",
      "steps_text": "Шаги 3",
-     "image": "https://static-cse.canva.com/blob/584138/.png'",
+     "image": "https://static-cse.canva.com/blob/584138/.png",
      "price": 145, "filter": [30, 23, 33, 38, 39, 40],
     },
     {"title": "Решение 4", "business_model": "Бизнес модель 4",
