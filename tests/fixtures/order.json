@@ -1,0 +1,13 @@
+[
+{
+    "model": "orders.order",
+    "pk": 1,
+    "fields": {
+        "first_name": "admin",
+        "phone_number": "string",
+        "comment": "string",
+        "created_time": "2023-10-03T09:27:47.127Z",
+        "email": "admin@mail.com"
+    }
+}
+]
