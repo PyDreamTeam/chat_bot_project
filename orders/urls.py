@@ -1,10 +1,10 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
-from .views import *
+from .views import OrdersViewSet
 
 
 urlpatterns = [
-    path('ordercreate/', OrderAPICreate.as_view()),
-    path('orderlist/', OrderAPIList.as_view()),
-    path('orderdetail/<int:pk>/', OrderAPIDetailView.as_view())
+    path('ordercreate/', OrdersViewSet.as_view({'post':'create'})),
+    path('orderlist/', OrdersViewSet.as_view({'get':'list'})),
+    path('orderlist/<int:pk>/', OrdersViewSet.as_view({'get':'retrieve'})),
+    path('orderdetail/<int:pk>/', OrdersViewSet.as_view({'put':'update', 'delete':'destroy'})),
 ]
