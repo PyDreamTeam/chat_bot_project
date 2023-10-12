@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pgadmin-py
+  name: pgadmin-deployment
 spec:
   replicas: 1
   selector:
@@ -22,6 +22,13 @@ spec:
               value: "pydream@pydream.com"
             - name: PGADMIN_DEFAULT_PASSWORD
               value: "pydream"
+          resources:
+            limits:
+              cpu: 150m
+              memory: 400Mi
+            requests:
+              cpu: 100m
+              memory: 300Mi
 ---
 # apiVersion: v1
 # kind: PersistentVolume
@@ -65,7 +72,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pgadmin-py
+  name: pgadmin-service
 spec:
   selector:
     app: pgadmin-py

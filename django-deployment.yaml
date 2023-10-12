@@ -27,6 +27,13 @@ spec:
             postStart:
               exec:
                 command: ["python", "manage.py", "migrate"]
+          resources:
+            limits:
+              cpu: 150m
+              memory: 400Mi
+            requests:
+              cpu: 100m
+              memory: 300Mi
       volumes:
         - name: django-storage
           persistentVolumeClaim:

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-beat-deployment
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: celery-beat
+  template:
+    metadata:
+      labels:
+        app: celery-beat
+    spec:
+      containers:
+      - name: celery-beat
+        image: mamicheck/celery:4
+        envFrom:
+            - secretRef:
+                name: pydream-secret
+        command: ["celery", "-A", "config", "beat", "-l", "info", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+        resources:
+            limits:
+              cpu: 150m
+              memory: 300Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-worker
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+    spec:
+      containers:
+      - name: celery-worker
+        image: mamicheck/celery:4
+        envFrom:
+            - secretRef:
+                name: pydream-secret
+        command: ["celery", "-A", "config", "worker", "-l", "info"]
+        resources:
+            limits:
+              cpu: 150m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 600Mi
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: celery-worker-service
+# spec:
+#   selector:
+#     app: celery-worker
+#   ports:
+#     - protocol: TCP
+#       port: 5555
+#       targetPort: 5555
