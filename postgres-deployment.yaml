@@ -18,10 +18,10 @@ spec:
           resources:
             limits:
               cpu: 150m
-              memory: 300Mi
+              memory: 150Mi
             requests:
               cpu: 100m
-              memory: 256Mi   
+              memory: 100Mi   
           envFrom:
             - secretRef:
                 name: postgres-secret
