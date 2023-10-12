@@ -22,10 +22,10 @@ spec:
         resources:
             limits:
               cpu: 150m
-              memory: 300Mi
+              memory: 200Mi
             requests:
               cpu: 100m
-              memory: 200Mi
+              memory: 100Mi
 
 ---
 apiVersion: apps/v1
@@ -52,10 +52,10 @@ spec:
         resources:
             limits:
               cpu: 150m
-              memory: 300Mi
+              memory: 200Mi
             requests:
               cpu: 100m
-              memory: 200Mi
+              memory: 100Mi
 ---
 # apiVersion: v1
 # kind: Service
