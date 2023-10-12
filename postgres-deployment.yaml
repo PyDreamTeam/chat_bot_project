@@ -15,6 +15,13 @@ spec:
       containers:
         - name: postgres
           image: postgres:15-alpine
+          resources:
+            limits:
+              cpu: 150m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi   
           envFrom:
             - secretRef:
                 name: postgres-secret
@@ -23,13 +30,6 @@ spec:
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-          resources:
-            limits:
-              cpu: 150m
-              memory: 512Mi
-            requests:
-              cpu: 100m
-              memory: 256Mi    
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
