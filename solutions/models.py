@@ -35,10 +35,23 @@ class SolutionTag(models.Model):
         return f"{self.title}, {self.properties}"
 
 
-BUY_SOLUTION = (
-    ("Buy this turnkey solution", "Buy this turnkey solution"),
-    ("Buy this ready-made with the possibility of refinement", "Buy this ready-made with the possibility of refinement"),
-)
+class Cards(models.Model):
+    title = models.CharField(max_length=200)
+    text = models.CharField(max_length=200)
+    img = models.CharField(max_length=200)
+
+
+class Advantages(models.Model):
+    advantage = models.CharField(max_length=200)
+
+
+class Dignities(models.Model):
+    dignities = models.CharField(max_length=200)
+
+
+class Steps(models.Model):
+    title = models.CharField(max_length=200)
+    text = models.CharField(max_length=200)
 
 
 class Solution(models.Model):
@@ -60,12 +73,13 @@ class Solution(models.Model):
     filter = models.ManyToManyField(SolutionTag)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    advantages = models.CharField(max_length=300)
+    advantages = models.ManyToManyField(Advantages)
     subtitle = models.CharField(max_length=300)
     full_description = models.CharField(max_length=300)
-    dignity = models.CharField(max_length=300)
-    steps_title = models.CharField(max_length=100)
-    steps_text = models.CharField(max_length=300)
+    dignities = models.ManyToManyField(Dignities)
+    steps = models.ManyToManyField(Steps)
+    cards = models.ManyToManyField(Cards)
+
 
     def __str__(self):
         return f"{self.title}, {self.short_description}"

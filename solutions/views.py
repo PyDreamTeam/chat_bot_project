@@ -5,9 +5,9 @@ from django.core.paginator import Paginator
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
-from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag
+from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
-                          SolutionSerializer, SolutionTagSerializer)
+                          SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
 
@@ -46,14 +46,14 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "advantages": solution_data["advantages"],
                 "subtitle": solution_data["subtitle"],
                 "full_description": solution_data["full_description"],
-                "dignity": solution_data["dignity"],
-                "steps_title": solution_data["steps_title"],
-                "steps_text": solution_data["steps_text"],
+                "steps": solution_data["steps"],
                 "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
+                "dignities": solution_data["dignities"],
+                "cards": solution_data["cards"],
                 "tags": [],
             }
 
@@ -102,14 +102,14 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "advantages": solution_data["advantages"],
                 "subtitle": solution_data["subtitle"],
                 "full_description": solution_data["full_description"],
-                "dignity": solution_data["dignity"],
-                "steps_title": solution_data["steps_title"],
-                "steps_text": solution_data["steps_text"],
+                "steps": solution_data["steps"],
                 "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],
                 "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
+                "dignities": solution_data["dignities"],
+                "cards": solution_data["cards"],
                 "tags": [],
             }
 
@@ -135,6 +135,54 @@ class SolutionViewSet(viewsets.ModelViewSet):
 class SolutionGroupViewSet(viewsets.ModelViewSet):
     queryset = SolutionGroup.objects.all()
     serializer_class = SolutionGroupSerializer
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
+    
+    
+class CardsViewSet(viewsets.ModelViewSet):
+    queryset = Cards.objects.all()
+    serializer_class = CardsSerializer
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
+    
+
+class AdvantagesViewSet(viewsets.ModelViewSet):
+    queryset = Advantages.objects.all()
+    serializer_class = AdvantagesSerializer
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
+    
+    
+class DignitiesViewSet(viewsets.ModelViewSet):
+    queryset = Dignities.objects.all()
+    serializer_class = DignitiesSerializer
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]
+    
+
+class StepsViewSet(viewsets.ModelViewSet):
+    queryset = Steps.objects.all()
+    serializer_class = StepsSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
     # только читать
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
