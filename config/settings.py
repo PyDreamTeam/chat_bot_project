@@ -51,11 +51,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', #JWT authentication backend library
     'rest_framework_simplejwt.token_blacklist',
     'accounts',
+    'favorite',
     'platforms',
     'solutions',
     'orders',
     'drf_spectacular', #specification
-    
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -286,3 +287,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User' #new model user
+
+CELERY_BROKER_URL = f"redis://{env.str('CELERY_HOST')}:{env.str('CELERY_PORT')}"
+CELERY_RESULT_BACKEND = f"redis://{env.str('CELERY_HOST')}:{env.str('CELERY_PORT')}"
+CELERY_IMPORTS = ["accounts.tasks"]

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+
+from accounts.tasks import send_message_when_new_order_task
 from .models import Order
 
 User = get_user_model()
@@ -28,8 +30,6 @@ class OrderSerializer(serializers.ModelSerializer):
                                          comment=validated_data['comment'],
                                          created_time=validated_data['created_time'],
                                          email=validated_data['email'])
-
+        if order.id:
+            send_message_when_new_order_task.delay(order.id)
         return order
-
-
-

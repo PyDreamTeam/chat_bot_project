@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: django-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: django
@@ -27,6 +27,13 @@ spec:
             postStart:
               exec:
                 command: ["python", "manage.py", "migrate"]
+          resources:
+            limits:
+              cpu: 150m
+              memory: 300Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
       volumes:
         - name: django-storage
           persistentVolumeClaim:

@@ -3,29 +3,45 @@
 '''
 Внимание!!! 
 Скрипт работает правильно только на пустой бд!
+
+Инструкция:
+    1. Выбрать нужный адрес сервера (раскомментировать/закомментировать)
+    2. Ввести или проверить учетные данные пользователя
+    3. Запустить скрипт
 '''
 
 import requests
 
-# # Адрес для добавления на сервер
-# url_main = 'http://python.twnsnd.online/'
-
-# Учетные данные пользователя локального сервера
-# user = {
-#     "email": "7777_7788@mail.ru",
-#     "password": "123Qazwsx123@"
-# }
-
+# # Адрес для добавления на веб сервер
+# url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
 url_main = 'http://127.0.0.1:8000/'
 
-# Учетные данные пользователя локального сервера
+
+# Учетные данные пользователя
 user = {
-    "email": "bronepoezd228@gmail.com",
-    "password": "Houle@12"
+    "email": "07777_7788@mail.ru",
+    "password": "123Qazwsx123@"
 }
+
+
+# Функция регистрации пользователя
+def register(url_main: str = url_main, user: dict = user):
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "email": user["email"],
+        "first_name": "string",
+        "last_name": "string",
+        "user_role": "AD",
+        "password": user["password"],
+        "get_email_notifications": "false",
+        "re_password": user["password"]
+    }
+    response = requests.post(
+        f'{url_main}api/auth/users/', json=data, headers=headers)
+    print(response)
 
 
 # Функция добавления
@@ -809,6 +825,9 @@ solutions_data = [
 
 
 if __name__ == '__main__':
+    # регистрация пользователя
+    register()
+    # platformsa
     add_to_db(groups_data, url_groups)
     add_to_db(filters_data, url_filters)
     add_to_db(tags_data, url_tags)
