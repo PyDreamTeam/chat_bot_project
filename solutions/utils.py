@@ -35,7 +35,7 @@ def modify_data(data, total_count):
             tag_data = {
                 "id": solution_tag.id,
                 "tag": solution_tag.properties,
-                "image_tag": solution_tag.image if platform_tag.image else "None",
+                "image_tag": solution_tag.image if solution_tag.image else "None",
                 "is_active": solution_tag.is_active,
                 "is_message": solution_tag.is_message,
             }
