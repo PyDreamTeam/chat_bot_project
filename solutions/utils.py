@@ -21,7 +21,7 @@ def modify_data(data, total_count):
             "integration_with_payment_systems": modified_item["integration_with_payment_systems"],
             "tasks": modified_item["tasks"],
             "actions_to_complete_tasks": modified_item["actions_to_complete_tasks"],
-            "visual": modified_item["visual"],
+            "image": modified_item["image"],
             "price": modified_item["price"],
             "filter": modified_item["filter"],
             "is_active": modified_item["is_active"],
@@ -35,7 +35,7 @@ def modify_data(data, total_count):
             tag_data = {
                 "id": solution_tag.id,
                 "tag": solution_tag.properties,
-                "image_tag": solution_tag.image if platform_tag.image else "None",
+                "image_tag": solution_tag.image if solution_tag.image else "None",
                 "is_active": solution_tag.is_active,
                 "is_message": solution_tag.is_message,
             }
