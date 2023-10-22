@@ -21,7 +21,7 @@ def modify_data(data, total_count):
             "integration_with_payment_systems": modified_item["integration_with_payment_systems"],
             "tasks": modified_item["tasks"],
             "actions_to_complete_tasks": modified_item["actions_to_complete_tasks"],
-            "visual": modified_item["image"],
+            "image": modified_item["image"],
             "price": modified_item["price"],
             "filter": modified_item["filter"],
             "is_active": modified_item["is_active"],
