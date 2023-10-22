@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: celery-beat
-        image: mamicheck/celery:4
+        image: mamicheck/celery:{{IMAGE_TAG}}
         envFrom:
             - secretRef:
                 name: pydream-secret
@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
       - name: celery-worker
-        image: mamicheck/celery:4
+        image: mamicheck/celery:{{IMAGE_TAG}}
         envFrom:
             - secretRef:
                 name: pydream-secret
