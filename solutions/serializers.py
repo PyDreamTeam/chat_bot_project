@@ -4,6 +4,7 @@ from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards,
 
 
 class SolutionSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Solution
         fields = "__all__"

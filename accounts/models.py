@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from config import settings
+from solutions.models import Solution
 from .managers import CustomUserManager
 
 
@@ -10,6 +13,9 @@ class Role(models.TextChoices):
     superadmin = "SA", _("SuperAdmin")
     admin = "AD", _("Admin")
     manager = "MN", _("Manager")
+
+
+ALL_ROLES = (Role.superadmin, Role.user, Role.admin, Role.manager)
 
 
 class User(AbstractUser):
@@ -30,10 +36,40 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=13, null=True, blank=True)
     image = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.user.email
+
+
+class SolutionHistory(models.Model):
+    action_time = models.DateTimeField(
+        verbose_name=_("action time"),
+        default=timezone.now,
+        editable=False,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("user"),
+    )
+    solution = models.ForeignKey(
+        Solution,
+        on_delete=models.CASCADE,
+        verbose_name=_("solution"),
+    )
+
+    def __str__(self):
+        return f"user: {self.user}, solution: {self.solution}"
+
+
+class SolutionHistoryConfig(models.Model):
+    max_view_records = models.IntegerField()
+    expiry_period = models.DurationField()
+
+    def __str__(self):
+        return f"max_view_records: {self.max_view_records}, " \
+               f"expiry_period: {self.expiry_period}"
 

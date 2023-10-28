@@ -1,0 +1,67 @@
+version: '3'
+services:
+  django:
+    build: .
+    container_name: djangoapp_pydream
+    restart: always
+    ports:
+      - "8005:8000"
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - postgres_db
+    volumes:
+      - .:/usr/src/app/
+    env_file:
+      - ./config/.env
+
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: postgresdb_pydream
+    ports:
+      - "5433:5432"
+    volumes:
+       - ../data/postgresql:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=testdb
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    container_name: celery_worker_pydream
+    command: >
+      bash -c "celery -A config worker -l info"
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - django
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    container_name: celery_beat_pydream
+    command: >
+      bash -c "celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - django
+
+  redis:
+    image: redis
+    container_name: redis_pydream
+    ports:
+      - "6379:6379"
+
+  flower:
+    image: mher/flower
+    container_name: flower_pydream
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379
+      - FLOWER_PORT=5555
+    ports:
+      - "5555:5555"

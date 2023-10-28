@@ -1,4 +1,7 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from favorite.models import FavoriteSolutions
+
 
 
 class SolutionGroup(models.Model):
@@ -79,9 +82,14 @@ class Solution(models.Model):
     dignities = models.ManyToManyField(Dignities)
     steps = models.ManyToManyField(Steps)
     cards = models.ManyToManyField(Cards)
-
+    # create new field to correct work app favorite
+    favorites = GenericRelation(FavoriteSolutions)
+    subtitle = models.CharField(max_length=300)
+    full_description = models.CharField(max_length=300)
+    
 
     def __str__(self):
-        return f"{self.title}, {self.short_description}"
+        return f"{self.title}, {self.short_description}, {self.id}"
+
 
 

@@ -5,14 +5,17 @@ from django.core.paginator import Paginator
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
+from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
+from favorite.mixin_favorite import ManageFavoriteSolutions
+from favorite.models import FavoriteSolutions
 
 
-class SolutionViewSet(viewsets.ModelViewSet):
+class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
     # Разрешить авторизованным пользователям редактировать, остальные могут
@@ -26,7 +29,12 @@ class SolutionViewSet(viewsets.ModelViewSet):
     # вывод одного значения
     def retrieve(self, request, pk=None):
         solution = self.queryset.filter(pk=pk).first()
+        is_favorite = False
         if solution:
+            if request.user.is_authenticated:
+                favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=pk)
+                if favorite_solutions:
+                    is_favorite = True
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
             data_solution = {
@@ -54,6 +62,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "created_at": solution_data["created_at"],
                 "dignities": solution_data["dignities"],
                 "cards": solution_data["cards"],
+                "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
 
@@ -67,7 +76,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 }
 
                 data_solution["tags"].append(tag_data)
-
+            add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
             return Response(data_solution)
         else:
             return Response(
@@ -85,6 +94,13 @@ class SolutionViewSet(viewsets.ModelViewSet):
         for solution in solutions:
             serializer = self.serializer_class(solution)
             solution_data = serializer.data
+
+            is_favorite = False
+            if request.user.is_authenticated:
+                favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=solution.id)
+                if favorite_solutions:
+                    is_favorite = True
+
             data_solution = {
                 "id": solution_data["id"],
                 "title": solution_data["title"],
@@ -110,6 +126,7 @@ class SolutionViewSet(viewsets.ModelViewSet):
                 "created_at": solution_data["created_at"],
                 "dignities": solution_data["dignities"],
                 "cards": solution_data["cards"],
+                "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
 
@@ -397,5 +414,6 @@ class SolutionFiltration(generics.CreateAPIView):
 
         if page is not None:
             serializer = self.serializer_class(page, many=True)
+
             modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
             return Response(modified_data)

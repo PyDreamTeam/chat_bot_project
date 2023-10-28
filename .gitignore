@@ -131,3 +131,5 @@ dmypy.json
 .pyre/
 Dockerfile
 entrypoint.sh
+/orders/migrations/0002_order_created_time_order_email_order_first_name.py
+/Generating
