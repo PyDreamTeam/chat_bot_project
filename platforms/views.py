@@ -3,13 +3,13 @@ from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
-from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
+from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data, get_groups_with_filters
 from favorite.mixin_favorite import ManageFavoritePlatforms
 from favorite.models import FavoritePlatforms
-
+from drf_spectacular.utils import extend_schema
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -371,6 +371,15 @@ class PlatformFiltration(generics.CreateAPIView):
             return Response(modified_data)
 
 
+
+@extend_schema(
+    description='Endpoint for searching platforms',
+    request=PlatformSearchSerializer,
+    responses={
+        200: PlatformSearchResponseSerializer(many=False),
+    },
+
+)
 class PlatformSearch(generics.CreateAPIView):
     queryset_group = PlatformGroup.objects.all()
     queryset_filter = PlatformFilter.objects.all()
