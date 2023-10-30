@@ -13,11 +13,11 @@
 import requests
 
 # # Адрес для добавления на веб сервер
-# url_main = 'https://python.twnsnd.online/'
+url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
-url_main = 'http://127.0.0.1:8000/'
+#url_main = 'http://127.0.0.1:8000/'
 
 
 # Учетные данные пользователя
@@ -72,7 +72,7 @@ groups_data = [
     {'title': 'Whatsapp business API', },
     {'title': 'Подписчики', },
     {'title': 'Подписки', },
-    {'title': 'Статисткика', },
+    {'title': 'Статистика', },
     {'title': 'Тарифы', },
     {'title': 'Документы', },
     {'title': 'Служба поддержки', },

@@ -6,16 +6,11 @@ from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
-from .utils import modify_data
+from .utils import modify_data, get_groups_with_filters
 from favorite.mixin_favorite import ManageFavoritePlatforms
 from favorite.models import FavoritePlatforms
 
 from django.contrib.contenttypes.models import ContentType
-from django.http import Http404
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
-from .models import Platform
-from .serializers import PlatformSerializer
 
 
 class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
@@ -375,3 +370,32 @@ class PlatformFiltration(generics.CreateAPIView):
             modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
             return Response(modified_data)
 
+
+class PlatformSearch(generics.CreateAPIView):
+    queryset_group = PlatformGroup.objects.all()
+    queryset_filter = PlatformFilter.objects.all()
+    serializer_class_group = PlatformGroupSerializer
+    serializer_class_filter = PlatformFilterSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        title = self.request.data.get("title")
+        # Используем Q-объект для выполнения поиска по полю title в обеих таблицах
+        queryset_group = self.queryset_group.filter(title__icontains=title)
+        queryset_filter = self.queryset_filter.filter(title__icontains=title)
+        return queryset_group, queryset_filter
+    
+    def create(self, request, *args, **kwargs):
+        queryset_group, queryset_filter = self.get_queryset()
+        serialized_data_group = self.serializer_class_group(queryset_group, many=True).data
+        serialized_data_filter = self.serializer_class_filter(queryset_filter, many=True).data
+
+        response_data = {
+            'count_group_results': len(serialized_data_group),
+            'count_filter_results': len(serialized_data_filter),
+            'search_results': {
+                'group_results': get_groups_with_filters(queryset_group, PlatformFilter.objects.all()), 
+                'filter_results': serialized_data_filter
+            }
+            }
+        return Response(response_data)
