@@ -266,16 +266,9 @@ platforms_data = [
 url_groups_solutions = f"{url_main}api/solution/groups/"
 groups_data_solutions = [
     {'title': 'Интеграции', },
+    {'title': 'Бизнес', },
     {'title': 'Каналы', },
-    {'title': 'Настройка чат-ботов', },
-    {'title': 'Whatsapp business API', },
-    {'title': 'Подписчики', },
-    {'title': 'Подписки', },
-    {'title': 'Статистика', },
-    {'title': 'Тарифы', },
-    {'title': 'Документы', },
-    {'title': 'Служба поддержки', },
-    {'title': 'Уровень сложности', },
+    {'title': 'Решение целей', },
 ]
 
 # Данные для добавления фильтров

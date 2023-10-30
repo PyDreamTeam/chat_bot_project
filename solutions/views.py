@@ -414,5 +414,6 @@ class SolutionFiltration(generics.CreateAPIView):
 
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-            modified_data = modify_data(serializer.data, len(queryset))
+
+            modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
             return Response(modified_data)

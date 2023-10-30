@@ -1,7 +1,7 @@
 from solutions.models import Solution
 
 
-def modify_data(data, total_count):
+def modify_data(data, total_count, page_number, total_page_number):
     modified_data = []
 
     for item in data:
@@ -47,7 +47,7 @@ def modify_data(data, total_count):
     return {
         "total_count": total_count,
         "curent_count": len(modified_data),
-        # "next": None,
-        # "previous": None,
+        "curent_page_number": page_number,
+        "total_page_number": total_page_number,
         "results": modified_data,
     }
