@@ -6,7 +6,7 @@ from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
-from .utils import modify_data
+from .utils import modify_data, get_groups_with_filters
 from favorite.mixin_favorite import ManageFavoritePlatforms
 from favorite.models import FavoritePlatforms
 
@@ -389,11 +389,12 @@ class PlatformSearch(generics.CreateAPIView):
         queryset_group, queryset_filter = self.get_queryset()
         serialized_data_group = self.serializer_class_group(queryset_group, many=True).data
         serialized_data_filter = self.serializer_class_filter(queryset_filter, many=True).data
+
         response_data = {
             'count_group_results': len(serialized_data_group),
             'count_filter_results': len(serialized_data_filter),
             'search_results': {
-                'group_results': serialized_data_group, 
+                'group_results': get_groups_with_filters(queryset_group, PlatformFilter.objects.all()), 
                 'filter_results': serialized_data_filter
             }
             }
