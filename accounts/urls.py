@@ -8,15 +8,15 @@ urlpatterns = [
     
     # base urls:
     path('auth/', include('djoser.urls')),
-    # User list url:
-    path('auth/users/', UserListViewSet.as_view({'get': 'list'}), name='user-list'),
     # JWT-endpoints:
     path('auth/', include('djoser.urls.jwt')),
     # JWT Logout
     path('auth/logout/', LogoutAPIView.as_view(), name="api-logout"),
     # Profile url
     path('profile/', ProfileDetailView.as_view(), name='user-profile-detail'),
-
+    # User list url:
+    path('users/list/', UserListViewSet.as_view({'get': 'list'}), name='user-list'),
+    # User history url:
     path('history/solutions/', SolutionHistoryListView.as_view(), name='history-solutions'),
 
     path('history/solutions/max-view-records', MaxViewRecordsView.as_view(),
