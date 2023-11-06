@@ -26,7 +26,8 @@ class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer)
                     "last_name",
                     "user_role",
                     "password",
-                    "get_email_notifications"
+                    "get_email_notifications",
+                    "is_active"
                 )
 
     def perform_create(self, validated_data):
