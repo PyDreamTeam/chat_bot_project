@@ -49,6 +49,14 @@ class LogoutAPIView(generics.GenericAPIView):
                   
         return Response(status=status.HTTP_200_OK)
     
+
+#ListUser
+class UserListViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserCreatePasswordRetypeSerializer
+    permission_classes = (IsAdminOrSuperAdmin,)
+    
+    
 #Profile   
 class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()

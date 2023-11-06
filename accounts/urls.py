@@ -2,12 +2,14 @@ from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import LogoutAPIView, ProfileDetailView, SolutionHistoryListView, MaxViewRecordsView, \
-    ExpiryPeriodView
+    ExpiryPeriodView, UserListViewSet
 
 urlpatterns = [
     
     # base urls:
     path('auth/', include('djoser.urls')),
+    # User list url:
+    path('auth/users/', UserListViewSet.as_view({'get': 'list'}), name='user-list'),
     # JWT-endpoints:
     path('auth/', include('djoser.urls.jwt')),
     # JWT Logout
