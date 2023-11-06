@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from djoser.conf import settings
 
-from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCreatePasswordRetypeSerializer
+from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCreatePasswordRetypeSerializer, UserCreateSerializer
 from djoser.serializers import SendEmailResetSerializer
 
 from rest_framework import serializers

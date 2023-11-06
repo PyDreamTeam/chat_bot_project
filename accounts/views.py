@@ -23,6 +23,7 @@ from .models import User, Profile, SolutionHistoryConfig, SolutionHistory
 from .permissions import IsAdminOrSuperAdmin
 from .serializers import (
     ProfileSerializer,
+    UserCreateSerializer,
     UserCreatePasswordRetypeSerializer,
     SolutionHistorySerializer,
     MaxViewRecordsSerializer,
@@ -53,7 +54,7 @@ class LogoutAPIView(generics.GenericAPIView):
 #ListUser
 class UserListViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserCreatePasswordRetypeSerializer
+    serializer_class = UserCreateSerializer
     permission_classes = (IsAdminOrSuperAdmin,)
     
     
