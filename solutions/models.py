@@ -82,6 +82,10 @@ class Solution(models.Model):
     dignities = models.ManyToManyField(Dignities)
     steps = models.ManyToManyField(Steps)
     cards = models.ManyToManyField(Cards)
+    cards_title = models.CharField(max_length=200)
+    cards_description = models.CharField(max_length=200)
+    steps_title = models.CharField(max_length=200)
+    steps_description = models.CharField(max_length=200)
     # create new field to correct work app favorite
     favorites = GenericRelation(FavoriteSolutions)
     subtitle = models.CharField(max_length=300)

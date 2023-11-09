@@ -62,6 +62,10 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "created_at": solution_data["created_at"],
                 "dignities": solution_data["dignities"],
                 "cards": solution_data["cards"],
+                "cards_title": solution_data["cards_title"],
+                "cards_description": solution_data["cards_description"],
+                "steps_title": solution_data["steps_title"],
+                "steps_description": solution_data["steps_description"],
                 "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
@@ -126,6 +130,10 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "created_at": solution_data["created_at"],
                 "dignities": solution_data["dignities"],
                 "cards": solution_data["cards"],
+                "cards_title": solution_data["cards_title"],
+                "cards_description": solution_data["cards_description"],
+                "steps_title": solution_data["steps_title"],
+                "steps_description": solution_data["steps_description"],
                 "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
