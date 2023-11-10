@@ -42,3 +42,39 @@ def modify_data(data, total_count, page_number, total_page_number):
         "total_page_number": total_page_number,
         "results": modified_data,
     }
+
+
+
+def get_groups_with_filters(groups, filters):
+    # groups = queryset_group
+    # filters = PlatformFilter.objects.all()
+    results = []
+    # формирование списка групп
+    for group in groups:
+        group_data = {
+            "group": group.title,
+            "id": group.id,
+            "count": 0,
+            "status": group.status,
+            "filters": [],
+        }
+
+        # формирование списка фильтров по группам
+        for platform_filter in filters.filter(group=group):
+            filter_data = {
+                "filter": platform_filter.title,
+                "id": platform_filter.id,
+                "image": f"{platform_filter.image}"
+                if platform_filter.image
+                else "None",
+                "status": platform_filter.status,
+                "functionality": platform_filter.functionality,
+                "integration": platform_filter.integration,
+                "multiple": platform_filter.multiple,
+            }
+
+            group_data["filters"].append(filter_data)
+            group_data["count"] += 1
+
+        results.append(group_data)
+    return results

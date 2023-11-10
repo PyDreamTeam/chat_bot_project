@@ -25,10 +25,10 @@ spec:
           resources:
             limits:
               cpu: 150m
-              memory: 220Mi
+              memory: 300Mi
             requests:
               cpu: 100m
-              memory: 190Mi
+              memory: 200Mi
 ---
 # apiVersion: v1
 # kind: PersistentVolume
