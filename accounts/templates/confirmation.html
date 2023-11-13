@@ -1,21 +1,52 @@
 {% load i18n %}
 
 {% block subject %}
-{% blocktrans %}{{ site_name }} - Ваш Аккаунт активирован!!!{% endblocktrans %}
+{% blocktrans %}Успешная авторизация{% endblocktrans %}
 {% endblock %}
 
 {% block text_body %}
-{% trans "Your account has been created and is ready to use!" %}
+    <div style="background-color: #f2f2f2; text-align: center; padding: 20px;">
 
-{% trans "Спасибо!" %}
+{% trans "Дорогой клиент!" %}
 
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+{% blocktrans %}
+        <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block; text-align: left;">
+            <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+    Мы рады сообщить вам, что ваша учетная запись успешно авторизована.
+Теперь вы можете воспользоваться всеми возможностями нашего сайта, включая доступ к контенту,
+покупкам и управлением профилем. Благодарим вас за выбор TOWNSEND и надеемся, что ваше онлайн-пребывание
+у нас будет приятным и удобным.
+    Для начала работы вам необходимо перейти по следующей ссылке: https://python.twnsnd.online/home и войти в свою
+учетную запись с использованием ваших учетных данных.
+            </p>
+        </div>
+{% endblocktrans %}
+
+<p style="color: #666666; font-size: 14px; margin-top: 10px;">
+    {% blocktrans %}С уважением, {{ site_name }} {% endblocktrans %}
+</p>
+    </div>
 {% endblock text_body %}
 
+
 {% block html_body %}
-<p>{% trans "Your account has been created and is ready to use!" %}</p>
 
-<p>{% trans "Спасибо!" %}</p>
+    <div style="background-color: #f2f2f2; text-align: center; padding: 20px;">
+<p style="color: #333333; font-size: 18px; font-weight: normal;">{% trans "Дорогой клиент!" %}</p>
+        <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block; text-align: left;">
+    <p style="color: #333333; font-size: 16px; line-height: 1.6;">{% blocktrans %} Мы рады сообщить вам, что ваша учетная запись успешно авторизована.
+Теперь вы можете воспользоваться всеми возможностями нашего сайта, включая доступ к контенту,
+покупкам и управлением профилем. Благодарим вас за выбор TOWNSEND и надеемся, что ваше онлайн-пребывание
+у нас будет приятным и удобным.
+            <br>
+            <br>
+    Для начала работы вам необходимо перейти по следующей ссылке:
+        <a href="https://python.twnsnd.online/home">https://python.twnsnd.online/home</a> и войти в свою
+    учетную запись с использованием ваших учетных данных.
+        {% endblocktrans %}</p>
+        </div>
 
-<p>{% blocktrans %}The {{ site_name }} team{% endblocktrans %}</p>
+ <p style="color: #666666; font-size: 14px; margin-top: 10px;">{% blocktrans %}С уважением, {{ site_name }} {% endblocktrans %}</p>
+    </div>
+
 {% endblock html_body %}
