@@ -174,6 +174,27 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         permissions = get_permissions(self.request.method)
         return [permission() for permission in permissions]
 
+
+    # переопределил метод для  реализации создания тэгов при создании фильтров
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            filter_instance = serializer.save()
+            tags_data = request.data.get("tags", [])
+            if tags_data:
+                for tag_data in tags_data:
+                    tag = PlatformTag.objects.create(
+                        properties=tag_data["tag"],
+                        image=tag_data.get("image_tag", ''),
+                        status=tag_data.get("status", 'save'),
+                        is_message=tag_data.get("is_message", False),
+                        title=filter_instance,
+                    )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    
+
     # вывод одного значения
     def retrieve(self, request, pk=None):
         platform_filter = self.queryset.filter(pk=pk).first()

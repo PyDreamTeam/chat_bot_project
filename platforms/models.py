@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from favorite.models import FavoritePlatforms
+from django.forms import JSONField
 
 
 class PlatformGroup(models.Model):
@@ -22,6 +23,7 @@ class PlatformFilter(models.Model):
     group = models.ForeignKey(PlatformGroup, on_delete=models.CASCADE)
     status = models.CharField(max_length=800, default='save')
     image = models.TextField(null=True, blank=True)
+    tags = JSONField() # поле для реализации создания тэгов при создании фильтров
 
     def __str__(self):
         return f"{self.title}, {self.group}"
