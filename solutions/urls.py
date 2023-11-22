@@ -5,6 +5,7 @@ from .views import (SolutionFilterViewSet, SolutionFiltration,
                     SolutionGroupViewSet, SolutionTagViewSet,
                     SolutionViewSet, CardsViewSet, AdvantagesViewSet, DignitiesViewSet, StepsViewSet)
 
+
 router = DefaultRouter()
 router.register("solutions", SolutionViewSet)
 router.register("groups", SolutionGroupViewSet)
@@ -15,9 +16,8 @@ router.register("advantages", AdvantagesViewSet)
 router.register("dignities", DignitiesViewSet)
 router.register("steps", StepsViewSet)
 
+
 urlpatterns = [
-    path(
-        "solution/filtration/", SolutionFiltration.as_view(), name="solution-filtration"
-    ),
+    path("solution/filtration/", SolutionFiltration.as_view(), name="solution-filtration"),
     path("solution/", include(router.urls)),
 ]

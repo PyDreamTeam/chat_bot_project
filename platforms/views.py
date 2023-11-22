@@ -13,6 +13,15 @@ from drf_spectacular.utils import extend_schema
 from django.contrib.contenttypes.models import ContentType
 
 
+_TAG_PLATFORM = "Platform"
+_TAG_PLATFORM_GROUP = "Platform group"
+_TAG_PLATFORM_TAG = "Platform tag"
+_TAG_PLATFORM_FAVORITE = "Platform favorite"
+_TAG_PLATFORM_FILTRATION = "Platform filtration"
+_TAG_PLATFORM_SEARCH = "Platform search"
+
+
+@extend_schema(tags=[_TAG_PLATFORM_FAVORITE])
 class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -39,7 +48,7 @@ class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         return Response(serializer.data)
 
 
-
+@extend_schema(tags=[_TAG_PLATFORM])
 class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -150,6 +159,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         )
 
 
+@extend_schema(tags=[_TAG_PLATFORM_GROUP])
 class PlatformGroupViewSet(viewsets.ModelViewSet):
     queryset = PlatformGroup.objects.all()
     serializer_class = PlatformGroupSerializer
@@ -162,6 +172,7 @@ class PlatformGroupViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
 
 
+@extend_schema(tags=[_TAG_PLATFORM_FILTRATION])
 class PlatformFilterViewSet(viewsets.ModelViewSet):
     queryset = PlatformFilter.objects.all()
     serializer_class = PlatformFilterSerializer
@@ -264,6 +275,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=[_TAG_PLATFORM_TAG])
 class PlatformTagViewSet(viewsets.ModelViewSet):
     queryset = PlatformTag.objects.all()
     serializer_class = PlatformTagSerializer
@@ -333,6 +345,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=[_TAG_PLATFORM_FILTRATION])
 class PlatformFiltration(generics.CreateAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -392,14 +405,13 @@ class PlatformFiltration(generics.CreateAPIView):
             return Response(modified_data)
 
 
-
 @extend_schema(
     description='Endpoint for searching platforms',
     request=PlatformSearchSerializer,
     responses={
         200: PlatformSearchResponseSerializer(many=False),
     },
-
+    tags=[_TAG_PLATFORM_SEARCH]
 )
 class PlatformSearch(generics.CreateAPIView):
     queryset_group = PlatformGroup.objects.all()

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework import status, generics, viewsets
+from rest_framework import status, generics, viewsets, mixins
 
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -22,6 +22,7 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExampl
 from .models import User, Profile, SolutionHistoryConfig, SolutionHistory
 from .permissions import IsAdminOrSuperAdmin
 from .serializers import (
+    UserSerializer,
     ProfileSerializer,
     UserCreateSerializer,
     UserCreatePasswordRetypeSerializer,
@@ -30,6 +31,12 @@ from .serializers import (
     ExpiryPeriodSerializer,
 )
 from .services import get_solution_history
+
+
+_TAG_SOLUTION_HISTORY = "Solution History"
+_TAG_USERS = "Users"
+_TAG_USER_SEARCH = "Users search"
+_TAG_PROFILE = "Profile"
 
 
 #Logout
@@ -51,14 +58,39 @@ class LogoutAPIView(generics.GenericAPIView):
         return Response(status=status.HTTP_200_OK)
     
 
-#ListUser
-class UserListViewSet(viewsets.ReadOnlyModelViewSet):
+#Users
+@extend_schema(tags=[_TAG_USERS])
+class UsersAPIView(mixins.ListModelMixin,
+                   mixins.UpdateModelMixin,
+                   viewsets.GenericViewSet):
     queryset = User.objects.all()
-    serializer_class = UserCreateSerializer
+    serializer_class = UserSerializer
+    permission_classes = (IsAdminOrSuperAdmin,)     
+
+
+#Users searching
+@extend_schema(
+    description='Endpoint for searching users',
+    tags=[_TAG_USER_SEARCH]
+)
+class UserSearchView(generics.ListAPIView):     
+    serializer_class = UserSerializer
     permission_classes = (IsAdminOrSuperAdmin,)
+    
+    def get_queryset(self):   
+        queryset = User.objects.all()       
+        first_name = self.request.data.get('first_name', None)
+        last_name = self.request.data.get('last_name', None)
+        if first_name is not None:
+            queryset = queryset.filter(first_name__icontains=first_name)
+        if last_name is not None:
+            queryset = queryset.filter(last_name__icontains=last_name)
+            
+        return queryset      
     
     
 #Profile   
+@extend_schema(tags=[_TAG_PROFILE])
 class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -70,9 +102,6 @@ class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
         profile = Profile.objects.get(user=user)
 
         return profile
-
-
-_TAG_SOLUTION_HISTORY = "Solution History"
 
 
 class SolutionHistoryListView(generics.ListAPIView):

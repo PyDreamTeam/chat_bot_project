@@ -30,13 +30,29 @@ class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer)
                     "is_active"
                 )
 
-    def perform_create(self, validated_data):
-        with transaction.atomic():
-            user = User.objects.create_user(**validated_data)
-            if settings.SEND_ACTIVATION_EMAIL:
-                user.is_active = True
-                user.save(update_fields=["is_active"])
-        return user
+    # Active users def
+    # def perform_create(self, validated_data):
+    #     with transaction.atomic():
+    #         user = User.objects.create_user(**validated_data)
+    #         if settings.SEND_ACTIVATION_EMAIL:
+    #             user.is_active = True
+    #             user.save(update_fields=["is_active"])
+    #     return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+                    'id',
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "user_role",
+                    "get_email_notifications",
+                    "is_active"
+                )
     
     
 class PasswordResetSerializer(SendEmailResetSerializer):
