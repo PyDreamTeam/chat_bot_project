@@ -179,7 +179,7 @@ DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": True, # True is only required re_password
     "USERNAME_CHANGED_EMAIL_CONFIRMATION": False,
     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-    "SEND_CONFIRMATION_EMAIL": False,
+    "SEND_CONFIRMATION_EMAIL": True,
     "SET_USERNAME_RETYPE": False,
     "SET_PASSWORD_RETYPE": True,
     "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
