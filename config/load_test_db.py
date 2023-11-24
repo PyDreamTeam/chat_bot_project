@@ -22,7 +22,7 @@ url_main = 'https://python.twnsnd.online/'
 
 # Учетные данные пользователя
 user = {
-    "email": "07777_7788@mail.ru",
+    "email": "7777_7788@mail.ru",
     "password": "123Qazwsx123@"
 }
 
