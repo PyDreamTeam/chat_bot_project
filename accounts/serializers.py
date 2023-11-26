@@ -69,6 +69,7 @@ class PasswordResetSerializer(SendEmailResetSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
+    user_role = serializers.CharField(source='user.user_role')
     email = serializers.CharField(source='user.email', read_only=True)
     phone_number = serializers.CharField(allow_null=True)
     image = serializers.CharField(allow_null=True)
