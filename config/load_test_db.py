@@ -13,17 +13,17 @@
 import requests
 
 # # Адрес для добавления на веб сервер
-url_main = 'https://python.twnsnd.online/'
+# url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
-#url_main = 'http://127.0.0.1:8000/'
+url_main = 'http://127.0.0.1:8000/'
 
 
 # Учетные данные пользователя
 user = {
-    "email": "7777_7788@mail.ru",
-    "password": "123Qazwsx123@"
+  "email": "admin@admin.by",
+  "password": "admin"
 }
 
 
@@ -813,7 +813,7 @@ solutions_data = [
 
 if __name__ == '__main__':
     # регистрация пользователя
-    #register()
+    # register()
     # platformsa
     add_to_db(groups_data, url_groups)
     add_to_db(filters_data, url_filters)

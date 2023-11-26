@@ -209,9 +209,21 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     # вывод одного значения
     def retrieve(self, request, pk=None):
         platform_filter = self.queryset.filter(pk=pk).first()
+        tags = PlatformTag.objects.all()
         if platform_filter:
             serializer = self.serializer_class(platform_filter)
             filter_data = dict(serializer.data)
+            # формирование списка тэгов к фильтру
+            tags_of_filter = []
+            for tag in tags.filter(title=platform_filter):
+                    tag_data = {
+                        "tag": tag.properties,
+                        "id": tag.id,
+                        "image_tag": tag.image if tag.image else "None",
+                        "status": tag.status,
+                        "is_message": tag.is_message,
+                    }
+                    tags_of_filter.append(tag_data)
             return Response(
                 {
                     "filter": filter_data["title"],
@@ -224,6 +236,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     "functionality": filter_data["functionality"],
                     "integration": filter_data["integration"],
                     "multiple": filter_data["multiple"],
+                    # вывод списка тэгов к фильтру
+                    "tags": tags_of_filter,
                 }
             )
         else:
