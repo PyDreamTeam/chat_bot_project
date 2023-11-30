@@ -1,46 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новый заказ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #666;
-        }
-        .contact-details {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>У вас новый заказ!</h1>
-        <p>Пользователь {{ order.first_name }} оставил сообщение:</p>
-        <p>{{ order.comment }}</p>
+{% load i18n %}
 
-        <div class="contact-details">
-            <p><strong>Контактные данные:</strong></p>
-            <p>Телефон: {{ order.phone_number }}</p>
-            <p>Email: {{ order.email }}</p>
+{% block subject %}
+{% blocktrans %}Новый заказ!{% endblocktrans %}
+{% endblock %}
+
+{% block text_body %}
+    <div style="background-color: #f2f2f2; text-align: center; padding: 20px;">
+
+{% trans "У вас новый заказ!" %}
+
+{% blocktrans %}
+        <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block; text-align: left;">
+            <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+            Пользователь {{ order.first_name }} оставил сообщение:
+                {{ order.comment }}
+
+                Контактные данные:
+                Телефон: {{ order.phone_number }}
+                Email: {{ order.email }}
+            </p>
         </div>
+{% endblocktrans %}
+
     </div>
-</body>
-</html>
+{% endblock text_body %}
+
+{% block html_body %}
+    <div style="background-color: #f2f2f2; text-align: center; padding: 20px;">
+<p style="color: #333333; font-size: 18px; font-weight: normal;">{% trans "У вас новый заказ!" %}</p>
+        <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block; text-align: left;">
+    <p style="color: #333333; font-size: 16px; line-height: 1.6;">{% blocktrans %} Пользователь {{ order.first_name }} оставил сообщение:
+
+            <br>
+            <br>
+    {{ order.comment }}
+        <br>
+
+         Контактные данные:
+        Телефон: {{ order.phone_number }}
+        Email: {{ order.email }}
+
+        {% endblocktrans %}</p>
+        </div>
+
+    </div>
+{% endblock html_body %}
