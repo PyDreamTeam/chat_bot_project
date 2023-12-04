@@ -66,6 +66,9 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "cards_description": solution_data["cards_description"],
                 "steps_title": solution_data["steps_title"],
                 "steps_description": solution_data["steps_description"],
+                "turnkey_platform": solution_data["turnkey_platform"],
+                "link": solution_data["link"],
+                "links_to_platform": solution_data["links_to_platform"],
                 "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
@@ -134,6 +137,9 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "cards_description": solution_data["cards_description"],
                 "steps_title": solution_data["steps_title"],
                 "steps_description": solution_data["steps_description"],
+                "turnkey_platform": solution_data["turnkey_platform"],
+                "link": solution_data["link"],
+                "links_to_platform": solution_data["links_to_platform"],
                 "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }

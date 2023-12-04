@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from favorite.models import FavoriteSolutions
-
+from django.contrib.postgres.fields import ArrayField
 
 
 class SolutionGroup(models.Model):
@@ -67,6 +67,7 @@ class Solution(models.Model):
     short_description = models.CharField(max_length=300)
     platform = models.CharField(max_length=100)
     messengers = models.CharField(max_length=100)
+    status = models.CharField(max_length=800, default='save', null=True, blank=True)
     integration_with_CRM = models.CharField(max_length=100)
     integration_with_payment_systems = models.CharField(max_length=100)
     tasks = models.CharField(max_length=100)
@@ -86,10 +87,13 @@ class Solution(models.Model):
     cards_description = models.CharField(max_length=200)
     steps_title = models.CharField(max_length=200)
     steps_description = models.CharField(max_length=200)
+    turnkey_platform = models.CharField(max_length=200, null=True, blank=True)
+    link = models.CharField(max_length=800, null=True, blank=True)
+    links_to_platform = ArrayField(models.CharField(max_length=10000), null=True, blank=True)
     # create new field to correct work app favorite
     favorites = GenericRelation(FavoriteSolutions)
-    subtitle = models.CharField(max_length=300)
-    full_description = models.CharField(max_length=300)
+    # subtitle = models.CharField(max_length=300)
+    # full_description = models.CharField(max_length=300)
     
 
     def __str__(self):
