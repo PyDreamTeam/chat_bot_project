@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-
 class ManageFavoritePlatforms:
     @action(
       detail=True,
@@ -40,7 +39,7 @@ class ManageFavoritePlatforms:
                 {'message': 'We have max count in favorite'},
                 status=status.HTTP_200_OK
             )
-
+            
 
 class ManageFavoriteSolutions:
     @action(

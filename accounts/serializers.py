@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from djoser.conf import settings
 
-from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCreatePasswordRetypeSerializer
+from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCreatePasswordRetypeSerializer, UserCreateSerializer
 from djoser.serializers import SendEmailResetSerializer
 
 from rest_framework import serializers
@@ -26,16 +26,33 @@ class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer)
                     "last_name",
                     "user_role",
                     "password",
-                    "get_email_notifications"
+                    "get_email_notifications",
+                    "is_active"
                 )
 
-    def perform_create(self, validated_data):
-        with transaction.atomic():
-            user = User.objects.create_user(**validated_data)
-            if settings.SEND_ACTIVATION_EMAIL:
-                user.is_active = True
-                user.save(update_fields=["is_active"])
-        return user
+    # Active users def
+    # def perform_create(self, validated_data):
+    #     with transaction.atomic():
+    #         user = User.objects.create_user(**validated_data)
+    #         if settings.SEND_ACTIVATION_EMAIL:
+    #             user.is_active = True
+    #             user.save(update_fields=["is_active"])
+    #     return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+                    'id',
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "user_role",
+                    "get_email_notifications",
+                    "is_active"
+                )
     
     
 class PasswordResetSerializer(SendEmailResetSerializer):
@@ -52,13 +69,14 @@ class PasswordResetSerializer(SendEmailResetSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
+    user_role = serializers.CharField(source='user.user_role')
     email = serializers.CharField(source='user.email', read_only=True)
     phone_number = serializers.CharField(allow_null=True)
     image = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Profile
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'image']
+        fields = ['first_name', 'last_name', 'user_role', 'email', 'phone_number', 'image']
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', {})

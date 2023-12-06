@@ -29,7 +29,7 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'user_role', 'get_email_notifications']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'user_role', 'get_email_notifications', 'is_active']
     
     def __str__(self):
         return self.email

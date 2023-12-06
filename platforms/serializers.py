@@ -27,3 +27,13 @@ class PlatformFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlatformFilter
         fields = "__all__"
+
+
+class PlatformSearchSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100)
+
+
+class PlatformSearchResponseSerializer(serializers.Serializer):
+    count_group_results = serializers.IntegerField()
+    count_filter_results = serializers.IntegerField()
+    search_results = serializers.ListField(child=(serializers.DictField()))

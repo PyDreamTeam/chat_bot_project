@@ -11,10 +11,20 @@ from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
                           SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data
+from drf_spectacular.utils import extend_schema
 from favorite.mixin_favorite import ManageFavoriteSolutions
 from favorite.models import FavoriteSolutions
 
 
+_TAG_SOLUTION = "Solution"
+_TAG_SOLUTION_GROUP = "Solution group"
+_TAG_SOLUTION_TAG = "Solution tag"
+_TAG_SOLUTION_FAVORITE = "Solution favorite"
+_TAG_SOLUTION_FILTRATION = "Solution filtration"
+_TAG_SOLUTION_SEARCH = "Solution search"
+
+
+@extend_schema(tags=[_TAG_SOLUTION])
 class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
@@ -163,6 +173,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
         )
 
 
+@extend_schema(tags=[_TAG_SOLUTION_GROUP])
 class SolutionGroupViewSet(viewsets.ModelViewSet):
     queryset = SolutionGroup.objects.all()
     serializer_class = SolutionGroupSerializer
@@ -174,7 +185,8 @@ class SolutionGroupViewSet(viewsets.ModelViewSet):
         permissions = get_permissions(self.request.method)
         return [permission() for permission in permissions]
     
-    
+
+@extend_schema(tags=[_TAG_SOLUTION])  
 class CardsViewSet(viewsets.ModelViewSet):
     queryset = Cards.objects.all()
     serializer_class = CardsSerializer
@@ -187,6 +199,7 @@ class CardsViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
     
 
+@extend_schema(tags=[_TAG_SOLUTION])
 class AdvantagesViewSet(viewsets.ModelViewSet):
     queryset = Advantages.objects.all()
     serializer_class = AdvantagesSerializer
@@ -198,7 +211,8 @@ class AdvantagesViewSet(viewsets.ModelViewSet):
         permissions = get_permissions(self.request.method)
         return [permission() for permission in permissions]
     
-    
+ 
+@extend_schema(tags=[_TAG_SOLUTION])    
 class DignitiesViewSet(viewsets.ModelViewSet):
     queryset = Dignities.objects.all()
     serializer_class = DignitiesSerializer
@@ -211,6 +225,7 @@ class DignitiesViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
     
 
+@extend_schema(tags=[_TAG_SOLUTION])
 class StepsViewSet(viewsets.ModelViewSet):
     queryset = Steps.objects.all()
     serializer_class = StepsSerializer
@@ -223,6 +238,7 @@ class StepsViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
 
 
+@extend_schema(tags=[_TAG_SOLUTION_FILTRATION])
 class SolutionFilterViewSet(viewsets.ModelViewSet):
     queryset = SolutionFilter.objects.all()
     serializer_class = SolutionFilterSerializer
@@ -304,6 +320,7 @@ class SolutionFilterViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=[_TAG_SOLUTION_TAG])
 class SolutionTagViewSet(viewsets.ModelViewSet):
     queryset = SolutionTag.objects.all()
     serializer_class = SolutionTagSerializer
@@ -373,6 +390,7 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=[_TAG_SOLUTION_FILTRATION])
 class SolutionFiltration(generics.CreateAPIView):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer

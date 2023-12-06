@@ -3,16 +3,25 @@ from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
-from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer,
+from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data, get_groups_with_filters
 from favorite.mixin_favorite import ManageFavoritePlatforms
 from favorite.models import FavoritePlatforms
-
+from drf_spectacular.utils import extend_schema
 from django.contrib.contenttypes.models import ContentType
 
 
+_TAG_PLATFORM = "Platform"
+_TAG_PLATFORM_GROUP = "Platform group"
+_TAG_PLATFORM_TAG = "Platform tag"
+_TAG_PLATFORM_FAVORITE = "Platform favorite"
+_TAG_PLATFORM_FILTRATION = "Platform filtration"
+_TAG_PLATFORM_SEARCH = "Platform search"
+
+
+@extend_schema(tags=[_TAG_PLATFORM_FAVORITE])
 class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -39,7 +48,7 @@ class PlatformFavoriteViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         return Response(serializer.data)
 
 
-
+@extend_schema(tags=[_TAG_PLATFORM])
 class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -150,6 +159,7 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         )
 
 
+@extend_schema(tags=[_TAG_PLATFORM_GROUP])
 class PlatformGroupViewSet(viewsets.ModelViewSet):
     queryset = PlatformGroup.objects.all()
     serializer_class = PlatformGroupSerializer
@@ -162,6 +172,7 @@ class PlatformGroupViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
 
 
+@extend_schema(tags=[_TAG_PLATFORM_FILTRATION])
 class PlatformFilterViewSet(viewsets.ModelViewSet):
     queryset = PlatformFilter.objects.all()
     serializer_class = PlatformFilterSerializer
@@ -174,12 +185,45 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         permissions = get_permissions(self.request.method)
         return [permission() for permission in permissions]
 
+
+    # переопределил метод для  реализации создания тэгов при создании фильтров
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            filter_instance = serializer.save()
+            tags_data = request.data.get("tags", [])
+            if tags_data:
+                for tag_data in tags_data:
+                    tag = PlatformTag.objects.create(
+                        properties=tag_data["tag"],
+                        image=tag_data.get("image_tag", ''),
+                        status=tag_data.get("status", 'save'),
+                        is_message=tag_data.get("is_message", False),
+                        title=filter_instance,
+                    )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    
+
     # вывод одного значения
     def retrieve(self, request, pk=None):
         platform_filter = self.queryset.filter(pk=pk).first()
+        tags = PlatformTag.objects.all()
         if platform_filter:
             serializer = self.serializer_class(platform_filter)
             filter_data = dict(serializer.data)
+            # формирование списка тэгов к фильтру
+            tags_of_filter = []
+            for tag in tags.filter(title=platform_filter):
+                    tag_data = {
+                        "tag": tag.properties,
+                        "id": tag.id,
+                        "image_tag": tag.image if tag.image else "None",
+                        "status": tag.status,
+                        "is_message": tag.is_message,
+                    }
+                    tags_of_filter.append(tag_data)
             return Response(
                 {
                     "filter": filter_data["title"],
@@ -192,6 +236,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     "functionality": filter_data["functionality"],
                     "integration": filter_data["integration"],
                     "multiple": filter_data["multiple"],
+                    # вывод списка тэгов к фильтру
+                    "tags": tags_of_filter,
                 }
             )
         else:
@@ -243,6 +289,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=[_TAG_PLATFORM_TAG])
 class PlatformTagViewSet(viewsets.ModelViewSet):
     queryset = PlatformTag.objects.all()
     serializer_class = PlatformTagSerializer
@@ -312,6 +359,7 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=[_TAG_PLATFORM_FILTRATION])
 class PlatformFiltration(generics.CreateAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -371,6 +419,14 @@ class PlatformFiltration(generics.CreateAPIView):
             return Response(modified_data)
 
 
+@extend_schema(
+    description='Endpoint for searching platforms',
+    request=PlatformSearchSerializer,
+    responses={
+        200: PlatformSearchResponseSerializer(many=False),
+    },
+    tags=[_TAG_PLATFORM_SEARCH]
+)
 class PlatformSearch(generics.CreateAPIView):
     queryset_group = PlatformGroup.objects.all()
     queryset_filter = PlatformFilter.objects.all()

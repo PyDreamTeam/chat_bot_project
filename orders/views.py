@@ -3,9 +3,14 @@ from .models import Order
 from .serializers import OrderSerializer
 from django.utils import timezone
 from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
+
+
+_TAG_ORDERS = "Orders"
 
 
 # OrdersViewSet processes applications from registered and unregistered users and save them in the database
+@extend_schema(tags=[_TAG_ORDERS])
 class OrdersViewSet(viewsets.GenericViewSet,
                     viewsets.mixins.CreateModelMixin,
                     viewsets.mixins.RetrieveModelMixin,

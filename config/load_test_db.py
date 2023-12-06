@@ -13,17 +13,17 @@
 import requests
 
 # # Адрес для добавления на веб сервер
-url_main = 'https://python.twnsnd.online/'
+# url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
-#url_main = 'http://127.0.0.1:8000/'
+url_main = 'http://127.0.0.1:8000/'
 
 
 # Учетные данные пользователя
 user = {
-    "email": "07777_7788@mail.ru",
-    "password": "123Qazwsx123@"
+  "email": "admin@admin.by",
+  "password": "admin"
 }
 
 
@@ -36,7 +36,7 @@ def register(url_main: str = url_main, user: dict = user):
         "last_name": "string",
         "user_role": "AD",
         "password": user["password"],
-        "get_email_notifications": "false",
+        "get_email_notifications": "true",
         "re_password": user["password"]
     }
     response = requests.post(
@@ -252,11 +252,11 @@ platforms_data = [
     {"title": "Платформа 2", "short_description": "Краткое описание платформы 2", "full_description": "Полное описание платформы 2", "turnkey_solutions": 2, "filter": [20, 22, 23, 38, 39, 40], "price": 200, 'image': 'https://static-cse.canva.com/blob/584210/Nasa.jpg', 'link': 'https://translate.google.com/', },
     {"title": "Платформа 3", "short_description": "Краткое описание платформы 3", "full_description": "Полное описание платформы 3", "turnkey_solutions": 3, "filter": [30, 23, 33, 38, 39, 40], "price": 300, 'image': 'https://static-cse.canva.com/blob/584144/.png', 'link': 'https://translate.google.com/', },
     {"title": "Платформа 4", "short_description": "Краткое описание платформы 4", "full_description": "Полное описание платформы 4", "turnkey_solutions": 4, "filter": [40, 24, 43, 38, 39, 40], "price": 400, 'image': 'https://static-cse.canva.com/blob/584138/.png', 'link': 'https://translate.google.com/', },
-    {"title": "Платформа 5", "short_description": "Краткое описание платформы 5", "full_description": "Полное описание платформы 5", "turnkey_solutions": 5, "filter": [50, 25, 53, 38, 39, 40], "price": 500, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
-    {"title": "Платформа 6", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [60, 26, 63, 38, 39, 40], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
-    {"title": "Платформа 7", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [63, 38, 39, 40, 41, 42, 37], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
-    {"title": "Платформа 8", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [63, 38, 39, 40, 41, 42, 37], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
-    {"title": "Платформа 9", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [63, 38, 39, 40, 41, 42, 37], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
+    # {"title": "Платформа 5", "short_description": "Краткое описание платформы 5", "full_description": "Полное описание платформы 5", "turnkey_solutions": 5, "filter": [50, 25, 53, 38, 39, 40], "price": 500, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
+    # {"title": "Платформа 6", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [60, 26, 63, 38, 39, 40], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
+    # {"title": "Платформа 7", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [63, 38, 39, 40, 41, 42, 37], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
+    # {"title": "Платформа 8", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [63, 38, 39, 40, 41, 42, 37], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
+    # {"title": "Платформа 9", "short_description": "Краткое описание платформы 6", "full_description": "Полное описание платформы 6", "turnkey_solutions": 6, "filter": [63, 38, 39, 40, 41, 42, 37], "price": 600, 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU', 'link': 'https://translate.google.com/', },
 ]
 
 #Работа с Готовыми решениями
@@ -608,7 +608,6 @@ solutions_data = [
      "full_description": "Данное решение использует наиболее инновационные решения для различных видов бизнеса. Оно поможет автоматизировать ряд задач и поможет снизить расходы организации или стартапа. Попробуйте применить данное решение в своем бизнесе 1",
      "dignities": [3],
      "steps": [3],
-
      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2Fy8JeXQfy-v3T-BKQfEflaQLt-ExWd9X5A&usqp=CAU",
      "turnkey_platform": 3,
      "link": 'https://translate.google.com/',
@@ -842,7 +841,7 @@ solutions_data = [
 
 if __name__ == '__main__':
     # регистрация пользователя
-    register()
+    # register()
     # platformsa
     add_to_db(groups_data, url_groups)
     add_to_db(filters_data, url_filters)
