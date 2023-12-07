@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
-from .serializers import (PlatformFilterSerializer, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
+from .serializers import (PlatformFilterSerializer, PlatformFilterSerializerSwagger, PlatformFilterSerializerSwaggerList, PlatformFilterSerializerSwaggerPost, PlatformFilterSerializerSwaggerPostResponses, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data, get_groups_with_filters
@@ -187,106 +187,104 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
 
 
     # переопределил метод для  реализации создания тэгов при создании фильтров
+    @extend_schema(
+        request=PlatformFilterSerializerSwaggerPost,
+        responses={200: PlatformFilterSerializerSwaggerPostResponses},
+        description='Create a platform filter.',
+        summary='Create platform filter',
+        )
     def create(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            filter_instance = serializer.save()
-            tags_data = request.data.get("tags", [])
-            if tags_data:
-                for tag_data in tags_data:
-                    tag = PlatformTag.objects.create(
-                        properties=tag_data["tag"],
-                        image=tag_data.get("image_tag", ''),
-                        status=tag_data.get("status", 'save'),
-                        is_message=tag_data.get("is_message", False),
-                        title=filter_instance,
-                    )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                    
+        filter_data = request.data
+        tags_data = filter_data.pop('tags')
+        serializer = self.get_serializer(data=filter_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        # создание и связывание тегов с созданным фильтром
+        filter_instance = serializer.instance
+        tags_data_with_title = []
+        for tag_data in tags_data:
+            tag_data['title'] = filter_instance.id
+            tags_data_with_title.append(tag_data)
+        tags_serializer = PlatformTagSerializer(data=tags_data_with_title, many=True)
+        tags_serializer.is_valid(raise_exception=True)
+        tags_serializer.save(title=filter_instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+   
+    # обновление фильтров с тэгами
+    @extend_schema(
+        request=PlatformFilterSerializerSwagger,
+        responses={200: {'description': 'data updated'}},
+        description='Update a platform filter.',
+        summary='Update platform filter',
+        )
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        self.update_tags(serializer.initial_data.get('tags'))
+        return Response("data updated", status=status.HTTP_200_OK)
+    
+    
+    # patch запрос (перенаправляет на обновление put запроса)
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+    
 
+    # обновление тэгов фильтра
+    def update_tags(self, tags_data):
+        for tag_data in tags_data:
+            try:
+                tag = PlatformTag.objects.get(id=tag_data['id'])
+                if tag_data.get('title'):
+                    tag.properties = tag_data.get('title')
+                if tag_data.get('image_tag'):
+                    tag.image = tag_data.get('image_tag')
+                if tag_data.get('status'):
+                    tag.status = tag_data.get('status')
+                if tag_data.get('is_message'):    
+                    tag.is_message = tag_data.get('is_message')
+                tag.save()
+            except PlatformTag.DoesNotExist:
+                continue
+
+            
     # вывод одного значения
+    @extend_schema(
+        responses={200: PlatformFilterSerializerSwaggerList},
+        description='A platform filter.',
+        summary='A platform filter',
+        )
     def retrieve(self, request, pk=None):
-        platform_filter = self.queryset.filter(pk=pk).first()
-        tags = PlatformTag.objects.all()
-        if platform_filter:
-            serializer = self.serializer_class(platform_filter)
-            filter_data = dict(serializer.data)
-            # формирование списка тэгов к фильтру
-            tags_of_filter = []
-            for tag in tags.filter(title=platform_filter):
-                    tag_data = {
-                        "tag": tag.properties,
-                        "id": tag.id,
-                        "image_tag": tag.image if tag.image else "None",
-                        "status": tag.status,
-                        "is_message": tag.is_message,
-                    }
-                    tags_of_filter.append(tag_data)
-            return Response(
-                {
-                    "filter": filter_data["title"],
-                    "id": filter_data["id"],
-                    "image": f"{filter_data['image']}"
-                    if filter_data["image"]
-                    else "None",
-                    "status": filter_data["status"],
-                    "group": filter_data["group"],
-                    "functionality": filter_data["functionality"],
-                    "integration": filter_data["integration"],
-                    "multiple": filter_data["multiple"],
-                    # вывод списка тэгов к фильтру
-                    "tags": tags_of_filter,
-                }
-            )
-        else:
-            return Response(
-                {"message": "Platform filter not found."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        # код для включения тегов принадлежащих данному фильтру
+        filter_id = serializer.data['id']
+        tags = PlatformTag.objects.filter(title_id=filter_id)
+        tags_serializer = PlatformTagSerializer(tags, many=True)
+        data = serializer.data
+        data['tags'] = tags_serializer.data
+        return Response(data)
 
     # вывод всех значений
-    def list(self, request):
-        groups = PlatformGroup.objects.all()
-        filters = PlatformFilter.objects.all()
-        PlatformTag.objects.all()
-
-        results = []
-
-        # формирование списка групп
-        for group in groups:
-            group_data = {
-                "group": group.title,
-                "id": group.id,
-                "count": 0,
-                "status": group.status,
-                "filters": [],
-            }
-
-            # формирование списка фильтров по группам
-            for platform_filter in filters.filter(group=group):
-                filter_data = {
-                    "filter": platform_filter.title,
-                    "id": platform_filter.id,
-                    "image": f"{platform_filter.image}"
-                    if platform_filter.image
-                    else "None",
-                    "status": platform_filter.status,
-                    "functionality": platform_filter.functionality,
-                    "integration": platform_filter.integration,
-                    "multiple": platform_filter.multiple,
-                }
-
-                group_data["filters"].append(filter_data)
-                group_data["count"] += 1
-
-            results.append(group_data)
-
-        return Response(
-            {"count": len(results), "next": None,
-             "previous": None, "results": results}
+    @extend_schema(
+        responses={200: PlatformFilterSerializerSwaggerList},
+        description='List a platform filter.',
+        summary='List a platform filter',
         )
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        # код для включения тегов принадлежащих каждому фильтру
+        serialized_data = serializer.data
+        for data in serialized_data:
+            filter_id = data['id']
+            tags = PlatformTag.objects.filter(title_id=filter_id)
+            tags_serializer = PlatformTagSerializer(tags, many=True)
+            data['tags'] = tags_serializer.data
+        return Response(serialized_data)
 
 
 @extend_schema(tags=[_TAG_PLATFORM_TAG])
