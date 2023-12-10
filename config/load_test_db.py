@@ -13,17 +13,17 @@
 import requests
 
 # # Адрес для добавления на веб сервер
-# url_main = 'https://python.twnsnd.online/'
+url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
-url_main = 'http://127.0.0.1:8000/'
+#url_main = 'http://127.0.0.1:8000/'
 
 
 # Учетные данные пользователя
 user = {
-  "email": "admin@admin.by",
-  "password": "admin"
+  "email": "7777_777@mail.ru",
+  "password": "123Qazwsx123@"
 }
 
 
@@ -456,7 +456,7 @@ cards_data_solutions = [
 ]
 
 
-# Данные для добавления преимущетв
+# Данные для добавления преимуществ
 url_advantages = f"{url_main}api/solution/advantages/"
 advantages_data_solutions = [
     {'advantage': 'Преимущество 1', },
@@ -465,7 +465,7 @@ advantages_data_solutions = [
 ]
 
 
-# Данные для добавления преимущетв
+# Данные для добавления преимуществ
 url_dignities = f"{url_main}api/solution/dignities/"
 dignities_data_solutions = [
     {'dignities': 'Достоинство 1', },
@@ -494,7 +494,7 @@ steps_data_solutions = [
 
 
 
-# Данные для добавления платформ
+# Данные для добавления решений
 url_solutions = f"{url_main}api/solution/solutions/"
 solutions_data = [
     {"title": "Решение 1",
@@ -505,6 +505,7 @@ solutions_data = [
      "short_description": "Краткое описание платформы 1",
      "platform": "Платформа 1",
      "messengers": "Мессенджеры 1",
+     "status": "save",
      "integration_with_CRM": "Интеграция с CRM 1",
      "integration_with_payment_systems": "Интеграция с платежными системами 1",
      "tasks": "Задачи 1",
@@ -531,6 +532,7 @@ solutions_data = [
      "objective": "Цели 2", "solution_type": "Тип решения 2",
      "short_description": "Краткое описание платформы 2", "platform": "Платформа 2",
      "messengers": "Мессенджеры 2", "integration_with_CRM": "Интеграция с CRM 2",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 2", "tasks": "Задачи 2",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 2",
      "cards": [2],
@@ -552,6 +554,7 @@ solutions_data = [
      "objective": "Цели 3", "solution_type": "Тип решения 3",
      "short_description": "Краткое описание платформы 3", "platform": "Платформа 3",
      "messengers": "Мессенджеры 3", "integration_with_CRM": "Интеграция с CRM 3",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 3", "tasks": "Задачи 3",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 3",
      "cards": [2],
@@ -574,6 +577,7 @@ solutions_data = [
      "objective": "Цели 4", "solution_type": "Тип решения 4",
      "short_description": "Краткое описание платформы 4", "platform": "Платформа 4",
      "messengers": "Мессенджеры 4", "integration_with_CRM": "Интеграция с CRM 4",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 4", "tasks": "Задачи 4",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 4",
      "cards": [2],
@@ -596,6 +600,7 @@ solutions_data = [
      "objective": "Цели 5", "solution_type": "Тип решения 5",
      "short_description": "Краткое описание платформы 5", "platform": "Платформа 5",
      "messengers": "Мессенджеры 5", "integration_with_CRM": "Интеграция с CRM 5",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 5", "tasks": "Задачи 5",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 5",
      "cards": [3],
@@ -618,6 +623,7 @@ solutions_data = [
      "objective": "Цели 6", "solution_type": "Тип решения 6",
      "short_description": "Краткое описание платформы 6", "platform": "Платформа 6",
      "messengers": "Мессенджеры 6", "integration_with_CRM": "Интеграция с CRM 6",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 6", "tasks": "Задачи 6",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 6",
      "cards": [1],
@@ -640,6 +646,7 @@ solutions_data = [
      "objective": "Цели 7", "solution_type": "Тип решения 7",
      "short_description": "Краткое описание платформы 7", "platform": "Платформа 7",
      "messengers": "Мессенджеры 7", "integration_with_CRM": "Интеграция с CRM 7",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 7", "tasks": "Задачи 7",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 7",
      "cards": [1],
@@ -662,6 +669,7 @@ solutions_data = [
      "objective": "Цели 8", "solution_type": "Тип решения 8",
      "short_description": "Краткое описание платформы 8", "platform": "Платформа 8",
      "messengers": "Мессенджеры 8", "integration_with_CRM": "Интеграция с CRM 8",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 8", "tasks": "Задачи 8",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 8",
      "cards": [1],
@@ -684,6 +692,7 @@ solutions_data = [
      "objective": "Цели 9", "solution_type": "Тип решения 9",
      "short_description": "Краткое описание платформы 9", "platform": "Платформа 9",
      "messengers": "Мессенджеры 9", "integration_with_CRM": "Интеграция с CRM 9",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 9", "tasks": "Задачи 9",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 9",
      "cards": [1],
@@ -706,6 +715,7 @@ solutions_data = [
      "objective": "Цели 10", "solution_type": "Тип решения 10",
      "short_description": "Краткое описание платформы 10", "platform": "Платформа 10",
      "messengers": "Мессенджеры 10", "integration_with_CRM": "Интеграция с CRM 10",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 10", "tasks": "Задачи 10",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 10",
      "cards": [1],
@@ -728,6 +738,7 @@ solutions_data = [
      "objective": "Цели 11", "solution_type": "Тип решения 11",
      "short_description": "Краткое описание платформы 11", "platform": "Платформа 11",
      "messengers": "Мессенджеры 11", "integration_with_CRM": "Интеграция с CRM 11",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 11", "tasks": "Задачи 11",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 11",
      "cards": [1],
@@ -750,6 +761,7 @@ solutions_data = [
      "objective": "Цели 12", "solution_type": "Тип решения 12",
      "short_description": "Краткое описание платформы 12", "platform": "Платформа 12",
      "messengers": "Мессенджеры 12", "integration_with_CRM": "Интеграция с CRM 12",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 12", "tasks": "Задачи 12",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 12",
      "cards": [1],
@@ -772,6 +784,7 @@ solutions_data = [
      "objective": "Цели 13", "solution_type": "Тип решения 13",
      "short_description": "Краткое описание платформы 13", "platform": "Платформа 13",
      "messengers": "Мессенджеры 13", "integration_with_CRM": "Интеграция с CRM 13",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 13", "tasks": "Задачи 13",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 13",
      "cards": [1],
@@ -794,6 +807,7 @@ solutions_data = [
      "objective": "Цели 14", "solution_type": "Тип решения 14",
      "short_description": "Краткое описание платформы 14", "platform": "Платформа 14",
      "messengers": "Мессенджеры 14", "integration_with_CRM": "Интеграция с CRM 14",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 14", "tasks": "Задачи 14",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 14",
      "cards": [1],
@@ -816,6 +830,7 @@ solutions_data = [
      "objective": "Цели 15", "solution_type": "Тип решения 15",
      "short_description": "Краткое описание платформы 15", "platform": "Платформа 15",
      "messengers": "Мессенджеры 15", "integration_with_CRM": "Интеграция с CRM 15",
+     "status": "save",
      "integration_with_payment_systems": "Интеграция с платежными системами 15", "tasks": "Задачи 15",
      "actions_to_complete_tasks": "Мероприятия по выполнению задачи 15",
      "cards": [1],
