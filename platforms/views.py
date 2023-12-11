@@ -213,7 +213,7 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
    
     # обновление фильтров с тэгами
     @extend_schema(
-        request=PlatformFilterSerializerSwagger,
+        request=PlatformFilterSerializerSwaggerList,
         responses={200: {'description': 'data updated'}},
         description='Update a platform filter.',
         summary='Update platform filter',
@@ -238,8 +238,8 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         for tag_data in tags_data:
             try:
                 tag = PlatformTag.objects.get(id=tag_data['id'])
-                if tag_data.get('title'):
-                    tag.properties = tag_data.get('title')
+                if tag_data.get('properties'):
+                    tag.properties = tag_data.get('properties')
                 if tag_data.get('image_tag'):
                     tag.image = tag_data.get('image_tag')
                 if tag_data.get('status'):

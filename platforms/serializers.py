@@ -42,11 +42,11 @@ class PlatformSearchResponseSerializer(serializers.Serializer):
 
 class PlatformTagSerializerSwagger(serializers.Serializer):
     id = serializers.CharField()
-    title = serializers.CharField()
+    properties = serializers.CharField()
     status = serializers.CharField()
     image = serializers.CharField()
     is_message = serializers.CharField()
-    filter_id = serializers.CharField()
+    title = serializers.CharField()
 
 class PlatformFilterSerializerSwagger(serializers.Serializer):
     title = serializers.CharField()
