@@ -226,7 +226,6 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
             test_filter = request.data
             test_filter['group'] = my_filter.group.id
             serializer = self.get_serializer(instance, data=test_filter, partial=False)
-            #serializer.validated_data['group'] = my_filter.group
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         self.update_tags(serializer)
@@ -434,6 +433,16 @@ class PlatformFiltration(generics.CreateAPIView):
         if page is not None:
             serializer = self.serializer_class(page, many=True)
             modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
+
+            for platform_result in modified_data['results']:
+                is_favorite = False
+                platform = self.queryset.filter(pk=platform_result['id']).first()
+                if platform:
+                    if request.user.is_authenticated:
+                        favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=platform_result['id'])
+                        if favorite:
+                            is_favorite = True
+                platform_result['is_favorite'] = is_favorite
             return Response(modified_data)
 
 
