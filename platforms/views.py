@@ -221,10 +221,17 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=False)
+        if not serializer.initial_data.get('group'):
+            my_filter = PlatformFilter.objects.get(title=serializer.initial_data.get('title'))
+            test_filter = request.data
+            test_filter['group'] = my_filter.group.id
+            serializer = self.get_serializer(instance, data=test_filter, partial=False)
+            #serializer.validated_data['group'] = my_filter.group
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        self.update_tags(serializer.initial_data.get('tags'))
+        self.update_tags(serializer)
         return Response("data updated", status=status.HTTP_200_OK)
+
     
     
     # patch запрос (перенаправляет на обновление put запроса)
@@ -234,22 +241,35 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     
 
     # обновление тэгов фильтра
-    def update_tags(self, tags_data):
-        for tag_data in tags_data:
-            try:
-                tag = PlatformTag.objects.get(id=tag_data['id'])
-                if tag_data.get('properties'):
-                    tag.properties = tag_data.get('properties')
-                if tag_data.get('image_tag'):
-                    tag.image = tag_data.get('image_tag')
-                if tag_data.get('status'):
-                    tag.status = tag_data.get('status')
-                if tag_data.get('is_message'):    
-                    tag.is_message = tag_data.get('is_message')
-                tag.save()
-            except PlatformTag.DoesNotExist:
-                continue
-
+    def update_tags(self, serializer):
+        for tag_data in serializer.initial_data.get('tags'):
+            tag_id = tag_data.get('id')
+            if tag_id:
+                try:
+                    tag = PlatformTag.objects.get(id=tag_id)
+                    if tag_data.get('properties'):
+                        tag.properties = tag_data.get('properties')
+                    if tag_data.get('image_tag'):
+                        tag.image = tag_data.get('image_tag')
+                    if tag_data.get('status'):
+                        tag.status = tag_data.get('status')
+                    if tag_data.get('is_message'):    
+                        tag.is_message = tag_data.get('is_message')
+                    tag.save()
+                except PlatformTag.DoesNotExist:
+                    return Response("Tag does not exist", status=status.HTTP_404_NOT_FOUND)
+            else:
+                try:
+                    filter_id = serializer.instance
+                    tag = PlatformTag.objects.create(
+                        properties=tag_data.get('properties'),
+                        image=tag_data.get('image_tag'),
+                        status=tag_data.get('status'),
+                        is_message=tag_data.get('is_message'),
+                        title_id=filter_id.id
+                    )
+                except Exception as e:
+                    return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
             
     # вывод одного значения
     @extend_schema(
