@@ -243,6 +243,11 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
 
     # обновление тэгов фильтра
     def update_tags(self, serializer):
+        request_tags = set(tag_data.get('id') for tag_data in serializer.initial_data.get('tags'))
+
+        # Удаление тегов, которых нет в запросе
+        PlatformTag.objects.exclude(id__in=request_tags).delete()
+
         for tag_data in serializer.initial_data.get('tags'):
             tag_id = tag_data.get('id')
             if tag_id:
@@ -261,13 +266,13 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
                     return Response("Tag does not exist", status=status.HTTP_404_NOT_FOUND)
             else:
                 try:
-                    filter_id = serializer.instance
+                    filter_instance = serializer.instance
                     tag = PlatformTag.objects.create(
                         properties=tag_data.get('properties'),
                         image=tag_data.get('image_tag'),
                         status=tag_data.get('status'),
                         is_message=tag_data.get('is_message'),
-                        title_id=filter_id.id
+                        title_id=filter_instance.id
                     )
                 except Exception as e:
                     return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
