@@ -218,25 +218,27 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
         description='Update a platform filter.',
         summary='Update platform filter',
         )
-    def update(self, request, *args, **kwargs):
+    def update(self, request, patch_value=None, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=False)
         if not serializer.initial_data.get('group'):
-            my_filter = PlatformFilter.objects.get(title=serializer.initial_data.get('title'))
+            my_filter = PlatformFilter.objects.get(id=kwargs['pk'])
             test_filter = request.data
+            test_filter['title'] = my_filter.title
             test_filter['group'] = my_filter.group.id
             serializer = self.get_serializer(instance, data=test_filter, partial=False)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        self.update_tags(serializer)
+        if not patch_value:
+            self.update_tags(serializer)
         return Response("data updated", status=status.HTTP_200_OK)
 
     
     
     # patch запрос (перенаправляет на обновление put запроса)
     def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
+        patch_value = True
+        return self.update(request, patch_value, *args, **kwargs)
     
 
     # обновление тэгов фильтра
