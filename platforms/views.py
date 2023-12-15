@@ -244,9 +244,10 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     # обновление тэгов фильтра
     def update_tags(self, serializer):
         request_tags = set(tag_data.get('id') for tag_data in serializer.initial_data.get('tags'))
+        filter_id = serializer.instance.id
 
-        # Удаление тегов, которых нет в запросе
-        PlatformTag.objects.exclude(id__in=request_tags).delete()
+        # Удаление тегов, которых нет в запросе и принадлежащих определенному фильтру
+        PlatformTag.objects.filter(title_id=filter_id).exclude(id__in=request_tags).delete()
 
         for tag_data in serializer.initial_data.get('tags'):
             tag_id = tag_data.get('id')
