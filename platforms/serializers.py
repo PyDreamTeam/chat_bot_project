@@ -60,6 +60,9 @@ class PlatformFilterSerializerSwagger(serializers.Serializer):
 
 class PlatformTagSerializerSwaggerPost(serializers.Serializer):
     properties = serializers.CharField()
+    status = serializers.CharField(required=False)
+    image = serializers.CharField(required=False)
+    is_message = serializers.BooleanField(required=False)
 
 
 class PlatformFilterSerializerSwaggerPost(serializers.Serializer):
@@ -88,10 +91,22 @@ class PlatformTagSerializerSwaggerList(serializers.Serializer):
     status = serializers.CharField()
     image = serializers.CharField()
     is_message = serializers.BooleanField()
-    title = serializers.CharField()
+    filter_id = serializers.CharField()
 
 
 class PlatformFilterSerializerSwaggerList(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    image = serializers.CharField()
+    status = serializers.CharField()
+    group = serializers.IntegerField()
+    functionality = serializers.CharField()
+    integration = serializers.CharField()
+    multiple = serializers.BooleanField()
+    tags = PlatformTagSerializerSwaggerList(many=True)
+
+
+class PlatformFilterSerializerSwaggerPut(serializers.Serializer):
     title = serializers.CharField()
     image = serializers.CharField()
     status = serializers.CharField()

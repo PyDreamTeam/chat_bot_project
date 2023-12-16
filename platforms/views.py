@@ -1,9 +1,10 @@
+import collections
 from django.db.models import Q
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
-from .serializers import (PlatformFilterSerializer, PlatformFilterSerializerSwagger, PlatformFilterSerializerSwaggerList, PlatformFilterSerializerSwaggerPost, PlatformFilterSerializerSwaggerPostResponses, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
+from .serializers import (PlatformFilterSerializer, PlatformFilterSerializerSwagger, PlatformFilterSerializerSwaggerList, PlatformFilterSerializerSwaggerPost, PlatformFilterSerializerSwaggerPostResponses, PlatformFilterSerializerSwaggerPut, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
                           PlatformSerializer, PlatformTagSerializer)
 from accounts.permissions import get_permissions
 from .utils import modify_data, get_groups_with_filters
@@ -207,13 +208,14 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
             tags_data_with_title.append(tag_data)
         tags_serializer = PlatformTagSerializer(data=tags_data_with_title, many=True)
         tags_serializer.is_valid(raise_exception=True)
-        tags_serializer.save(title=filter_instance)
+        tags_serializer.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
    
     # обновление фильтров с тэгами
     @extend_schema(
-        request=PlatformFilterSerializerSwaggerList,
+        request=PlatformFilterSerializerSwaggerPut,
         responses={200: {'description': 'data updated'}},
         description='Update a platform filter.',
         summary='Update platform filter',
@@ -287,13 +289,21 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        # код для включения тегов принадлежащих данному фильтру
+        # код для включения тегов, принадлежащих данному фильтру
         filter_id = serializer.data['id']
         tags = PlatformTag.objects.filter(title_id=filter_id)
         tags_serializer = PlatformTagSerializer(tags, many=True)
         data = serializer.data
-        data['tags'] = tags_serializer.data
+        list_for_OrderedDict = []
+        for tag in tags_serializer.data:
+            new_tag = dict(tag)
+            new_tag['filter_id'] = new_tag['title']
+            new_tag.pop('title')
+            ordered_tag = collections.OrderedDict(new_tag)
+            list_for_OrderedDict.append(ordered_tag)
+        data['tags'] = list_for_OrderedDict
         return Response(data)
+
 
     # вывод всех значений
     @extend_schema(
@@ -310,7 +320,15 @@ class PlatformFilterViewSet(viewsets.ModelViewSet):
             filter_id = data['id']
             tags = PlatformTag.objects.filter(title_id=filter_id)
             tags_serializer = PlatformTagSerializer(tags, many=True)
-            data['tags'] = tags_serializer.data
+            list_for_OrderedDict = []
+            for tag in tags_serializer.data:
+                new_tag = dict(tag)
+                new_tag['filter_id'] = new_tag['title']
+                new_tag.pop('title')
+                tag = collections.OrderedDict(new_tag)
+                list_for_OrderedDict.append(tag)
+            data['tags'] = list_for_OrderedDict
+
         return Response(serialized_data)
 
 
