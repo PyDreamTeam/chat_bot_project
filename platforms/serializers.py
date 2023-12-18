@@ -5,7 +5,6 @@ from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 
 class PlatformSerializer(serializers.ModelSerializer):
     # is_favorite = serializers.BooleanField(read_only=True)
-
     class Meta:
         model = Platform
         fields = "__all__"
@@ -115,3 +114,22 @@ class PlatformFilterSerializerSwaggerPut(serializers.Serializer):
     integration = serializers.CharField()
     multiple = serializers.BooleanField()
     tags = PlatformTagSerializerSwaggerList(many=True)
+
+
+
+class PlatformFiltrationSerializerSwagger(serializers.Serializer):
+    title = serializers.CharField()
+    id_tags = serializers.ListField(child=serializers.IntegerField(), required=False)
+    price_min = serializers.FloatField(required=False)
+    price_max = serializers.FloatField(required=False)
+    sort_abc = serializers.ChoiceField(choices=[('a', 'a'), ('z', 'z')], required=False)
+    page_number = serializers.IntegerField()
+    items_per_page = serializers.IntegerField(required=False, default=10)
+
+
+class PlatformSerializerSwagger(serializers.ModelSerializer):
+    # is_favorite = serializers.BooleanField(read_only=True)
+    is_favorite = serializers.BooleanField()
+    class Meta:
+        model = Platform
+        fields = "__all__"

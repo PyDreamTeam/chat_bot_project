@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator
 from .models import Platform, PlatformFilter, PlatformGroup, PlatformTag
 from .serializers import (PlatformFilterSerializer, PlatformFilterSerializerSwagger, PlatformFilterSerializerSwaggerList, PlatformFilterSerializerSwaggerPost, PlatformFilterSerializerSwaggerPostResponses, PlatformFilterSerializerSwaggerPut, PlatformGroupSerializer, PlatformSearchResponseSerializer, PlatformSearchSerializer,
-                          PlatformSerializer, PlatformTagSerializer)
+                          PlatformSerializer, PlatformSerializerSwagger, PlatformTagSerializer, PlatformFiltrationSerializerSwagger)
 from accounts.permissions import get_permissions
 from .utils import modify_data, get_groups_with_filters
 from favorite.mixin_favorite import ManageFavoritePlatforms
@@ -62,6 +62,9 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         return [permission() for permission in permissions]
 
     # вывод одного значения
+    @extend_schema(
+        responses={200: PlatformSerializerSwagger},
+        )
     def retrieve(self, request, pk=None):
         is_favorite = False
         platform = self.queryset.filter(pk=pk).first()
@@ -108,7 +111,10 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
             )
 
     # вывод всех значений
-
+    
+    @extend_schema(
+        responses={200: PlatformSerializerSwagger},
+        )
     def list(self, request):
         platforms = Platform.objects.all()
 
@@ -402,7 +408,11 @@ class PlatformTagViewSet(viewsets.ModelViewSet):
         )
 
 
-@extend_schema(tags=[_TAG_PLATFORM_FILTRATION])
+@extend_schema(tags=[_TAG_PLATFORM_FILTRATION],
+               request=PlatformFiltrationSerializerSwagger,
+               responses={
+        200: PlatformSerializerSwagger(many=True),
+    },)
 class PlatformFiltration(generics.CreateAPIView):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
