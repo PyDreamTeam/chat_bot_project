@@ -291,3 +291,6 @@ AUTH_USER_MODEL = 'accounts.User' #new model user
 CELERY_BROKER_URL = f"redis://{env.str('CELERY_HOST')}:{env.str('CELERY_PORT')}"
 CELERY_RESULT_BACKEND = f"redis://{env.str('CELERY_HOST')}:{env.str('CELERY_PORT')}"
 CELERY_IMPORTS = ["accounts.tasks"]
+
+SUPERUSER_EMAIL = env.str('SUPERUSER_EMAIL')
+SUPERUSER_PASSWORD = env.str('SUPERUSER_PASSWORD')
