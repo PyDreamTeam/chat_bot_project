@@ -118,12 +118,15 @@ class PlatformFilterSerializerSwaggerPut(serializers.Serializer):
 
 
 class PlatformFiltrationSerializerSwagger(serializers.Serializer):
-    title = serializers.CharField()
+    title = serializers.CharField(required=False)
     id_tags = serializers.ListField(child=serializers.IntegerField(), required=False)
+    group = serializers.CharField(required=False)
+    filter = serializers.CharField(required=False)
+    tag = serializers.CharField(required=False)
     price_min = serializers.FloatField(required=False)
     price_max = serializers.FloatField(required=False)
     sort_abc = serializers.ChoiceField(choices=[('a', 'a'), ('z', 'z')], required=False)
-    page_number = serializers.IntegerField()
+    page_number = serializers.IntegerField(required=False)
     items_per_page = serializers.IntegerField(required=False, default=10)
 
 

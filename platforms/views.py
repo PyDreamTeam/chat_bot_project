@@ -422,6 +422,9 @@ class PlatformFiltration(generics.CreateAPIView):
         # Получаем параметры фильтра из запроса
         title = self.request.data.get("title")
         id_tags = self.request.data.get("id_tags", [])
+        group = self.request.data.get("group")
+        filter = self.request.data.get("filter")
+        tag = self.request.data.get("tag")
         price_min = self.request.data.get("price_min")
         price_max = self.request.data.get("price_max")
         sort_abc = self.request.data.get("sort_abc")
@@ -436,6 +439,18 @@ class PlatformFiltration(generics.CreateAPIView):
         # Условие по тегам, если они есть
         if id_tags:
             q &= Q(filter__id__in=id_tags)
+
+        # Условие по имени группы, если оно есть
+        if group:
+            q &= Q(filter__title_id__group_id__title__icontains=group)
+
+        # Условие по имени фильтра, если оно есть
+        if filter:
+            q &= Q(filter__title_id__title__icontains=filter)
+
+        # Условие по имени тега, если оно есть
+        if tag:
+            q &= Q(filter__properties__icontains=tag)
 
         # Условие по минимальной цене, если она есть
         if price_min:
