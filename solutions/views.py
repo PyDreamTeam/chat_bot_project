@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
 from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
-                          SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer)
+                          SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer, SolutionSerializerSwaggerFiltrationRequest, SolutionSerializerSwaggerFiltrationResponse, ResponseSerializerSwaggerListResponse)
 from accounts.permissions import get_permissions
 from .utils import modify_data
 from drf_spectacular.utils import extend_schema
@@ -335,6 +335,11 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
 
     # вывод всех значений
+    @extend_schema(
+        responses={200: ResponseSerializerSwaggerListResponse},
+        description='A list solution tags.',
+        summary='A list solution tags',
+        )
     def list(self, request):
         groups = SolutionGroup.objects.all()
         filters = SolutionFilter.objects.all()
@@ -349,7 +354,8 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
                 "group": group.title,
                 "id": group.id,
                 "count": 0,
-                "is_active": group.is_active,
+                # "is_active": group.is_active,
+                "status": group.status,
                 "filters": [],
             }
 
@@ -362,7 +368,8 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
                     "id": solution_filter.id,
                     "image": "" if solution_filter.title in exceptions else solution_filter.image if solution_filter.image else "None",
                     "count": 0,
-                    "is_active": solution_filter.is_active,
+                    # "is_active": solution_filter.is_active,
+                    "status": solution_filter.status,
                     "functionality": solution_filter.functionality,
                     "integration": solution_filter.integration,
                     "multiple": solution_filter.multiple,
@@ -375,7 +382,8 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
                         "tag": tag.properties,
                         "id": tag.id,
                         "image_tag": tag.image if tag.image else "None",
-                        "is_active": tag.is_active,
+                        # "is_active": tag.is_active,
+                        "status": tag.status,
                         "is_message": tag.is_message,
                     }
                     filter_data["tags"].append(tag_data)
@@ -392,7 +400,11 @@ class SolutionTagViewSet(viewsets.ModelViewSet):
         )
 
 
-@extend_schema(tags=[_TAG_SOLUTION_FILTRATION])
+@extend_schema(tags=[_TAG_SOLUTION_FILTRATION],
+               request=SolutionSerializerSwaggerFiltrationRequest,
+               responses={
+        200: SolutionSerializerSwaggerFiltrationResponse(many=True),
+    },)
 class SolutionFiltration(generics.CreateAPIView):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer

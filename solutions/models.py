@@ -9,6 +9,7 @@ class SolutionGroup(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.CharField(max_length=800, null=True)
+    status = models.CharField(max_length=50, default="save")
 
     def __str__(self):
         return f"{self.title},"
@@ -22,6 +23,7 @@ class SolutionFilter(models.Model):
     group = models.ForeignKey(SolutionGroup, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     image = models.CharField(max_length=800, null=True)
+    status = models.CharField(max_length=50, default="save")
 
     def __str__(self):
         return f"{self.title}, {self.group}"
@@ -33,6 +35,7 @@ class SolutionTag(models.Model):
     is_active = models.BooleanField(default=True)
     image = models.CharField(max_length=800, null=True)
     is_message = models.BooleanField(default=False)
+    status = models.CharField(max_length=50, default="save")
 
     def __str__(self):
         return f"{self.title}, {self.properties}"

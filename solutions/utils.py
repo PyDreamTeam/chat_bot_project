@@ -25,8 +25,12 @@ def modify_data(data, total_count, page_number, total_page_number):
             "price": modified_item["price"],
             "filter": modified_item["filter"],
             "is_active": modified_item["is_active"],
+            "status": modified_item["status"],
             "created_at": modified_item["created_at"],
             "image": modified_item["image"] if modified_item["image"] else "None",
+            "turnkey_platform": modified_item["turnkey_platform"],
+            "link": modified_item["link"],
+            "links_to_platform": modified_item["links_to_platform"],
             "tags": [],
         }
 
