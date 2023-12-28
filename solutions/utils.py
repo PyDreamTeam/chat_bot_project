@@ -31,7 +31,6 @@ def modify_data(data, total_count, page_number, total_page_number):
             "turnkey_platform": modified_item["turnkey_platform"],
             "link": modified_item["link"],
             "links_to_platform": modified_item["links_to_platform"],
-            "short_description": modified_item["short_description"],
             "full_description": modified_item["full_description"],
             "tags": [],
         }

@@ -98,6 +98,7 @@ class SolutionSerializerSwaggerFiltrationResponse(serializers.Serializer):
     turnkey_platform = serializers.CharField()
     link = serializers.CharField()
     links_to_platform = serializers.CharField()
+    full_description = serializers.CharField()
     tags = TagSerializer(many=True)
 
 
