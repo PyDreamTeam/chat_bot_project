@@ -100,6 +100,7 @@ class SolutionSerializerSwaggerFiltrationResponse(serializers.Serializer):
     links_to_platform = serializers.CharField()
     full_description = serializers.CharField()
     tags = TagSerializer(many=True)
+    is_favorite = serializers.BooleanField()
 
 
 # response swagger для списка тэгов

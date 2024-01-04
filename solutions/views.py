@@ -461,8 +461,18 @@ class SolutionFiltration(generics.CreateAPIView):
 
         if page is not None:
             serializer = self.serializer_class(page, many=True)
-
             modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
+            
+            for solution_result in modified_data['results']:
+                is_favorite = False
+                solution = self.queryset.filter(pk=solution_result['id']).first()
+                if solution:
+                    if request.user.is_authenticated:
+                        favorite = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=solution_result['id'])
+                        if favorite:
+                            is_favorite = True
+                solution_result['is_favorite'] = is_favorite
+            
             return Response(modified_data)
 
 
