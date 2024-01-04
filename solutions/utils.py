@@ -56,3 +56,36 @@ def modify_data(data, total_count, page_number, total_page_number):
         "total_page_number": total_page_number,
         "results": modified_data,
     }
+
+def get_groups_with_filters(groups, filters):
+    results = []
+    # формирование списка групп
+    for group in groups:
+        group_data = {
+            "group": group.title,
+            "id": group.id,
+            "count": 0,
+            "status": group.status,
+            "filters": [],
+        }
+
+        # формирование списка фильтров по группам
+        for solution_filter in filters.filter(group=group):
+            filter_data = {
+                "filter": solution_filter.title,
+                "id": solution_filter.id,
+                "image": f"{solution_filter.image}"
+                if solution_filter.image
+                else "None",
+                "status": solution_filter.status,
+                "functionality": solution_filter.functionality,
+                "integration": solution_filter.integration,
+                "multiple": solution_filter.multiple,
+                "is_active": solution_filter.is_active
+            }
+
+            group_data["filters"].append(filter_data)
+            group_data["count"] += 1
+
+        results.append(group_data)
+    return results

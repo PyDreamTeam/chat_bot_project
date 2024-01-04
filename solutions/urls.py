@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (SolutionFilterViewSet, SolutionFiltration,
                     SolutionGroupViewSet, SolutionTagViewSet,
-                    SolutionViewSet, CardsViewSet, AdvantagesViewSet, DignitiesViewSet, StepsViewSet)
+                    SolutionViewSet, CardsViewSet, AdvantagesViewSet, DignitiesViewSet, StepsViewSet, SolutionSearch)
 
 
 router = DefaultRouter()
@@ -19,5 +19,6 @@ router.register("steps", StepsViewSet)
 
 urlpatterns = [
     path("solution/filtration/", SolutionFiltration.as_view(), name="solution-filtration"),
+    path("solution/filters-search/", SolutionSearch.as_view(), name="platform-search"),
     path("solution/", include(router.urls)),
 ]

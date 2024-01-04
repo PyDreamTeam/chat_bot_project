@@ -7,10 +7,10 @@ from rest_framework.response import Response
 
 from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
-from .serializers import (SolutionFilterSerializer, SolutionGroupSerializer,
+from .serializers import (SolutionFilterSearchSerializer, SolutionFilterSearchSerializerResponse, SolutionFilterSerializer, SolutionGroupSerializer, 
                           SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer, SolutionSerializerSwaggerFiltrationRequest, SolutionSerializerSwaggerFiltrationResponse, ResponseSerializerSwaggerListResponse)
 from accounts.permissions import get_permissions
-from .utils import modify_data
+from .utils import get_groups_with_filters, modify_data
 from drf_spectacular.utils import extend_schema
 from favorite.mixin_favorite import ManageFavoriteSolutions
 from favorite.models import FavoriteSolutions
@@ -22,6 +22,7 @@ _TAG_SOLUTION_TAG = "Solution tag"
 _TAG_SOLUTION_FAVORITE = "Solution favorite"
 _TAG_SOLUTION_FILTRATION = "Solution filtration"
 _TAG_SOLUTION_SEARCH = "Solution search"
+_TAG_SOLUTION_FILTERS_SEARCH = "Solution filters search"
 
 
 @extend_schema(tags=[_TAG_SOLUTION])
@@ -463,3 +464,41 @@ class SolutionFiltration(generics.CreateAPIView):
 
             modified_data = modify_data(serializer.data, len(queryset), page.number, paginator.num_pages)
             return Response(modified_data)
+
+
+@extend_schema(
+    description='Endpoint for searching groups and filters of solutions',
+    request=SolutionFilterSearchSerializer,
+    responses={
+        200: SolutionFilterSearchSerializerResponse(many=False),
+    },
+    tags=[_TAG_SOLUTION_FILTERS_SEARCH]
+)
+class SolutionSearch(generics.CreateAPIView):
+    queryset_group = SolutionGroup.objects.all()
+    queryset_filter = SolutionFilter.objects.all()
+    serializer_class_group = SolutionGroupSerializer
+    serializer_class_filter = SolutionFilterSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        title = self.request.data.get("title")
+        # Используем Q-объект для выполнения поиска по полю title в обеих таблицах
+        queryset_group = self.queryset_group.filter(title__icontains=title)
+        queryset_filter = self.queryset_filter.filter(title__icontains=title)
+        return queryset_group, queryset_filter
+    
+    def create(self, request, *args, **kwargs):
+        queryset_group, queryset_filter = self.get_queryset()
+        serialized_data_group = self.serializer_class_group(queryset_group, many=True).data
+        serialized_data_filter = self.serializer_class_filter(queryset_filter, many=True).data
+
+        response_data = {
+            'count_group_results': len(serialized_data_group),
+            'count_filter_results': len(serialized_data_filter),
+            'search_results': {
+                'group_results': get_groups_with_filters(queryset_group, SolutionFilter.objects.all()), 
+                'filter_results': serialized_data_filter
+            }
+            }
+        return Response(response_data)

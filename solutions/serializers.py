@@ -127,3 +127,16 @@ class ResponseSerializerSwaggerListResponse(serializers.Serializer):
     count = serializers.IntegerField()
     status = serializers.CharField()
     filters = FilterSerializerSwaggerListResponse(many=True)
+
+# для документации swagger
+class SolutionFilterSearchSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100)
+
+class SolutionFilterAndGroupResultSerializer(serializers.Serializer):
+    group_results = SolutionGroupSerializer(many=True)
+    filter_results = SolutionFilterSerializer(many=True)
+
+class SolutionFilterSearchSerializerResponse(serializers.Serializer):
+    count_group_results = serializers.IntegerField()
+    count_filter_results = serializers.IntegerField()
+    search_results = SolutionFilterAndGroupResultSerializer()
