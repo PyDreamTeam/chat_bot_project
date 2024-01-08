@@ -1,3 +1,4 @@
+import collections
 from django.db.models import Q
 from django.shortcuts import render
 from django.core.paginator import Paginator
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 
 from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
-from .serializers import (SolutionFilterSearchSerializer, SolutionFilterSearchSerializerResponse, SolutionFilterSerializer, SolutionGroupSerializer, 
+from .serializers import (FilterSerializerSwaggerListResponse, SolutionFilterSearchSerializer, SolutionFilterSearchSerializerResponse, SolutionFilterSerializer, SolutionGroupSerializer, 
                           SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer, SolutionSerializerSwaggerFiltrationRequest, SolutionSerializerSwaggerFiltrationResponse, ResponseSerializerSwaggerListResponse)
 from accounts.permissions import get_permissions
 from .utils import get_groups_with_filters, modify_data
@@ -254,73 +255,57 @@ class SolutionFilterViewSet(viewsets.ModelViewSet):
         permissions = get_permissions(self.request.method)
         return [permission() for permission in permissions]
 
+
     # вывод одного значения
+    @extend_schema(
+        responses={200: FilterSerializerSwaggerListResponse},
+        description='A solution filter.',
+        summary='A solution filter',
+        )
     def retrieve(self, request, pk=None):
-        solution_filter = self.queryset.filter(pk=pk).first()
-        if solution_filter:
-            serializer = self.serializer_class(solution_filter)
-            filter_data = dict(serializer.data)
-            return Response(
-                {
-                    "filter": filter_data["title"],
-                    "id": filter_data["id"],
-                    "image": f"{filter_data['image']}"
-                    if filter_data["image"]
-                    else "None",
-                    "is_active": filter_data["is_active"],
-                    "group": filter_data["group"],
-                    "functionality": filter_data["functionality"],
-                    "integration": filter_data["integration"],
-                    "multiple": filter_data["multiple"],
-                }
-            )
-        else:
-            return Response(
-                {"message": "Solution filter not found."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        # код для включения тегов, принадлежащих данному фильтру
+        filter_id = serializer.data['id']
+        tags = SolutionTag.objects.filter(title_id=filter_id)
+        tags_serializer = SolutionTagSerializer(tags, many=True)
+        data = serializer.data
+        list_for_OrderedDict = []
+        for tag in tags_serializer.data:
+            new_tag = dict(tag)
+            new_tag['filter_id'] = new_tag['title']
+            new_tag.pop('title')
+            ordered_tag = collections.OrderedDict(new_tag)
+            list_for_OrderedDict.append(ordered_tag)
+        data['tags'] = list_for_OrderedDict
+        return Response(data)
+
 
     # вывод всех значений
-    def list(self, request):
-        groups = SolutionGroup.objects.all()
-        filters = SolutionFilter.objects.all()
-        SolutionTag.objects.all()
-
-        results = []
-
-        # формирование списка групп
-        for group in groups:
-            group_data = {
-                "group": group.title,
-                "id": group.id,
-                "count": 0,
-                "is_active": group.is_active,
-                "filters": [],
-            }
-
-            # формирование списка фильтров по группам
-            for solution_filter in filters.filter(group=group):
-                filter_data = {
-                    "filter": solution_filter.title,
-                    "id": solution_filter.id,
-                    "image": f"{solution_filter.image}"
-                    if solution_filter.image
-                    else "None",
-                    "is_active": solution_filter.is_active,
-                    "functionality": solution_filter.functionality,
-                    "integration": solution_filter.integration,
-                    "multiple": solution_filter.multiple,
-                }
-
-                group_data["filters"].append(filter_data)
-                group_data["count"] += 1
-
-            results.append(group_data)
-
-        return Response(
-            {"count": len(results), "next": None,
-             "previous": None, "results": results}
+    @extend_schema(
+        responses={200: FilterSerializerSwaggerListResponse},
+        description='List a solution filters.',
+        summary='List a solution filters',
         )
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        # код для включения тегов принадлежащих каждому фильтру
+        serialized_data = serializer.data
+        for data in serialized_data:
+            filter_id = data['id']
+            tags = SolutionTag.objects.filter(title_id=filter_id)
+            tags_serializer = SolutionTagSerializer(tags, many=True)
+            list_for_OrderedDict = []
+            for tag in tags_serializer.data:
+                new_tag = dict(tag)
+                new_tag['filter_id'] = new_tag['title']
+                new_tag.pop('title')
+                tag = collections.OrderedDict(new_tag)
+                list_for_OrderedDict.append(tag)
+            data['tags'] = list_for_OrderedDict
+
+        return Response(serialized_data)
 
 
 @extend_schema(tags=[_TAG_SOLUTION_TAG])
