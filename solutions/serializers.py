@@ -7,7 +7,8 @@ class SolutionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Solution
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ["business_model", "business_area", "business_niche", "objective", "solution_type", "platform", "messengers", "integration_with_CRM", "integration_with_payment_systems"]
 
 
 class SolutionTagSerializer(serializers.ModelSerializer):
