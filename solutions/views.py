@@ -282,6 +282,73 @@ class SolutionFilterViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+    @extend_schema(
+        request=FilterSerializerSwaggerListRequest,
+        responses={200: {'description': 'data updated'}},
+        description='Update a solution filter.',
+        summary='Update solution filter',
+        )
+    def update(self, request, patch_value=None, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
+        if not serializer.initial_data.get('group'):
+            my_filter = SolutionFilter.objects.get(id=kwargs['pk'])
+            test_filter = request.data
+            test_filter['title'] = my_filter.title
+            test_filter['group'] = my_filter.group.id
+            serializer = self.get_serializer(instance, data=test_filter, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        if not patch_value:
+            self.update_tags(serializer)
+        return Response("data updated", status=status.HTTP_200_OK)
+
+    
+    
+    # patch запрос (перенаправляет на обновление put запроса)
+    def partial_update(self, request, *args, **kwargs):
+        patch_value = True
+        return self.update(request, patch_value, *args, **kwargs)
+    
+
+    # обновление тэгов фильтра
+    def update_tags(self, serializer):
+        request_tags = set(tag_data.get('id') for tag_data in serializer.initial_data.get('tags'))
+        filter_id = serializer.instance.id
+
+        # Удаление тегов, которых нет в запросе и принадлежащих определенному фильтру
+        SolutionTag.objects.filter(title_id=filter_id).exclude(id__in=request_tags).delete()
+
+        for tag_data in serializer.initial_data.get('tags'):
+            tag_id = tag_data.get('id')
+            if tag_id:
+                try:
+                    tag = SolutionTag.objects.get(id=tag_id)
+                    if tag_data.get('properties'):
+                        tag.properties = tag_data.get('properties')
+                    if tag_data.get('image_tag'):
+                        tag.image = tag_data.get('image_tag')
+                    if tag_data.get('status'):
+                        tag.status = tag_data.get('status')
+                    if tag_data.get('is_message'):    
+                        tag.is_message = tag_data.get('is_message')
+                    tag.save()
+                except SolutionTag.DoesNotExist:
+                    return Response("Tag does not exist", status=status.HTTP_404_NOT_FOUND)
+            else:
+                try:
+                    filter_instance = serializer.instance
+                    tag = SolutionTag.objects.create(
+                        properties=tag_data.get('properties'),
+                        image=tag_data.get('image_tag'),
+                        status=tag_data.get('status'),
+                        is_message=tag_data.get('is_message'),
+                        title_id=filter_instance.id
+                    )
+                except Exception as e:
+                    return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+
     # вывод одного значения
     @extend_schema(
         responses={200: FilterSerializerSwaggerListResponse},
