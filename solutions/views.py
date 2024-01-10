@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
-from .serializers import (FilterSerializerSwaggerListResponse, SolutionFilterSearchSerializer, SolutionFilterSearchSerializerResponse, SolutionFilterSerializer, SolutionGroupSerializer, 
+from .serializers import (FilterSerializerSwaggerListRequest, FilterSerializerSwaggerListResponse, SolutionFilterSearchSerializer, SolutionFilterSearchSerializerResponse, SolutionFilterSerializer, SolutionGroupSerializer, 
                           SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer, SolutionSerializerSwaggerFiltrationRequest, SolutionSerializerSwaggerFiltrationResponse, ResponseSerializerSwaggerListResponse)
 from accounts.permissions import get_permissions
 from .utils import get_groups_with_filters, modify_data
@@ -254,6 +254,32 @@ class SolutionFilterViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         permissions = get_permissions(self.request.method)
         return [permission() for permission in permissions]
+
+
+    # переопределил метод для  реализации создания тэгов при создании фильтров
+    @extend_schema(
+        request=FilterSerializerSwaggerListRequest,
+        responses={200: FilterSerializerSwaggerListResponse},
+        description='Create a solution filter.',
+        summary='Create solution filter',
+        )
+    def create(self, request):
+        filter_data = request.data
+        tags_data = filter_data.pop('tags')
+        serializer = self.get_serializer(data=filter_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        # создание и связывание тегов с созданным фильтром
+        filter_instance = serializer.instance
+        tags_data_with_title = []
+        for tag_data in tags_data:
+            tag_data['title'] = filter_instance.id
+            tags_data_with_title.append(tag_data)
+        tags_serializer = SolutionTagSerializer(data=tags_data_with_title, many=True)
+        tags_serializer.is_valid(raise_exception=True)
+        tags_serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
     # вывод одного значения
