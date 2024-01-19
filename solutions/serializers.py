@@ -157,6 +157,7 @@ class SolutionFilterSearchSerializerResponse(serializers.Serializer):
 
 #сериализатор для тарифов
 class TariffSerializer(serializers.ModelSerializer):
+    tags_of_rates = serializers.ListField(child=serializers.CharField())
     class Meta:
         model = Tariff
         fields = "__all__"
