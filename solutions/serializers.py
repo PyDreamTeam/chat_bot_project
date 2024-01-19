@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
+from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps, Tariff
 
 
 class SolutionSerializer(serializers.ModelSerializer):
@@ -153,3 +153,10 @@ class SolutionFilterSearchSerializerResponse(serializers.Serializer):
     count_group_results = serializers.IntegerField()
     count_filter_results = serializers.IntegerField()
     search_results = SolutionFilterAndGroupResultSerializer()
+
+
+#сериализатор для тарифов
+class TariffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tariff
+        fields = "__all__"

@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from favorite.models import FavoriteSolutions
 from django.contrib.postgres.fields import ArrayField
+from django.forms import JSONField
 
 
 class SolutionGroup(models.Model):
@@ -103,4 +104,12 @@ class Solution(models.Model):
         return f"{self.title}, {self.short_description}, {self.id}"
 
 
-
+class Tariff(models.Model):
+    title = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_special = models.CharField(max_length=100, null=True, blank=True)
+    tags_of_rates = models.JSONField()
+    
+    def __str__(self):
+        return f"{self.id}, {self.title}, {self.price}"

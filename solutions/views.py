@@ -7,9 +7,9 @@ from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
 
 from accounts.tasks import add_solution_in_history_task
-from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps
+from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps, Tariff
 from .serializers import (FilterSerializerSwaggerListRequest, FilterSerializerSwaggerListResponse, SolutionFilterSearchSerializer, SolutionFilterSearchSerializerResponse, SolutionFilterSerializer, SolutionGroupSerializer, 
-                          SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer, SolutionSerializerSwaggerFiltrationRequest, SolutionSerializerSwaggerFiltrationResponse, ResponseSerializerSwaggerListResponse)
+                          SolutionSerializer, SolutionTagSerializer, SolutionTagSerializer, CardsSerializer, AdvantagesSerializer, DignitiesSerializer, StepsSerializer, SolutionSerializerSwaggerFiltrationRequest, SolutionSerializerSwaggerFiltrationResponse, ResponseSerializerSwaggerListResponse, TariffSerializer)
 from accounts.permissions import get_permissions
 from .utils import get_groups_with_filters, modify_data
 from drf_spectacular.utils import extend_schema
@@ -590,3 +590,16 @@ class SolutionSearch(generics.CreateAPIView):
             }
             }
         return Response(response_data)
+
+
+@extend_schema(tags=[_TAG_SOLUTION])
+class TariffViewSet(viewsets.ModelViewSet):
+    queryset = Tariff.objects.all()
+    serializer_class = TariffSerializer
+    # Разрешить авторизованным пользователям редактировать, остальные могут
+    # только читать
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        permissions = get_permissions(self.request.method)
+        return [permission() for permission in permissions]

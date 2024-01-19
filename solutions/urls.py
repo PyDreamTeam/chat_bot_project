@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (SolutionFilterViewSet, SolutionFiltration,
                     SolutionGroupViewSet, SolutionTagViewSet,
-                    SolutionViewSet, CardsViewSet, AdvantagesViewSet, DignitiesViewSet, StepsViewSet, SolutionSearch)
+                    SolutionViewSet, CardsViewSet, AdvantagesViewSet, DignitiesViewSet, StepsViewSet, SolutionSearch, TariffViewSet)
 
 
 router = DefaultRouter()
@@ -15,6 +15,7 @@ router.register("cards", CardsViewSet)
 router.register("advantages", AdvantagesViewSet)
 router.register("dignities", DignitiesViewSet)
 router.register("steps", StepsViewSet)
+router.register("tariffs", TariffViewSet)   
 
 
 urlpatterns = [
