@@ -94,6 +94,7 @@ class Solution(models.Model):
     turnkey_platform = models.CharField(max_length=200, null=True, blank=True)
     link = models.CharField(max_length=800, null=True, blank=True)
     links_to_platform = ArrayField(models.CharField(max_length=10000), null=True, blank=True)
+    dignities = ArrayField(models.CharField(max_length=10000), null=True, blank=True)
     # create new field to correct work app favorite
     favorites = GenericRelation(FavoriteSolutions)
     # subtitle = models.CharField(max_length=300)

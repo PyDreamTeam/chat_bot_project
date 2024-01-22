@@ -17,11 +17,11 @@ email=settings.SUPERUSER_EMAIL
 password=settings.SUPERUSER_PASSWORD
 
 # # Адрес для добавления на веб сервер
-url_main = 'https://python.twnsnd.online/'
+# url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
-# url_main = 'http://127.0.0.1:8000/'
+url_main = 'http://127.0.0.1:8000/'
 
 
 # Учетные данные пользователя
@@ -526,6 +526,7 @@ solutions_data = [
      "turnkey_platform": 1,
      "link": 'https://translate.google.com/',
      "links_to_platform": ['link_1', 'link_2', 'link_3', ],
+     "dignities": ['dignitie_1', 'dignitie_2', 'dignitie_3', ],
      "filter": [10, 22, 13, 38, 39, 40],
     },
     {"title": "Решение 2", "business_model": "Бизнес модель 2",
@@ -550,6 +551,7 @@ solutions_data = [
      "turnkey_platform": 1,
      "link": 'https://translate.google.com/',
      "links_to_platform": ['link_1', 'link_2', 'link_3', ],
+     "dignities": ['dignitie_1', 'dignitie_2', 'dignitie_3', ],
      "price": 220,
      "filter": [20, 22, 23, 38, 39, 40],
     },
@@ -575,6 +577,7 @@ solutions_data = [
      "turnkey_platform": 2,
      "link": 'https://translate.google.com/',
      "links_to_platform": ['link_1', 'link_2', 'link_3', ],
+     "dignities": ['dignitie_1', 'dignitie_2', 'dignitie_3', ],
      "price": 145, "filter": [30, 23, 33, 38, 39, 40],
     },
     # {"title": "Решение 4", "business_model": "Бизнес модель 4",

@@ -82,6 +82,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "turnkey_platform": solution_data["turnkey_platform"],
                 "link": solution_data["link"],
                 "links_to_platform": solution_data["links_to_platform"],
+                "dignities": solution_data["dignities"],
                 "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
@@ -154,6 +155,7 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 "turnkey_platform": solution_data["turnkey_platform"],
                 "link": solution_data["link"],
                 "links_to_platform": solution_data["links_to_platform"],
+                "dignities": solution_data["dignities"],
                 "is_favorite": is_favorite, #app favorite
                 "tags": [],
             }
