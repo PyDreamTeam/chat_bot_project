@@ -59,6 +59,7 @@ class Dignities(models.Model):
 class Steps(models.Model):
     title = models.CharField(max_length=200)
     text = models.CharField(max_length=200)
+    media = models.TextField(null=True, blank=True)
 
 
 class Solution(models.Model):
