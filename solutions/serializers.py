@@ -8,7 +8,8 @@ class SolutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solution
         # fields = "__all__"
-        exclude = ["business_model", "business_area", "business_niche", "objective", "solution_type", "platform", "messengers", "integration_with_CRM", "integration_with_payment_systems"]
+        exclude = ["business_model", "business_area", "business_niche", "objective",
+                   "solution_type", "messengers", "integration_with_CRM", "integration_with_payment_systems"]
 
 
 class SolutionTagSerializer(serializers.ModelSerializer):
@@ -56,13 +57,15 @@ class StepsSerializer(serializers.ModelSerializer):
 # request swagger для фильтрации
 class SolutionSerializerSwaggerFiltrationRequest(serializers.Serializer):
     title = serializers.CharField(required=False)
-    id_tags = serializers.ListField(child=serializers.IntegerField(), required=False)
+    id_tags = serializers.ListField(
+        child=serializers.IntegerField(), required=False)
     # group = serializers.CharField(required=False)
     # filter = serializers.CharField(required=False)
     # tag = serializers.CharField(required=False)
     price_min = serializers.FloatField(required=False)
     price_max = serializers.FloatField(required=False)
-    sort_abc = serializers.ChoiceField(choices=[('a', 'a'), ('z', 'z')], required=False)
+    sort_abc = serializers.ChoiceField(
+        choices=[('a', 'a'), ('z', 'z')], required=False)
     page_number = serializers.IntegerField(required=False)
     items_per_page = serializers.IntegerField(required=False, default=10)
 
@@ -74,6 +77,7 @@ class TagSerializer(serializers.Serializer):
     image_tag = serializers.CharField()
     is_active = serializers.BooleanField()
     is_message = serializers.BooleanField()
+
 
 class SolutionSerializerSwaggerFiltrationResponse(serializers.Serializer):
     id = serializers.IntegerField()
@@ -113,6 +117,7 @@ class TagSerializerSwaggerListResponse(serializers.Serializer):
     status = serializers.CharField()
     is_message = serializers.BooleanField()
 
+
 class FilterSerializerSwaggerListResponse(serializers.Serializer):
     filter = serializers.CharField()
     id = serializers.IntegerField()
@@ -123,6 +128,7 @@ class FilterSerializerSwaggerListResponse(serializers.Serializer):
     integration = serializers.CharField()
     multiple = serializers.BooleanField()
     tags = TagSerializerSwaggerListResponse(many=True)
+
 
 class FilterSerializerSwaggerListRequest(serializers.Serializer):
     filter = serializers.CharField()
@@ -135,6 +141,7 @@ class FilterSerializerSwaggerListRequest(serializers.Serializer):
     multiple = serializers.BooleanField()
     tags = TagSerializerSwaggerListResponse(many=True)
 
+
 class ResponseSerializerSwaggerListResponse(serializers.Serializer):
     group = serializers.CharField()
     id = serializers.IntegerField()
@@ -143,12 +150,16 @@ class ResponseSerializerSwaggerListResponse(serializers.Serializer):
     filters = FilterSerializerSwaggerListResponse(many=True)
 
 # для документации swagger
+
+
 class SolutionFilterSearchSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=100)
+
 
 class SolutionFilterAndGroupResultSerializer(serializers.Serializer):
     group_results = SolutionGroupSerializer(many=True)
     filter_results = SolutionFilterSerializer(many=True)
+
 
 class SolutionFilterSearchSerializerResponse(serializers.Serializer):
     count_group_results = serializers.IntegerField()
@@ -156,9 +167,10 @@ class SolutionFilterSearchSerializerResponse(serializers.Serializer):
     search_results = SolutionFilterAndGroupResultSerializer()
 
 
-#сериализатор для тарифов
+# сериализатор для тарифов
 class TariffSerializer(serializers.ModelSerializer):
     tags_of_rates = serializers.ListField(child=serializers.CharField())
+
     class Meta:
         model = Tariff
         fields = "__all__"
