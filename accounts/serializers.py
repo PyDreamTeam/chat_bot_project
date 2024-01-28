@@ -8,14 +8,16 @@ from djoser.serializers import UserCreatePasswordRetypeSerializer as BaseUserCre
 from djoser.serializers import SendEmailResetSerializer
 
 from rest_framework import serializers
-from .models import Profile, SolutionHistoryConfig
+from .models import Profile, SolutionHistoryConfig, PlatformHistoryConfig
 
 from solutions.serializers import SolutionSerializer, SolutionTagSerializer
-from .models import Profile, SolutionHistory
+from platforms.serializers import PlatformSerializer, PlatformTagSerializer
+from .models import Profile, SolutionHistory, PlatformHistory
 
 User = get_user_model()
 
-    
+
+#User Create    
 class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer):
 
     class Meta(BaseUserCreatePasswordRetypeSerializer.Meta):
@@ -40,6 +42,7 @@ class UserCreatePasswordRetypeSerializer(BaseUserCreatePasswordRetypeSerializer)
     #     return user
 
 
+#User
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -54,7 +57,8 @@ class UserSerializer(serializers.ModelSerializer):
                     "is_active"
                 )
     
-    
+
+#Password
 class PasswordResetSerializer(SendEmailResetSerializer):
     
     def validate_email(self, value):
@@ -66,6 +70,7 @@ class PasswordResetSerializer(SendEmailResetSerializer):
         return value
 
 
+#Profile
 class ProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
@@ -91,6 +96,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return instance
 
 
+#Solution History
 class SolutionSerializerInAccounts(SolutionSerializer):
     filter = SolutionTagSerializer(many=True)
 
@@ -103,13 +109,38 @@ class SolutionHistorySerializer(serializers.ModelSerializer):
         fields = ("solution", )
 
 
-class MaxViewRecordsSerializer(serializers.ModelSerializer):
+class SolutionMaxViewRecordsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SolutionHistoryConfig
         fields = ("max_view_records", )
 
 
-class ExpiryPeriodSerializer(serializers.ModelSerializer):
+class SolutionExpiryPeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = SolutionHistoryConfig
+        fields = ("expiry_period", )
+
+
+#Platform History
+class PlatformSerializerInAccounts(PlatformSerializer):
+    filter = PlatformTagSerializer(many=True)
+
+
+class PlatformHistorySerializer(serializers.ModelSerializer):
+    platform = PlatformSerializerInAccounts()
+
+    class Meta:
+        model = PlatformHistory
+        fields = ("platform", )
+        
+        
+class PlatformMaxViewRecordsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlatformHistoryConfig
+        fields = ("max_view_records", )
+
+
+class PlatformExpiryPeriodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlatformHistoryConfig
         fields = ("expiry_period", )

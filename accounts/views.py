@@ -19,7 +19,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
-from .models import User, Profile, SolutionHistoryConfig, SolutionHistory
+from .models import User, Profile, SolutionHistoryConfig, SolutionHistory, PlatformHistoryConfig, PlatformHistory
 from .permissions import IsAdminOrSuperAdmin
 from .serializers import (
     UserSerializer,
@@ -27,13 +27,17 @@ from .serializers import (
     UserCreateSerializer,
     UserCreatePasswordRetypeSerializer,
     SolutionHistorySerializer,
-    MaxViewRecordsSerializer,
-    ExpiryPeriodSerializer,
+    SolutionMaxViewRecordsSerializer,
+    SolutionExpiryPeriodSerializer,
+    PlatformHistorySerializer,
+    PlatformMaxViewRecordsSerializer,
+    PlatformExpiryPeriodSerializer,
 )
-from .services import get_solution_history
+from .services import get_solution_history, get_platform_history
 
 
 _TAG_SOLUTION_HISTORY = "Solution History"
+_TAG_PLATFORM_HISTORY = "Platform History"
 _TAG_USERS = "Users"
 _TAG_USER_SEARCH = "Users search"
 _TAG_PROFILE = "Profile"
@@ -104,6 +108,7 @@ class ProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
         return profile
 
 
+#Solution History
 class SolutionHistoryListView(generics.ListAPIView):
     queryset = SolutionHistory.objects.all()
     serializer_class = SolutionHistorySerializer
@@ -155,8 +160,8 @@ class SolutionHistoryConfigBaseView(APIView):
             return Response(input_serializer.errors, status=400)
 
 
-class MaxViewRecordsView(SolutionHistoryConfigBaseView):
-    serializer_class = MaxViewRecordsSerializer
+class SolutionMaxViewRecordsView(SolutionHistoryConfigBaseView):
+    serializer_class = SolutionMaxViewRecordsSerializer
     FIELD = "max_view_records"
 
     @extend_schema(tags=[_TAG_SOLUTION_HISTORY])
@@ -168,8 +173,8 @@ class MaxViewRecordsView(SolutionHistoryConfigBaseView):
         return super().post(request, *args, **kwargs)
 
 
-class ExpiryPeriodView(SolutionHistoryConfigBaseView):
-    serializer_class = ExpiryPeriodSerializer
+class SolutionExpiryPeriodView(SolutionHistoryConfigBaseView):
+    serializer_class = SolutionExpiryPeriodSerializer
     FIELD = "expiry_period"
 
     @extend_schema(tags=[_TAG_SOLUTION_HISTORY])
@@ -178,6 +183,101 @@ class ExpiryPeriodView(SolutionHistoryConfigBaseView):
 
     @extend_schema(
         tags=[_TAG_SOLUTION_HISTORY],
+        parameters=[
+            OpenApiParameter(
+                name=FIELD,
+                description="Store timedelta objects. Format: [DD] [[HH:]MM:]ss[.uuuuuu]",
+                required=True,
+                type=timedelta,
+                examples=[
+                    OpenApiExample("1 day 8 hours 55 min 30 seconds", value="1 8:55:30"),
+                    OpenApiExample("30 days", value="30 00:00:00"),
+                    OpenApiExample("12 hours", value="12:00:00"),
+                    OpenApiExample("45 min", value="45:00"),
+                    OpenApiExample("20 seconds", value="20"),
+                ],
+            )
+        ],
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    
+
+#Platform History
+class PlatformHistoryListView(generics.ListAPIView):
+    queryset = PlatformHistory.objects.all()
+    serializer_class = PlatformHistorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self, *args, **kwargs):
+        return get_platform_history(user=self.request.user)
+
+    @extend_schema(tags=[_TAG_PLATFORM_HISTORY])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(self.get_serializer_data(serializer))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(self.get_serializer_data(serializer))
+
+    @staticmethod
+    def get_serializer_data(serializer):
+        serializer_data = [dct["platform"] for dct in serializer.data]
+        for dct in serializer_data:
+            dct["tags"] = dct.pop("filter")
+        return serializer_data
+    
+    
+class PlatformHistoryConfigBaseView(APIView):
+    permission_classes = (IsAdminOrSuperAdmin,)
+    serializer_class = None
+    FIELD = ""
+
+    def get(self, request, *args, **kwargs):
+        queryset = PlatformHistoryConfig.objects.values(self.FIELD).get(pk=1)
+        serializer = self.serializer_class(queryset)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        input_serializer = self.serializer_class(data=request.data)
+        if input_serializer.is_valid(raise_exception=True):
+            PlatformHistoryConfig.objects.filter(pk=1).update(
+                **{self.FIELD: input_serializer.data.get(self.FIELD)}
+            )
+            return Response({"message": "Successfully changed"}, status=200)
+        else:
+            return Response(input_serializer.errors, status=400)
+        
+        
+class PlatformMaxViewRecordsView(PlatformHistoryConfigBaseView):
+    serializer_class = PlatformMaxViewRecordsSerializer
+    FIELD = "max_view_records"
+
+    @extend_schema(tags=[_TAG_PLATFORM_HISTORY])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @extend_schema(tags=[_TAG_PLATFORM_HISTORY])
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    
+    
+class PlatformExpiryPeriodView(PlatformHistoryConfigBaseView):
+    serializer_class = PlatformExpiryPeriodSerializer
+    FIELD = "expiry_period"
+
+    @extend_schema(tags=[_TAG_PLATFORM_HISTORY])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @extend_schema(
+        tags=[_TAG_PLATFORM_HISTORY],
         parameters=[
             OpenApiParameter(
                 name=FIELD,

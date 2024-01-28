@@ -1,28 +1,46 @@
 {% load i18n %}
 
 {% block subject %}
-{% blocktrans %}Account activation on {{ site_name }}{% endblocktrans %}
+{% blocktrans %}Активация учетной записи на {{ site_name }}{% endblocktrans %}
 {% endblock subject %}
 
 {% block text_body %}
-{% blocktrans %}You're receiving this email because you need to finish activation process on {{ site_name }}.{% endblocktrans %}
+    <div style="background-color: #f2f2f2; text-align: center; padding: 20px;">
+{% blocktrans %}
+    <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block; text-align: left;">
+            <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+                Вы получили это электронное письмо, потому что вам необходимо завершить процесс активации на {{ site_name }}.
+            </p>
+    </div>
+{% endblocktrans %}
 
-{% trans "Please go to the following page to activate account:" %}
+        {% trans "Пожалуйста, перейдите на следующую страницу, чтобы активировать свою учетную запись:" %}
 {{ protocol }}://python.twnsnd.online/sign-up/activation{{ url|safe }}
-
-{% trans "Thanks for using our site!" %}
-
-{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+        {% trans "Спасибо, что воспользовались нашим сайтом!" %}
+<p style="color: #666666; font-size: 14px; margin-top: 10px;">
+    {% blocktrans %}С уважением, {{ site_name }} {% endblocktrans %}
+</p>
+    </div>
 {% endblock text_body %}
 
 {% block html_body %}
-<p>{% blocktrans %}You're receiving this email because you need to finish activation process on {{ site_name }}.{% endblocktrans %}</p>
 
-<p>{% trans "Please go to the following page to activate account:" %}</p>
-<p><a href="{{ protocol }}://python.twnsnd.online/sign-up/activation{{ url|safe }}">{{ protocol }}://python.twnsnd.online/sign-up/activation{{ url|safe }}</a></p>
+    <div style="background-color: #f2f2f2; text-align: center; padding: 20px;">
+        <div style="background-color: white; padding: 20px; border-radius: 15px; display: inline-block; text-align: left;">
+    <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+        {% blocktrans %}
+        Вы получили это электронное письмо, потому что вам необходимо завершить процесс активации на {{ site_name }}.
+            <br>
+        {% endblocktrans %}
+    </p>
 
-<p>{% trans "Thanks for using our site!" %}</p>
+            <p>{% trans "Пожалуйста, перейдите на следующую страницу, чтобы активировать свою учетную запись:" %}</p>
+<a href="{{ protocol }}://python.twnsnd.online/sign-up/activation{{ url|safe }}">{{ protocol }}://python.twnsnd.online/sign-up/activation{{ url|safe }}</a>
+            <br>
+            <p>{% trans "Спасибо, что воспользовались нашим сайтом!" %}</p>
+        </div>
 
-<p>{% blocktrans %}The {{ site_name }} team{% endblocktrans %}</p>
+<p style="color: #666666; font-size: 14px; margin-top: 10px;">{% blocktrans %}С уважением, {{ site_name }} {% endblocktrans %}</p>
+    </div>
 
 {% endblock html_body %}

@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from config import settings
 from solutions.models import Solution
+from platforms.models import Platform
 from .managers import CustomUserManager
 
 
@@ -23,8 +24,6 @@ class User(AbstractUser):
     email = models.EmailField(_('email'), db_index=True, unique=True, blank=False)
     user_role = models.CharField(max_length=10, choices=Role.choices, default="US")
     get_email_notifications = models.BooleanField(blank=False, default=False)
-    #wish = models.ManyToManyField(Wish, _('wish'), blank=False)
-    #photo = models.ImageField(null=True, blank=True)
 
     objects = CustomUserManager()
 
@@ -44,6 +43,7 @@ class Profile(models.Model):
         return self.user.email
 
 
+#Solution History
 class SolutionHistory(models.Model):
     action_time = models.DateTimeField(
         verbose_name=_("action time"),
@@ -73,3 +73,33 @@ class SolutionHistoryConfig(models.Model):
         return f"max_view_records: {self.max_view_records}, " \
                f"expiry_period: {self.expiry_period}"
 
+
+#Platform History
+class PlatformHistory(models.Model):
+    action_time = models.DateTimeField(
+        verbose_name=_("action time"),
+        default=timezone.now,
+        editable=False,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("user"),
+    )
+    platform = models.ForeignKey(
+        Platform,
+        on_delete=models.CASCADE,
+        verbose_name=_("platform"),
+    )
+
+    def __str__(self):
+        return f"user: {self.user}, platform: {self.platform}"
+    
+    
+class PlatformHistoryConfig(models.Model):
+    max_view_records = models.IntegerField()
+    expiry_period = models.DurationField()
+
+    def __str__(self):
+        return f"max_view_records: {self.max_view_records}, " \
+               f"expiry_period: {self.expiry_period}"
