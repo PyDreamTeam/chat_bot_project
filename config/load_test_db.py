@@ -17,11 +17,11 @@ email=settings.SUPERUSER_EMAIL
 password=settings.SUPERUSER_PASSWORD
 
 # # Адрес для добавления на веб сервер
-# url_main = 'https://python.twnsnd.online/'
+url_main = 'https://python.twnsnd.online/'
 
 
 # Адрес для добавления на локальный сервер
-url_main = 'http://127.0.0.1:8000/'
+# url_main = 'http://127.0.0.1:8000/'
 
 
 # Учетные данные пользователя
@@ -526,6 +526,7 @@ solutions_data = [
      "turnkey_platform": 1,
      "link": 'https://translate.google.com/',
      "links_to_platform": ['link_1', 'link_2', 'link_3', ],
+     "advantages": ['Чат бот в Telegram для языковой школы', 'Заменяет LMS', 'Помогает выстроить бесшовный автоматизированный путь', ],
      "dignities": ['dignitie_1', 'dignitie_2', 'dignitie_3', ],
      "filter": [10, 22, 13, 38, 39, 40],
     },
@@ -551,6 +552,7 @@ solutions_data = [
      "turnkey_platform": 1,
      "link": 'https://translate.google.com/',
      "links_to_platform": ['link_1', 'link_2', 'link_3', ],
+     "advantages": ['Чат бот в Telegram', 'Заменяет LMS', 'Помогает выстроить бесшовный автоматизированный путь', ],
      "dignities": ['dignitie_1', 'dignitie_2', 'dignitie_3', ],
      "price": 220,
      "filter": [20, 22, 23, 38, 39, 40],
@@ -577,6 +579,7 @@ solutions_data = [
      "turnkey_platform": 2,
      "link": 'https://translate.google.com/',
      "links_to_platform": ['link_1', 'link_2', 'link_3', ],
+     "advantages": ['Чат бот в Telegram', 'Заменяет LMS', 'Помогает выстроить бесшовный автоматизированный путь', ],
      "dignities": ['dignitie_1', 'dignitie_2', 'dignitie_3', ],
      "price": 145, "filter": [30, 23, 33, 38, 39, 40],
     },
@@ -914,7 +917,7 @@ if __name__ == '__main__':
     add_to_db(platforms_data, url_platforms)
     #solution
     add_to_db(cards_data_solutions, url_cards)
-    add_to_db(advantages_data_solutions, url_advantages)
+    # add_to_db(advantages_data_solutions, url_advantages)
     add_to_db(dignities_data_solutions, url_dignities)
     add_to_db(steps_data_solutions, url_steps)
     add_to_db(groups_data_solutions, url_groups_solutions)
