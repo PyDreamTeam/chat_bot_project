@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 
 from rest_framework import generics, permissions, renderers, status, viewsets
 from rest_framework.response import Response
+from accounts.services import add_solution_in_history
 
 from accounts.tasks import add_solution_in_history_task
 from .models import Solution, SolutionFilter, SolutionGroup, SolutionTag, Cards, Advantages, Dignities, Steps, Tariff
@@ -44,6 +45,11 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
         is_favorite = False
         if solution:
             if request.user.is_authenticated:
+                try:
+                    add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
+                except Exception as e:
+                    print(e)
+                    add_solution_in_history(user_id=request.user.id, solution_id=solution.id)
                 favorite_solutions = FavoriteSolutions.objects.filter(user=request.user) & FavoriteSolutions.objects.filter(object_id=pk)
                 if favorite_solutions:
                     is_favorite = True
@@ -52,36 +58,19 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
             data_solution = {
                 "id": solution_data["id"],
                 "title": solution_data["title"],
-                # "business_model": solution_data["business_model"],
-                # "business_area": solution_data["business_area"],
-                # "business_niche": solution_data["business_niche"],
-                # "objective": solution_data["objective"],
-                # "solution_type": solution_data["solution_type"],
                 "short_description": solution_data["short_description"],
-                # "platform": solution_data["platform"],
-                # "platform_title": solution_data["platform_title"],
-                # "platform_image": solution_data["platform_image"],
-                # "messengers": solution_data["messengers"],
                 "status": solution_data["status"],
-                # "integration_with_CRM": solution_data["integration_with_CRM"],
-                # "integration_with_payment_systems": solution_data["integration_with_payment_systems"],
-                # "actions_to_complete_tasks": solution_data["actions_to_complete_tasks"],
                 "advantages": solution_data["advantages"],
-                # "subtitle": solution_data["subtitle"],
                 "full_description": solution_data["full_description"],
                 "steps": solution_data["steps"],
                 "image": solution_data["image"],
                 "price": solution_data["price"],
                 "filter": solution_data["filter"],
-                # "is_active": solution_data["is_active"],
                 "created_at": solution_data["created_at"],
                 "dignities": solution_data["dignities"],
                 "cards": solution_data["cards"],
-                # "cards_title": solution_data["cards_title"],
-                # "cards_description": solution_data["cards_description"],
                 "steps_title": solution_data["steps_title"],
                 "steps_description": solution_data["steps_description"],
-                # "turnkey_platform": solution_data["turnkey_platform"],
                 "link": solution_data["link"],
                 "links_to_platform": solution_data["links_to_platform"],
                 "dignities": solution_data["dignities"],
@@ -99,7 +88,6 @@ class SolutionViewSet(viewsets.ModelViewSet, ManageFavoriteSolutions):
                 }
 
                 data_solution["tags"].append(tag_data)
-            # add_solution_in_history_task.delay(user_id=request.user.id, solution_id=solution.id)
             return Response(data_solution)
         else:
             return Response(
