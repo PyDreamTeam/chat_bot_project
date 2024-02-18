@@ -11,11 +11,13 @@ from django.db import migrations
 from accounts.apps import AccountsConfig
 from config.settings import BASE_DIR
 
-fixture = BASE_DIR / "accounts/migrations/fixtures/solutionhistoryconfig.json"
+fixture_solution = BASE_DIR / "accounts/migrations/fixtures/solutionhistoryconfig.json"
+fixture_platform = BASE_DIR / "accounts/migrations/fixtures/platformhistoryconfig.json"
 
 
 def load_fixture(apps, schema_editor):
-    call_command("loaddata", fixture, app_label=AccountsConfig.name)
+    call_command("loaddata", fixture_solution, app_label=AccountsConfig.name)
+    call_command("loaddata", fixture_platform, app_label=AccountsConfig.name)
 
 
 class Migration(migrations.Migration):
@@ -24,6 +26,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("auth", "0012_alter_user_first_name_max_length"),
         ("solutions", "0001_initial"),
+        ("platforms", "0001_initial"),
     ]
 
     operations = [
@@ -213,6 +216,60 @@ class Migration(migrations.Migration):
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+            ],
+        ),
+        migrations.CreateModel(
+            name="PlatformHistoryConfig",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("max_view_records", models.IntegerField()),
+                ("expiry_period", models.DurationField()),
+            ],
+        ),
+        migrations.CreateModel(
+            name="PlatformHistory",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "action_time",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        verbose_name="action time",
+                    ),
+                ),
+                (
+                    "platform",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="platforms.platform",
+                        verbose_name="platform",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="user",
                     ),
                 ),
             ],

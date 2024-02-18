@@ -12,6 +12,8 @@ from favorite.mixin_favorite import ManageFavoritePlatforms
 from favorite.models import FavoritePlatforms
 from drf_spectacular.utils import extend_schema
 from django.contrib.contenttypes.models import ContentType
+from accounts.services import add_platform_in_history
+from accounts.tasks import add_platform_in_history_task
 
 
 _TAG_PLATFORM = "Platform"
@@ -70,6 +72,11 @@ class PlatformViewSet(viewsets.ModelViewSet, ManageFavoritePlatforms):
         platform = self.queryset.filter(pk=pk).first()
         if platform:
             if request.user.is_authenticated:
+                try:
+                    add_platform_in_history_task.delay(user_id=request.user.id, platform_id=platform.id)
+                except Exception as e:
+                    print(e)
+                    add_platform_in_history(user_id=request.user.id, platform_id=platform.id)
                 favorite = FavoritePlatforms.objects.filter(user=request.user) & FavoritePlatforms.objects.filter(object_id=pk)
                 if favorite:
                     is_favorite = True

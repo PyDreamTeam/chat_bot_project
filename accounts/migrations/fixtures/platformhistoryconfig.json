@@ -1,0 +1,10 @@
+[
+  {
+    "model": "accounts.platformhistoryconfig",
+    "pk": 1,
+    "fields": {
+      "max_view_records": 20,
+      "expiry_period": "24:00:00"
+    }
+  }
+]
