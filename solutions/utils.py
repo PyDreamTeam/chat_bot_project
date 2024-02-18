@@ -30,7 +30,7 @@ def modify_data(data, total_count, page_number, total_page_number):
             "status": modified_item["status"],
             "created_at": modified_item["created_at"],
             "image": modified_item["image"] if modified_item["image"] else "None",
-            "turnkey_platform": modified_item["turnkey_platform"],
+            # "turnkey_platform": modified_item["turnkey_platform"],
             "link": modified_item["link"],
             "links_to_platform": modified_item["links_to_platform"],
             "dignities": modified_item["dignities"],
