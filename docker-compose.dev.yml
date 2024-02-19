@@ -5,7 +5,7 @@ services:
     container_name: djangoapp_pydream
     restart: always
     ports:
-      - "8005:8000"
+      - "8000:8000"
     command: >
       sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     depends_on:
@@ -19,13 +19,13 @@ services:
     image: postgres:15-alpine
     container_name: postgresdb_pydream
     ports:
-      - "5433:5432"
-    volumes:
-       - ../data/postgresql:/var/lib/postgresql/data/
+      - "5432:5432"
+    # volumes:
+    #    - ../data/postgresql:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=testdb
+      - POSTGRES_NAME=postgres
 
   celery_worker:
     build:
