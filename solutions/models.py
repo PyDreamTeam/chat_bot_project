@@ -79,7 +79,7 @@ class Solution(models.Model):
     # integration_with_payment_systems = models.CharField(max_length=100, null=True, blank=True)
     tasks = models.CharField(max_length=100, null=True, blank=True)
     # actions_to_complete_tasks = models.CharField(max_length=100, null=True, blank=True)
-    image = models.URLField(null=True, blank=True)
+    image = models.TextField(null=True, blank=True)
     price = models.IntegerField(null=True)
     filter = models.ManyToManyField(SolutionTag, null=True, blank=True)
     # is_active = models.BooleanField(default=True)
