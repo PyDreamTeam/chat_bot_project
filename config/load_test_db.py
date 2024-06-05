@@ -17,7 +17,7 @@ email=settings.SUPERUSER_EMAIL
 password=settings.SUPERUSER_PASSWORD
 
 # # Адрес для добавления на веб сервер
-url_main = 'https://python.twnsnd.online/'
+url_main = 'https://python.devlaba.online/'
 
 
 # Адрес для добавления на локальный сервер
